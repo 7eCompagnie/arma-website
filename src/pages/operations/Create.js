@@ -29,11 +29,11 @@ function Create() {
     };
 
     return (<DashboardAppShell active={"createFormation"} content={<>
-        <h1>Créer une formation</h1>
+        <h1>Créer une opération</h1>
         <form>
             <SimpleGrid cols={2}>
                 <InputWrapper
-                    label={"Nom de la formation"}
+                    label={"Nom de l'opération"}
                     required
                 >
                     <Input

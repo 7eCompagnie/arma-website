@@ -6,11 +6,13 @@ import Formations from "./pages/formations/Formations";
 import SingleOperation from "./pages/operations/Single";
 import SingleFormation from "./pages/formations/Single";
 import Create from "./pages/operations/Create";
+import Authorize from "./pages/Authorize";
 
 function App() {
   return (<>
       <Routes>
           <Route path="/" element={<Home />}/>
+          <Route path="/authorize" element={<Authorize />}/>
           <Route path="/dashboard" element={<Dashboard />}/>
           <Route path="/operations/register" element={<Register />}/>
           <Route path="/operations/operation-bosso" element={<SingleOperation />}/>

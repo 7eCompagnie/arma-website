@@ -3,12 +3,59 @@ import { useMantineTheme } from '@mantine/core';
 import '../css/dashboard.css';
 import {AlertCircle, BellRinging, Logout, Settings} from "tabler-icons-react";
 import {useNavigate} from "react-router-dom";
-import {useState} from "react";
+import {useEffect, useState} from "react";
+import axios from 'axios';
 
 function DashboardHeader() {
     const theme = useMantineTheme();
     const navigate = useNavigate();
     const [opened, setOpened] = useState(false);
+    const [user, setUser] = useState([]);
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+
+    const fetchToken = () => {
+        fetch('/api/v1/discord/authorize?code=' + urlParams.get('code'))
+            .then(res => res.json())
+            .then(data => {
+                localStorage.setItem('token', data.data.token);
+                navigate('/dashboard');
+            })
+            .catch(err => console.log(err));
+    }
+
+    const fetchData = () => {
+        const token = localStorage.getItem('token');
+
+        fetch(`/api/users/${token}`)
+            .then(response => {
+                return response.json();
+            })
+            .then(data => {
+                setUser(data);
+            });
+    }
+
+    const revokeToken = () => {
+        const token = localStorage.getItem('token');
+
+        fetch(`/api/v1/discord/revoke?token=${localStorage.getItem('token')}`)
+            .then(response => {
+                return response.json();
+            })
+            .then(data => {
+                localStorage.removeItem('token');
+                navigate('/');
+            });
+    }
+
+    useEffect(() => {
+        if (urlParams.get('code') !== null)
+            fetchToken();
+        if (localStorage.getItem('token') === null && urlParams.get('code') === null)
+            navigate('/');
+        fetchData();
+    }, [fetchToken, navigate, urlParams])
 
     return (<div style={{height: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0 1rem'}}>
         <Center style={{ height: '100%'}}>
@@ -18,8 +65,8 @@ function DashboardHeader() {
         <div>
             <Menu control={
                 <Button color="gray">
-                    <Text size="md" style={{marginLeft: '.45rem', marginRight: '.75rem', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>Sn0w</Text>
-                    <Avatar radius="xl" size="sm"/>
+                    <Text size="md" style={{marginLeft: '.45rem', marginRight: '.75rem', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>{user.username}</Text>
+                    <Avatar radius="xl" size="sm" src={`https://cdn.discordapp.com/avatars/${user.identifier}/${user.avatar}`}/>
                 </Button>
             }>
                 <Menu.Label>Mon compte</Menu.Label>
@@ -27,7 +74,7 @@ function DashboardHeader() {
                 <Menu.Item onClick={() => setOpened(true)} icon={<BellRinging size={14} />}>Notifications</Menu.Item>
                 <Menu.Item icon={<Settings size={14} />}>Paramètres</Menu.Item>
                 <Divider />
-                <Menu.Item color="red" icon={<Logout size={14} />} onClick={() => { navigate('/') }}>Se déconnecter</Menu.Item>
+                <Menu.Item color="red" icon={<Logout size={14} />} onClick={() => { revokeToken() }}>Se déconnecter</Menu.Item>
             </Menu>
         </div>
 
