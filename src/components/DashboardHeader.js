@@ -4,7 +4,7 @@ import '../css/dashboard.css';
 import {AlertCircle, BellRinging, Logout, Settings} from "tabler-icons-react";
 import {useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
-import axios from 'axios';
+
 
 function DashboardHeader() {
     const theme = useMantineTheme();
@@ -15,31 +15,29 @@ function DashboardHeader() {
     const urlParams = new URLSearchParams(queryString);
 
     const fetchToken = () => {
-        fetch('/api/v1/discord/authorize?code=' + urlParams.get('code'))
+        fetch(`http://localhost:4000/api/v1/discord/authorize?code=${urlParams.get('code')}`)
             .then(res => res.json())
             .then(data => {
                 localStorage.setItem('token', data.data.token);
                 navigate('/dashboard');
-            })
-            .catch(err => console.log(err));
+            }).catch(err => console.log(err));
     }
 
     const fetchData = () => {
         const token = localStorage.getItem('token');
 
-        fetch(`/api/users/${token}`)
-            .then(response => {
-                return response.json();
-            })
+        fetch(`http://localhost:4000/api/v1/users/token/${token}`)
+            .then(res => res.json())
             .then(data => {
-                setUser(data);
-            });
+                setUser(data.data);
+            })
+            .catch(err => console.log(err));
     }
 
     const revokeToken = () => {
         const token = localStorage.getItem('token');
 
-        fetch(`/api/v1/discord/revoke?token=${localStorage.getItem('token')}`)
+        fetch(`http://localhost:4000/api/v1/discord/revoke?token=${localStorage.getItem('token')}`)
             .then(response => {
                 return response.json();
             })
@@ -54,8 +52,9 @@ function DashboardHeader() {
             fetchToken();
         if (localStorage.getItem('token') === null && urlParams.get('code') === null)
             navigate('/');
-        fetchData();
-    }, [fetchToken, navigate, urlParams])
+        if (localStorage.getItem('token') !== null)
+            fetchData();
+    }, []);
 
     return (<div style={{height: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0 1rem'}}>
         <Center style={{ height: '100%'}}>
@@ -66,7 +65,7 @@ function DashboardHeader() {
             <Menu control={
                 <Button color="gray">
                     <Text size="md" style={{marginLeft: '.45rem', marginRight: '.75rem', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>{user.username}</Text>
-                    <Avatar radius="xl" size="sm" src={`https://cdn.discordapp.com/avatars/${user.identifier}/${user.avatar}`}/>
+                    <Avatar radius="xl" size="sm" src={`https://cdn.discordapp.com/avatars/${user.identifier}/${user.avatar}.png`} />
                 </Button>
             }>
                 <Menu.Label>Mon compte</Menu.Label>

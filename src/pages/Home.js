@@ -10,9 +10,11 @@ function Home() {
     const urlParams = new URLSearchParams(queryString);
 
     const fetchUrl = () => {
-        fetch('http://localhost:4000/api/v1/discord/auth').then(res => res.json()).then(data => {
-            setButtonUrl(data.data.url);
-        });
+        fetch('http://localhost:4000/api/v1/discord/auth')
+            .then(res => res.json())
+            .then(data => {
+                setButtonUrl(data.data.url);
+            }).catch(err => console.log(err));
     };
 
     useEffect(() => {
