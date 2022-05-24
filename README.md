@@ -13,6 +13,19 @@ This project is a dashboard to manage player registrations for a game called "Ar
 
 I used ReactJS from the official documentation.
 
+## Install
+
+```sh
+git clone https://github.com/Sn00ww/7th-company
+```
+
+## Usage
+
+```sh
+npm i
+npm run start
+```
+
 ## Author
 
 👤 **Sn0w**
