@@ -10,10 +10,12 @@ function DashboardHeader() {
     const [user, setUser] = useState([]);
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
+    const [isLoading, setLoading] = useState(true);
 
     const fetchToken = () => {
         const body = new URLSearchParams();
         body.append('code', urlParams.get('code'));
+
         fetch('http://localhost:8000/api/v1/login', {
             method: 'POST',
             headers: {
@@ -23,27 +25,29 @@ function DashboardHeader() {
         })
             .then(res => res.json())
             .then(data => {
-                localStorage.setItem('token', data.data.token);
+                localStorage.setItem('token', data.data);
+                fetchData();
                 navigate('/dashboard');
             }).catch(err => console.log(err));
     }
 
     const fetchData = () => {
-        // const token = localStorage.getItem('token');
-        //
-        // fetch(`http://localhost:4000/api/v1/users/token/${token}`)
-        //     .then(res => res.json())
-        //     .then(data => {
-        //         setUser(data.data);
-        //     })
-        //     .catch(err => console.log(err));
+        const token = localStorage.getItem('token');
+
+        fetch(`http://localhost:8000/api/v1/users/token/${token}`)
+            .then(res => res.json())
+            .then(data => {
+                setUser(data.data);
+                setLoading(false);
+            })
+            .catch(err => console.log(err));
     }
 
-    const revokeToken = () => {
+    const revokeToken = async () => {
         const body = new URLSearchParams();
         body.append('token', localStorage.getItem('token'));
 
-        fetch(`http://localhost:8000/api/v1/revoke`, {
+        await fetch(`http://localhost:8000/api/v1/revoke`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
@@ -63,10 +67,13 @@ function DashboardHeader() {
             fetchToken();
         if (localStorage.getItem('token') === null && urlParams.get('code') === null)
             navigate('/');
-        // if (localStorage.getItem('token') !== null)
-        //     fetchData();
+        if (localStorage.getItem('token') !== null)
+            fetchData();
     }, []);
 
+    if (isLoading) {
+        return (<>Loading...</>);
+    }
     return (<div style={{height: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0 1rem'}}>
         <Center style={{ height: '100%'}}>
             <img src="/img/logo.png" alt="Logo de la 7ème Compagnie" height="90%" />
