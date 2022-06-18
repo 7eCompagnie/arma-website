@@ -1,4 +1,4 @@
-import {Alert, Avatar, Button, Center, Divider, Menu, Modal, Text} from "@mantine/core";
+import {Alert, Avatar, Button, Center, Divider, Menu, Modal, Skeleton, Text} from "@mantine/core";
 import '../css/dashboard.css';
 import {AlertCircle, BellRinging, Logout, Settings} from "tabler-icons-react";
 import {useNavigate} from "react-router-dom";
@@ -72,7 +72,27 @@ function DashboardHeader() {
     }, []);
 
     if (isLoading) {
-        return (<>Loading...</>);
+        return (<div style={{height: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0 1rem'}}>
+            <Center style={{ height: '100%'}}>
+                <img src="/img/logo.png" alt="Logo de la 7ème Compagnie" height="90%" />
+                <span style={{ marginLeft: '1rem', fontWeight: 900, fontSize: '14pt' }}>La 7ème Compagnie</span>
+            </Center>
+            <div>
+                <Menu control={
+                    <Button color="gray">
+                        <Skeleton height=".5rem" width="6rem" mr=".75rem"/>
+                        <Skeleton height="1.5rem" width=".5rem" circle/>
+                    </Button>
+                }>
+                    <Menu.Label>Mon compte</Menu.Label>
+                    {/*<Menu.Item onClick={() => setOpened(true)} icon={<BellRinging size={14} />} rightSection={<Badge color="green" variant="light">1</Badge>}>Notifications</Menu.Item>*/}
+                    <Menu.Item onClick={() => setOpened(true)} icon={<BellRinging size={14} />}>Notifications</Menu.Item>
+                    <Menu.Item icon={<Settings size={14} />}>Paramètres</Menu.Item>
+                    <Divider />
+                    <Menu.Item color="red" icon={<Logout size={14} />} onClick={() => { revokeToken() }}>Se déconnecter</Menu.Item>
+                </Menu>
+            </div>
+        </div>);
     }
     return (<div style={{height: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0 1rem'}}>
         <Center style={{ height: '100%'}}>
