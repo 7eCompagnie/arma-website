@@ -1,13 +1,10 @@
-import {Alert, Avatar, Badge, Button, Center, Divider, Menu, Modal, Text} from "@mantine/core";
-import { useMantineTheme } from '@mantine/core';
+import {Alert, Avatar, Button, Center, Divider, Menu, Modal, Text} from "@mantine/core";
 import '../css/dashboard.css';
 import {AlertCircle, BellRinging, Logout, Settings} from "tabler-icons-react";
 import {useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
 
-
 function DashboardHeader() {
-    const theme = useMantineTheme();
     const navigate = useNavigate();
     const [opened, setOpened] = useState(false);
     const [user, setUser] = useState([]);
@@ -15,7 +12,15 @@ function DashboardHeader() {
     const urlParams = new URLSearchParams(queryString);
 
     const fetchToken = () => {
-        fetch(`http://localhost:4000/api/v1/discord/authorize?code=${urlParams.get('code')}`)
+        const body = new URLSearchParams();
+        body.append('code', urlParams.get('code'));
+        fetch('http://localhost:8000/api/v1/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: body
+        })
             .then(res => res.json())
             .then(data => {
                 localStorage.setItem('token', data.data.token);
@@ -24,27 +29,33 @@ function DashboardHeader() {
     }
 
     const fetchData = () => {
-        const token = localStorage.getItem('token');
-
-        fetch(`http://localhost:4000/api/v1/users/token/${token}`)
-            .then(res => res.json())
-            .then(data => {
-                setUser(data.data);
-            })
-            .catch(err => console.log(err));
+        // const token = localStorage.getItem('token');
+        //
+        // fetch(`http://localhost:4000/api/v1/users/token/${token}`)
+        //     .then(res => res.json())
+        //     .then(data => {
+        //         setUser(data.data);
+        //     })
+        //     .catch(err => console.log(err));
     }
 
     const revokeToken = () => {
-        const token = localStorage.getItem('token');
+        const body = new URLSearchParams();
+        body.append('token', localStorage.getItem('token'));
 
-        fetch(`http://localhost:4000/api/v1/discord/revoke?token=${localStorage.getItem('token')}`)
-            .then(response => {
-                return response.json();
-            })
+        fetch(`http://localhost:8000/api/v1/revoke`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: body
+        })
+            .then(res => res.json())
             .then(data => {
                 localStorage.removeItem('token');
                 navigate('/');
-            });
+            })
+            .catch(err => console.log(err));
     }
 
     useEffect(() => {
@@ -52,8 +63,8 @@ function DashboardHeader() {
             fetchToken();
         if (localStorage.getItem('token') === null && urlParams.get('code') === null)
             navigate('/');
-        if (localStorage.getItem('token') !== null)
-            fetchData();
+        // if (localStorage.getItem('token') !== null)
+        //     fetchData();
     }, []);
 
     return (<div style={{height: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0 1rem'}}>

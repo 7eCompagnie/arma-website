@@ -1,19 +1,16 @@
 import DashboardAppShell from "../../components/DashboardAppShell";
 import {useEffect, useState} from "react";
 import {
-    Box,
-    Button, Center,
-    Container, Group,
+    Button,
+    Container,
     Input,
     InputWrapper,
-    SegmentedControl,
     SimpleGrid,
     Table,
     Tabs,
-    Textarea,
-    Tooltip
+    Textarea
 } from "@mantine/core";
-import {InfoCircle, LetterCaseToggle, Calendar, SquarePlus, Pencil, Trash} from "tabler-icons-react";
+import {LetterCaseToggle, Calendar, SquarePlus, Pencil, Trash} from "tabler-icons-react";
 import {DatePicker, TimeInput, TimeRangeInput} from "@mantine/dates";
 import 'dayjs/locale/fr';
 import dayjs from "dayjs";
