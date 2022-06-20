@@ -24,33 +24,30 @@ function Register() {
     }, []);
 
     return(<>
-        <DashboardAppShell active={"operation-register"} content={<>
-            <h1>Inscriptions au opérations</h1>
-            <SimpleGrid cols={2}>
-                <Card shadow="sm" p="lg">
-                    <Card.Section>
-                        <Image src="/img/bosso.png" height={160} alt="Norway" />
-                    </Card.Section>
+        <h1>Inscriptions au opérations</h1>
+        <SimpleGrid cols={2}>
+            <Card shadow="sm" p="lg">
+                <Card.Section>
+                    <Image src="/img/bosso.png" height={160} alt="Norway" />
+                </Card.Section>
 
-                    <Group position="apart" style={{ marginBottom: 5, marginTop: theme.spacing.sm }}>
-                        <Text weight={900} size={"xl"}>Opération Bosso</Text>
-                        <Badge color="pink" variant="light">
-                        4 places restantes
-                        </Badge>
-                    </Group>
+                <Group position="apart" style={{ marginBottom: 5, marginTop: theme.spacing.sm }}>
+                    <Text weight={900} size={"xl"}>Opération Bosso</Text>
+                    <Badge color="pink" variant="light">4 places restantes
+                    </Badge>
+                </Group>
 
-                    <Text mb={20} style={{display: 'flex', alignItems: 'center'}}><Calendar size={20} style={{marginRight: '4px'}}/> 24 mai 2022</Text>
+                <Text mb={20} style={{display: 'flex', alignItems: 'center'}}><Calendar size={20} style={{marginRight: '4px'}}/> 24 mai 2022</Text>
 
-                    <Text size="sm" style={{ color: secondaryColor, lineHeight: 1.5 }}>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, urna eu tincidunt consectetur, nisl nunc euismod nisi, eu porta nisl nisi euismod nisi.
-                    </Text>
+                <Text size="sm" style={{ color: secondaryColor, lineHeight: 1.5 }}>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, urna eu tincidunt consectetur, nisl nunc euismod nisi, eu porta nisl nisi euismod nisi.
+                </Text>
 
-                    <Button onClick={() => { navigate('/operations/operation-bosso') }} variant="light" color="blue" fullWidth style={{ marginTop: 14 }}>
-                        En savoir plus
-                    </Button>
-                </Card>
-            </SimpleGrid>
-        </>}/>
+                <Button onClick={() => { navigate('/operations/operation-bosso') }} variant="light" color="blue" fullWidth style={{ marginTop: 14 }}>
+                    En savoir plus
+                </Button>
+            </Card>
+        </SimpleGrid>
     </>);
 }
 

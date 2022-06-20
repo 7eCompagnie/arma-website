@@ -24,51 +24,49 @@ function Formations() {
     }, []);
 
     return(<>
-        <DashboardAppShell active={"formations"} content={<>
-            <h1>Les formations disponibles</h1>
-            <SimpleGrid cols={3}>
-                <Card shadow="sm" p="lg">
-                    <Card.Section>
-                        <Image src="/img/tigre.jpg" height={160} alt="Tigre" />
-                    </Card.Section>
+        <h1>Les formations disponibles</h1>
+        <SimpleGrid cols={3}>
+            <Card shadow="sm" p="lg">
+                <Card.Section>
+                    <Image src="/img/tigre.jpg" height={160} alt="Tigre" />
+                </Card.Section>
 
-                    <Group position="apart" style={{ marginBottom: 5, marginTop: theme.spacing.sm }}>
-                        <Text weight={900} size={"xl"}>Pilote d'hélicoptère</Text>
-                        <Badge color="green" variant="light">
-                            Ouvert
-                        </Badge>
-                    </Group>
+                <Group position="apart" style={{ marginBottom: 5, marginTop: theme.spacing.sm }}>
+                    <Text weight={900} size={"xl"}>Pilote d'hélicoptère</Text>
+                    <Badge color="green" variant="light">
+                        Ouvert
+                    </Badge>
+                </Group>
 
-                    <Text size="sm" style={{ color: secondaryColor, lineHeight: 1.5 }}>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, urna eu tincidunt consectetur, nisl nunc euismod nisi, eu porta nisl nisi euismod nisi.
-                    </Text>
+                <Text size="sm" style={{ color: secondaryColor, lineHeight: 1.5 }}>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, urna eu tincidunt consectetur, nisl nunc euismod nisi, eu porta nisl nisi euismod nisi.
+                </Text>
 
-                    <Button onClick={() => { navigate('/formations/pilote-helico') }} variant="light" color="blue" fullWidth style={{ marginTop: 14 }}>
-                        En savoir plus
-                    </Button>
-                </Card>
-                <Card shadow="sm" p="lg">
-                    <Card.Section>
-                        <Image src="/img/griffon.jpg" height={160} alt="Griffon" />
-                    </Card.Section>
+                <Button onClick={() => { navigate('/formations/pilote-helico') }} variant="light" color="blue" fullWidth style={{ marginTop: 14 }}>
+                    En savoir plus
+                </Button>
+            </Card>
+            <Card shadow="sm" p="lg">
+                <Card.Section>
+                    <Image src="/img/griffon.jpg" height={160} alt="Griffon" />
+                </Card.Section>
 
-                    <Group position="apart" style={{ marginBottom: 5, marginTop: theme.spacing.sm }}>
-                        <Text weight={900} size={"xl"}>Tireur Griffon</Text>
-                        <Badge color="green" variant="light">
-                            Ouvert
-                        </Badge>
-                    </Group>
+                <Group position="apart" style={{ marginBottom: 5, marginTop: theme.spacing.sm }}>
+                    <Text weight={900} size={"xl"}>Tireur Griffon</Text>
+                    <Badge color="green" variant="light">
+                        Ouvert
+                    </Badge>
+                </Group>
 
-                    <Text size="sm" style={{ color: secondaryColor, lineHeight: 1.5 }}>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, urna eu tincidunt consectetur, nisl nunc euismod nisi, eu porta nisl nisi euismod nisi.
-                    </Text>
+                <Text size="sm" style={{ color: secondaryColor, lineHeight: 1.5 }}>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, urna eu tincidunt consectetur, nisl nunc euismod nisi, eu porta nisl nisi euismod nisi.
+                </Text>
 
-                    <Button variant="light" color="blue" fullWidth style={{ marginTop: 14 }}>
-                        En savoir plus
-                    </Button>
-                </Card>
-            </SimpleGrid>
-        </>}/>
+                <Button variant="light" color="blue" fullWidth style={{ marginTop: 14 }}>
+                    En savoir plus
+                </Button>
+            </Card>
+        </SimpleGrid>
     </>);
 }
 

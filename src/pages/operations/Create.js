@@ -25,7 +25,7 @@ function Create() {
         console.log('tabKey', tabKey);
     };
 
-    return (<DashboardAppShell active={"createFormation"} content={<>
+    return (<>
         <h1>Créer une opération</h1>
         <form>
             <SimpleGrid cols={2}>
@@ -183,7 +183,7 @@ function Create() {
             </Tabs>
             <Button color={"green"} fullWidth mt={30}>Créer l'opération</Button>
         </form>
-   </>}/>)
+    </>)
 }
 
 export default Create;

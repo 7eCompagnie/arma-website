@@ -87,7 +87,7 @@ function DashboardHeader() {
                     <Menu.Label>Mon compte</Menu.Label>
                     {/*<Menu.Item onClick={() => setOpened(true)} icon={<BellRinging size={14} />} rightSection={<Badge color="green" variant="light">1</Badge>}>Notifications</Menu.Item>*/}
                     <Menu.Item onClick={() => setOpened(true)} icon={<BellRinging size={14} />}>Notifications</Menu.Item>
-                    <Menu.Item icon={<Settings size={14} />}>Paramètres</Menu.Item>
+                    <Menu.Item onClick={() => navigate('/settings')} icon={<Settings size={14} />}>Paramètres</Menu.Item>
                     <Divider />
                     <Menu.Item color="red" icon={<Logout size={14} />} onClick={() => { revokeToken() }}>Se déconnecter</Menu.Item>
                 </Menu>
@@ -109,7 +109,7 @@ function DashboardHeader() {
                 <Menu.Label>Mon compte</Menu.Label>
                 {/*<Menu.Item onClick={() => setOpened(true)} icon={<BellRinging size={14} />} rightSection={<Badge color="green" variant="light">1</Badge>}>Notifications</Menu.Item>*/}
                 <Menu.Item onClick={() => setOpened(true)} icon={<BellRinging size={14} />}>Notifications</Menu.Item>
-                <Menu.Item icon={<Settings size={14} />}>Paramètres</Menu.Item>
+                <Menu.Item onClick={() => navigate('/settings')} icon={<Settings size={14} />}>Paramètres</Menu.Item>
                 <Divider />
                 <Menu.Item color="red" icon={<Logout size={14} />} onClick={() => { revokeToken() }}>Se déconnecter</Menu.Item>
             </Menu>
