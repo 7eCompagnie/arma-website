@@ -68,6 +68,8 @@ function App() {
     }, [])
 
 
+    if (pathname === '/')
+        return <Home />;
     return (<>
         <AppShell
             padding="md"
@@ -83,7 +85,6 @@ function App() {
         >
             <Container>
                 <Routes>
-                    <Route path="/" element={<Home />}/>
                     <Route path="/settings" element={<Settings isLoading={isLoading} user={user}/>}/>
                     <Route path="/dashboard" element={<Dashboard />}/>
                     <Route path="/operations" element={<Register />}/>
