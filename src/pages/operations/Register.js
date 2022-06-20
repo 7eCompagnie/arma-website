@@ -10,7 +10,6 @@ import {
 } from "@mantine/core";
 import {Calendar} from "tabler-icons-react";
 import {useNavigate} from "react-router-dom";
-import DashboardAppShell from "../../components/DashboardAppShell";
 
 function Register() {
     const navigate = useNavigate();

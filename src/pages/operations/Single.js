@@ -6,7 +6,6 @@ import {
     Table, Text, useMantineTheme,
 } from "@mantine/core";
 import {Ban} from "tabler-icons-react";
-import DashboardAppShell from "../../components/DashboardAppShell";
 
 function Single() {
     const theme = useMantineTheme();

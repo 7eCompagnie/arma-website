@@ -1,5 +1,4 @@
 import {useEffect} from "react";
-import DashboardAppShell from "../../components/DashboardAppShell";
 import {Badge, Image, Text} from "@mantine/core";
 
 function Single() {

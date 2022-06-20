@@ -9,7 +9,6 @@ import {
     Text,
     useMantineTheme
 } from "@mantine/core";
-import DashboardAppShell from "../../components/DashboardAppShell";
 import {useNavigate} from "react-router-dom";
 
 function Formations() {

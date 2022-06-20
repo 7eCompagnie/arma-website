@@ -4,10 +4,8 @@ import {
 } from '@mantine/core';
 import {useEffect} from "react";
 import {DeviceGamepad, Stars, Sword} from "tabler-icons-react";
-import DashboardAppShell from "../components/DashboardAppShell";
 
 function Dashboard() {
-
     useEffect(() => {
         document.title = "Dashboard - La 7ème Compagnie";
     }, []);
