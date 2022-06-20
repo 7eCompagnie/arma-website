@@ -1,15 +1,72 @@
-import {Navbar} from "@mantine/core";
+import {Navbar, Skeleton} from "@mantine/core";
 import DashboardNavbarLink from "./DashboardNavbarLink";
 import {Award, CalendarEvent, CalendarPlus} from "tabler-icons-react";
 import {Dashboard} from "tabler-icons-react";
 
-function DashboardNavbar({active}) {
+function DashboardNavbar({active, isLoading, user}) {
+
+    const links = [
+        {
+            icon: <Dashboard size={16}/>,
+            color: "blue",
+            label: "Tableau de bord",
+            to: "/dashboard"
+        },
+        {
+            icon: <CalendarEvent size={16}/>,
+            color: "teal",
+            label: "Prochaines opérations",
+            to: "/operations"
+        },
+        {
+            icon: <Award size={16}/>,
+            color: "red",
+            label: "Suivre une formation",
+            to: "/formations"
+        }
+    ]
+
+    const linksToDisplay = links.map((link, i) => {
+        if (link.to === active)
+            link.isActive = true;
+        return <DashboardNavbarLink key={i} link={link.to} isActive={link.isActive} icon={link.icon} color={link.color} label={link.label} />
+    })
+
+    const adminLinks = [
+        {
+            icon: <CalendarPlus size={16}/>,
+            color: "grape",
+            label: "Créer une opération",
+            to: "/operations/create"
+        }
+    ]
+
+    const adminLinksToDisplay = adminLinks.map((link, i) => {
+        if (link.to === active)
+            link.isActive = true;
+        return <DashboardNavbarLink key={i} link={link.to} isActive={link.isActive} icon={link.icon} color={link.color} label={link.label} />
+    })
+
+    let skeletons = [];
+
+    for (let i = 0; i < links.length + adminLinks.length; i++) {
+        skeletons.push(<div key={i} style={{display: "flex", alignItems: "center", marginLeft: "10px"}}>
+            <Skeleton height={26} width={26} my={10}/>
+            <Skeleton height={10} width={"70%"} ml={20}/>
+        </div>)
+    }
+
+    if (isLoading) {
+        return (<>
+            <Navbar.Section grow mt="md">
+                {skeletons}
+            </Navbar.Section>
+        </>);
+    }
     return (<>
         <Navbar.Section grow mt="md">
-            <DashboardNavbarLink link={"/dashboard"} isActive={active === "/dashboard"} icon={<Dashboard size={16}/>} color="blue" label={"Dashboard"}/>
-            <DashboardNavbarLink link={"/operations"} isActive={active === "/operations"} icon={<CalendarEvent size={16}/>} color="teal" label={"S'inscrire aux opérations"}/>
-            <DashboardNavbarLink link={"/formations"} isActive={active === "/formations"} icon={<Award size={16}/>} color="red" label={"Formations"}/>
-            <DashboardNavbarLink link={"/operations/create"} isActive={active === "/formation/create"} icon={<CalendarPlus size={16}/>} color="grape" label={"Créer une opération"}/>
+            {linksToDisplay}
+            {user.roles.includes('ADMIN_ROLE') ? adminLinksToDisplay : null}
         </Navbar.Section>
     </>);
 }

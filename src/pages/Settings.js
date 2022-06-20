@@ -1,8 +1,5 @@
-import {Checkbox, Input, InputWrapper, SimpleGrid, Skeleton, Textarea} from "@mantine/core";
-import {At, Calendar, LetterCaseToggle, Numbers} from "tabler-icons-react";
-import {DatePicker, TimeInput, TimeRangeInput} from "@mantine/dates";
-import dayjs from "dayjs";
-import {useEffect} from "react";
+import {Checkbox, Input, InputWrapper, SimpleGrid, Skeleton} from "@mantine/core";
+import {At, Numbers} from "tabler-icons-react";
 
 function Settings({isLoading, user}) {
     if (isLoading) {

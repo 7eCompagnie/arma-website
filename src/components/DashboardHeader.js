@@ -2,7 +2,7 @@ import {Alert, Avatar, Button, Center, Divider, Menu, Modal, Skeleton, Text} fro
 import '../css/dashboard.css';
 import {AlertCircle, BellRinging, Logout, Settings} from "tabler-icons-react";
 import {useNavigate} from "react-router-dom";
-import {useEffect, useState} from "react";
+import {useState} from "react";
 
 function DashboardHeader({isLoading, user}) {
     const navigate = useNavigate();
@@ -22,6 +22,7 @@ function DashboardHeader({isLoading, user}) {
             .then(res => res.json())
             .then(data => {
                 localStorage.removeItem('token');
+                navigate('/');
             })
             .catch(err => console.log(err));
     }

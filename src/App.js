@@ -24,7 +24,12 @@ function App() {
     const fetchData = () => {
         const token = localStorage.getItem('token');
 
-        fetch(`http://localhost:8000/api/v1/users/token/${token}`)
+        fetch(`http://localhost:8000/api/v1/users/token/${token}`, {
+            method: 'GET',
+            headers: {
+                'x-access-token': token
+            }
+        })
             .then(res => res.json())
             .then(data => {
                 setUser(data.data);
@@ -41,6 +46,7 @@ function App() {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
+                'x-access-token': localStorage.getItem('token')
             },
             body: body
         })
@@ -59,14 +65,14 @@ function App() {
             navigate('/');
         if (localStorage.getItem('token') !== null)
             fetchData();
-    })
+    }, [])
 
 
     return (<>
         <AppShell
             padding="md"
             navbar={<Navbar width={{ base: 300 }} height={500} p="xs">
-                <DashboardNavbar active={pathname}/>
+                <DashboardNavbar active={pathname} isLoading={isLoading} user={user}/>
             </Navbar>}
             header={<Header height={60} p="xs">
                 <DashboardHeader isLoading={isLoading} user={user}/>
