@@ -6,10 +6,11 @@ import Formations from "./pages/formations/Formations";
 import SingleOperation from "./pages/operations/Single";
 import SingleFormation from "./pages/formations/Single";
 import Create from "./pages/operations/Create";
-import Authorize from "./pages/Authorize";
+import NotFound from "./pages/NotFound";
 import {AppShell, Container, Header, Navbar} from "@mantine/core";
 import DashboardNavbar from "./components/DashboardNavbar";
 import DashboardHeader from "./components/DashboardHeader";
+import Settings from "./pages/Settings";
 
 function App() {
     const { pathname } = useLocation();
@@ -30,13 +31,14 @@ function App() {
             <Container>
                 <Routes>
                     <Route path="/" element={<Home />}/>
-                    <Route path="/authorize" element={<Authorize />}/>
+                    <Route path="/settings" element={<Settings />}/>
                     <Route path="/dashboard" element={<Dashboard />}/>
                     <Route path="/operations" element={<Register />}/>
                     <Route path="/operations/operation-bosso" element={<SingleOperation />}/>
                     <Route path="/operations/create" element={<Create />}/>
                     <Route path="/formations" element={<Formations />}/>
                     <Route path="/formations/pilote-helico" element={<SingleFormation />}/>
+                    <Route path="*" element={<NotFound />}/>
                 </Routes>
             </Container>
         </AppShell>
