@@ -1,6 +1,6 @@
 import {Navbar, Skeleton} from "@mantine/core";
 import DashboardNavbarLink from "./DashboardNavbarLink";
-import {Award, CalendarEvent, CalendarPlus} from "tabler-icons-react";
+import {Award, CalendarEvent, CalendarPlus, Users} from "tabler-icons-react";
 import {Dashboard} from "tabler-icons-react";
 
 function DashboardNavbar({active, isLoading, user}) {
@@ -38,6 +38,12 @@ function DashboardNavbar({active, isLoading, user}) {
             color: "grape",
             label: "Créer une opération",
             to: "/operations/create"
+        },
+        {
+            icon: <Users size={16}/>,
+            color: "lime",
+            label: "Gérer les utilisateurs",
+            to: "/users"
         }
     ]
 
@@ -66,6 +72,7 @@ function DashboardNavbar({active, isLoading, user}) {
     return (<>
         <Navbar.Section grow mt="md">
             {linksToDisplay}
+            {user.roles.includes('ADMIN_ROLE') ? <h3 style={{fontSize: "1rem", margin: "1rem 0 0 .75rem", textTransform: "uppercase", color: "#b2bec3"}}>Administrateurs</h3> : null}
             {user.roles.includes('ADMIN_ROLE') ? adminLinksToDisplay : null}
         </Navbar.Section>
     </>);

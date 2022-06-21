@@ -7,6 +7,7 @@ import SingleOperation from "./pages/operations/Single";
 import SingleFormation from "./pages/formations/Single";
 import Create from "./pages/operations/Create";
 import NotFound from "./pages/NotFound";
+import Users from "./pages/users/Users";
 import {AppShell, Container, Header, Navbar} from "@mantine/core";
 import DashboardNavbar from "./components/DashboardNavbar";
 import DashboardHeader from "./components/DashboardHeader";
@@ -87,11 +88,16 @@ function App() {
                 <Routes>
                     <Route path="/settings" element={<Settings isLoading={isLoading} user={user}/>}/>
                     <Route path="/dashboard" element={<Dashboard />}/>
+
                     <Route path="/operations" element={<Register />}/>
                     <Route path="/operations/operation-bosso" element={<SingleOperation />}/>
                     <Route path="/operations/create" element={<Create />}/>
+
                     <Route path="/formations" element={<Formations />}/>
                     <Route path="/formations/pilote-helico" element={<SingleFormation />}/>
+
+                    <Route path="/users" element={<Users />}/>
+
                     <Route path="*" element={<NotFound />}/>
                 </Routes>
             </Container>
