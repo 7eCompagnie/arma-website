@@ -13,6 +13,7 @@ import DashboardNavbar from "./components/DashboardNavbar";
 import DashboardHeader from "./components/DashboardHeader";
 import Settings from "./pages/Settings";
 import {useEffect, useState} from "react";
+import UserEdit from "./pages/users/UserEdit";
 
 function App() {
     const { pathname } = useLocation();
@@ -96,13 +97,13 @@ function App() {
                     <Route path="/formations" element={<Formations />}/>
                     <Route path="/formations/pilote-helico" element={<SingleFormation />}/>
 
-                    <Route path="/users" element={<Users />}/>
+                    <Route path="/users" element={<Users isLoading={isLoading}/>}/>
+                    <Route path="/users/:identifier" element={<UserEdit/>}/>
 
                     <Route path="*" element={<NotFound />}/>
                 </Routes>
             </Container>
         </AppShell>
-
     </>);
 }
 

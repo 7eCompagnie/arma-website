@@ -1,13 +1,18 @@
-import {Button, Center, Pagination, Table} from "@mantine/core";
+import {Button, Center, Modal, Pagination, Skeleton, Table, Text} from "@mantine/core";
 import {useEffect, useState} from "react";
+import {useNavigate} from "react-router-dom";
 
-function Users() {
+function Users({isLoading, user}) {
     const [users, setUsers] = useState([]);
     const [activePage, setPage] = useState(1);
     const [maxPages, setMaxPages] = useState(1);
+    const [opened, setOpened] = useState(false);
+    const [currUserModal, setCurrUserModal] = useState(null);
+    const navigate = useNavigate();
 
     const fetchUsers = (page) => {
         const currPage = page || 1;
+
         fetch(`http://localhost:8000/api/v1/users?page=${currPage}`, {
             method: 'GET',
             headers: {
@@ -17,6 +22,7 @@ function Users() {
             .then(res => res.json())
             .then(data => {
                 setUsers(data.data);
+                setCurrUserModal(data.data[0]);
             })
             .catch(err => console.log(err));
     }
@@ -30,8 +36,28 @@ function Users() {
         })
             .then(res => res.json())
             .then(data => {
-                console.log(data.data);
                 setMaxPages(data.data);
+            })
+            .catch(err => console.log(err));
+    }
+
+    const updateModal = (currUser) => {
+        setCurrUserModal(currUser)
+        setOpened(true)
+    }
+
+    const deleteUser = (user) => {
+        setOpened(false);
+        fetch(`http://localhost:8000/api/v1/users/${user.identifier}`, {
+            method: 'DELETE',
+            headers: {
+                'x-access-token': localStorage.getItem('token')
+            },
+        })
+            .then(res => res.json())
+            .then(data => {
+                fetchUsers(activePage)
+                setCurrUserModal(null)
             })
             .catch(err => console.log(err));
     }
@@ -52,7 +78,7 @@ function Users() {
                         result = "Utilisateur"
                     else if (role === 'ADMIN_ROLE')
                         result = "Administrateur"
-                    else if (role === 'FORMATOR_ROLE')
+                    else if (role === 'TRAINER_ROLE')
                         result = "Formateur"
                     if (i < user.roles.length - 1)
                         return <span key={i}>{result}, </span>
@@ -60,10 +86,10 @@ function Users() {
                 })
             }</td>
             <td>
-                <Button color="yellow" size="md" compact>
+                <Button color="yellow" size="md" compact onClick={() => navigate(`/users/${user.identifier}`)}>
                     Editer
                 </Button>
-                <Button color="red" size="md" ml={".5rem"} compact>
+                <Button onClick={() => updateModal(user)} color="red" size="md" ml={".5rem"} compact>
                     Supprimer
                 </Button>
             </td>
@@ -75,22 +101,42 @@ function Users() {
         <Center mb={"1rem"}>
             <Pagination page={activePage} onChange={setPage} total={maxPages} withEdges />
         </Center>
-        <Table striped highlightOnHover>
-            <thead>
-                <tr>
-                    <th>Pseudo</th>
-                    <th>Adresse email</th>
-                    <th>Roles</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {rows}
-            </tbody>
-        </Table>
+        <Skeleton visible={isLoading}>
+            <Table striped highlightOnHover>
+                <thead>
+                    <tr>
+                        <th>Pseudo</th>
+                        <th>Adresse email</th>
+                        <th>Roles</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {rows}
+                </tbody>
+            </Table>
+        </Skeleton>
         <Center mt={"1rem"}>
             <Pagination page={activePage} onChange={setPage} total={maxPages} withEdges />
         </Center>
+        <Modal
+            centered
+            opened={opened}
+            onClose={() => setOpened(false)}
+            title={`Confirmation de la suppression du compte de ${currUserModal == null ? "Null" : currUserModal.username}`}
+            size={"xl"}
+            style={{paddingBottom: "-2rem"}}
+        >
+            <Text>
+                La suppression du compte <strong>supprimera toutes les données</strong> relatives à ce dernier (formations, opérations, statistiques, etc.)<br/>
+                <strong>Vous ne pourrez pas récupérer ces données.</strong>
+            </Text>
+
+            <div style={{display: "flex", justifyContent: "flex-end", marginTop: "2rem"}}>
+                <Button variant={"outline"} color={"gray"}>Annuler</Button>
+                <Button ml={"1rem"} color={"red"} onClick={() => deleteUser(currUserModal)}>Supprimer</Button>
+            </div>
+        </Modal>
     </>);
 }
 
