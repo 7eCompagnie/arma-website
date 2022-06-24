@@ -96,7 +96,7 @@ function App() {
                     <Route path="/operations/create" element={<Create />}/>
 
                     <Route path="/trainings" element={<Trainings />}/>
-                    <Route path="/trainings/pilote-helico" element={<SingleFormation />}/>
+                    <Route path="/trainings/:id" element={<SingleFormation />}/>
 
                     <Route path="/formers/trainings" element={<FormersTrainings/>}/>
 
