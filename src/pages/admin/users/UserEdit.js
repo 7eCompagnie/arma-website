@@ -23,6 +23,7 @@ function UserEdit() {
                 setUser(data.data);
                 setNewRoles(data.data.roles)
                 setIsLoading(false);
+                document.title = `Utilisateur ${data.data.username} - La 7ème Compagnie`;
             })
             .catch(err => {
                 console.log(err);

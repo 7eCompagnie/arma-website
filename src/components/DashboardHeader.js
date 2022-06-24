@@ -30,7 +30,7 @@ function DashboardHeader({isLoading, user}) {
     if (isLoading) {
         return (<div style={{height: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0 1rem'}}>
             <Center style={{ height: '100%'}}>
-                <img src="/img/logo.png" alt="Logo de la 7ème Compagnie" height="90%" />
+                <img src="/img/logo.webp" alt="Logo de la 7ème Compagnie" height="90%" />
                 <span style={{ marginLeft: '1rem', fontWeight: 900, fontSize: '14pt' }}>La 7ème Compagnie</span>
             </Center>
             <div>
@@ -42,7 +42,7 @@ function DashboardHeader({isLoading, user}) {
                 }>
                     <Menu.Label>Mon compte</Menu.Label>
                     {/*<Menu.Item onClick={() => setOpened(true)} icon={<BellRinging size={14} />} rightSection={<Badge color="green" variant="light">1</Badge>}>Notifications</Menu.Item>*/}
-                    <Menu.Item onClick={() => setOpened(true)} icon={<BellRinging size={14} />}>Notifications</Menu.Item>
+                    <Menu.Item disabled onClick={() => setOpened(true)} icon={<BellRinging size={14} />}>Notifications</Menu.Item>
                     <Menu.Item onClick={() => navigate('/settings')} icon={<Settings size={14} />}>Paramètres</Menu.Item>
                     <Divider />
                     <Menu.Item color="red" icon={<Logout size={14} />} onClick={() => { revokeToken().then(r => navigate('/')) }}>Se déconnecter</Menu.Item>
@@ -52,7 +52,7 @@ function DashboardHeader({isLoading, user}) {
     }
     return (<div style={{height: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0 1rem'}}>
         <Center style={{ height: '100%'}}>
-            <img src="/img/logo.png" alt="Logo de la 7ème Compagnie" height="90%" />
+            <img src="/img/logo.webp" alt="Logo de la 7ème Compagnie" height="90%" />
             <span style={{ marginLeft: '1rem', fontWeight: 900, fontSize: '14pt' }}>La 7ème Compagnie</span>
         </Center>
         <div>
@@ -64,7 +64,7 @@ function DashboardHeader({isLoading, user}) {
             }>
                 <Menu.Label>Mon compte</Menu.Label>
                 {/*<Menu.Item onClick={() => setOpened(true)} icon={<BellRinging size={14} />} rightSection={<Badge color="green" variant="light">1</Badge>}>Notifications</Menu.Item>*/}
-                <Menu.Item onClick={() => setOpened(true)} icon={<BellRinging size={14} />}>Notifications</Menu.Item>
+                <Menu.Item disabled onClick={() => setOpened(true)} icon={<BellRinging size={14} />}>Notifications</Menu.Item>
                 <Menu.Item onClick={() => navigate('/settings')} icon={<Settings size={14} />}>Paramètres</Menu.Item>
                 <Divider />
                 <Menu.Item color="red" icon={<Logout size={14} />} onClick={() => { revokeToken() }}>Se déconnecter</Menu.Item>

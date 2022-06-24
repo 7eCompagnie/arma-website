@@ -1,0 +1,69 @@
+import {useEffect, useState} from "react";
+import {
+    Badge,
+    Button,
+    Card,
+    Group,
+    Image,
+    SimpleGrid, Text, useMantineTheme
+} from "@mantine/core";
+import {useNavigate} from "react-router-dom";
+
+function Trainings() {
+    const navigate = useNavigate();
+    const theme = useMantineTheme();
+    const secondaryColor = theme.colorScheme === 'dark'
+        ? theme.colors.dark[1]
+        : theme.colors.gray[7];
+    const [trainings, setTrainings] = useState([]);
+
+    const fetchTrainings = () => {
+        fetch(`http://localhost:8000/api/v1/trainings/`,
+            {
+                method: 'GET',
+                headers: {
+                    'x-access-token': localStorage.getItem('token')
+                },
+            })
+            .then(res => res.json())
+            .then(data => {
+                setTrainings(data.data);
+            })
+            .catch(err => console.log(err));
+    }
+
+    useEffect(() => {
+        document.title = "Formations - La 7ème Compagnie";
+        fetchTrainings();
+    }, []);
+
+    const trainingsToDisplay = trainings.map((training, i) => {
+        return (<Card shadow="sm" p="lg" key={i}>
+            <Card.Section>
+                <Image src={`/img/trainings/${training.picture}`} height={160} alt={training.title} />
+            </Card.Section>
+
+            <Group position="apart" style={{ marginBottom: 5, marginTop: theme.spacing.sm }}>
+                <Text weight={900} size={"xl"}>{training.title}</Text>
+                {training.isOpen ? <Badge color="green" variant="light">Ouvert</Badge> : <Badge color="red" variant="light">Fermé</Badge>}
+            </Group>
+
+            <Text size="sm" style={{ color: secondaryColor, lineHeight: 1.5 }}>
+                {training.description}
+            </Text>
+
+            <Button onClick={() => { navigate(`/trainings/${training._id}`) }} variant="light" color="blue" fullWidth style={{ marginTop: 14 }}>
+                En savoir plus
+            </Button>
+        </Card>)
+    });
+
+    return(<>
+        <h1>Les formations disponibles</h1>
+        <SimpleGrid cols={3}>
+            {trainingsToDisplay}
+        </SimpleGrid>
+    </>);
+}
+
+export default Trainings;

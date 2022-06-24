@@ -2,18 +2,19 @@ import {Routes, Route, useLocation, useNavigate} from "react-router-dom";
 import Home from "./pages/Home";
 import Dashboard from "./pages/Dashboard";
 import Register from "./pages/operations/Register";
-import Formations from "./pages/formations/Formations";
+import Trainings from "./pages/formers/Trainings";
 import SingleOperation from "./pages/operations/Single";
-import SingleFormation from "./pages/formations/Single";
+import SingleFormation from "./pages/formers/Single";
 import Create from "./pages/operations/Create";
 import NotFound from "./pages/NotFound";
-import Users from "./pages/users/Users";
+import Users from "./pages/admin/users/Users";
 import {AppShell, Container, Header, Navbar} from "@mantine/core";
 import DashboardNavbar from "./components/DashboardNavbar";
 import DashboardHeader from "./components/DashboardHeader";
 import Settings from "./pages/Settings";
 import {useEffect, useState} from "react";
-import UserEdit from "./pages/users/UserEdit";
+import UserEdit from "./pages/admin/users/UserEdit";
+import FormersTrainings from "./pages/formers/trainings/FormersTrainings";
 
 function App() {
     const { pathname } = useLocation();
@@ -94,11 +95,13 @@ function App() {
                     <Route path="/operations/operation-bosso" element={<SingleOperation />}/>
                     <Route path="/operations/create" element={<Create />}/>
 
-                    <Route path="/formations" element={<Formations />}/>
-                    <Route path="/formations/pilote-helico" element={<SingleFormation />}/>
+                    <Route path="/trainings" element={<Trainings />}/>
+                    <Route path="/trainings/pilote-helico" element={<SingleFormation />}/>
 
-                    <Route path="/users" element={<Users isLoading={isLoading}/>}/>
-                    <Route path="/users/:identifier" element={<UserEdit/>}/>
+                    <Route path="/formers/trainings" element={<FormersTrainings/>}/>
+
+                    <Route path="/admin/users" element={<Users isLoading={isLoading}/>}/>
+                    <Route path="/admin/users/:identifier" element={<UserEdit/>}/>
 
                     <Route path="*" element={<NotFound />}/>
                 </Routes>

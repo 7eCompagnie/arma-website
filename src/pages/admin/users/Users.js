@@ -2,7 +2,7 @@ import {Button, Center, Modal, Pagination, Skeleton, Table, Text} from "@mantine
 import {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 
-function Users({isLoading, user}) {
+function Users({isLoading}) {
     const [users, setUsers] = useState([]);
     const [activePage, setPage] = useState(1);
     const [maxPages, setMaxPages] = useState(1);
@@ -65,6 +65,7 @@ function Users({isLoading, user}) {
     useEffect(() => {
         fetchUsers(activePage);
         fetchMaxPages();
+        document.title = "Utilisateurs - La 7ème Compagnie";
     }, [activePage]);
 
     const rows = users.map((user, i) => (
@@ -86,7 +87,7 @@ function Users({isLoading, user}) {
                 })
             }</td>
             <td>
-                <Button color="yellow" size="md" compact onClick={() => navigate(`/users/${user.identifier}`)}>
+                <Button color="yellow" size="md" compact onClick={() => navigate(`/admin/users/${user.identifier}`)}>
                     Editer
                 </Button>
                 <Button onClick={() => updateModal(user)} color="red" size="md" ml={".5rem"} compact>
