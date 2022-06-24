@@ -98,7 +98,7 @@ function App() {
                     <Route path="/trainings" element={<Trainings />}/>
                     <Route path="/trainings/:id" element={<SingleFormation />}/>
 
-                    <Route path="/formers/trainings" element={<FormersTrainings/>}/>
+                    <Route path="/formers/trainings" element={<FormersTrainings />}/>
 
                     <Route path="/admin/users" element={<Users isLoading={isLoading}/>}/>
                     <Route path="/admin/users/:identifier" element={<UserEdit/>}/>

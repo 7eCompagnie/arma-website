@@ -9,6 +9,7 @@ function FormersTrainings() {
     const [opened, setOpened] = useState(false);
     const [currTrainingModal, setCurrTrainingModal] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
+    const [trainers, setTrainers] = useState([]);
     const navigate = useNavigate();
 
     const fetchTrainings = (page) => {
@@ -64,23 +65,6 @@ function FormersTrainings() {
             .catch(err => console.log(err));
     }
 
-    const getTrainerUsername = async (trainer) => {
-        const data = fetch(`http://localhost:8000/api/v1/users/${trainer}`,
-            {
-                method: 'GET',
-                headers: {
-                    'x-access-token': localStorage.getItem('token')
-                },
-            })
-            .then(res => res.json())
-            .then(data => {
-                return data.data.username;
-            })
-            .catch(err => console.log(err));
-        console.log(data);
-        return data;
-    }
-
     useEffect(() => {
         fetchTrainings(activePage);
         fetchMaxPages();
@@ -91,14 +75,6 @@ function FormersTrainings() {
         <tr key={i}>
             <td>{training.title}</td>
             <td>{training.description}</td>
-            <td>{
-                training.trainers.map((trainer, i) => {
-                    let result = getTrainerUsername(trainer);
-                    if (i < training.trainers.length - 1)
-                        return <span key={i}>{result}, </span>
-                    return result
-                })
-            }</td>
             <td>
                 <Button color="yellow" size="md" compact onClick={() => navigate(`/formers/trainings/${training._id}`)}>
                     Editer
@@ -121,7 +97,6 @@ function FormersTrainings() {
                     <tr>
                         <th>Titre</th>
                         <th>Description</th>
-                        <th>Formateurs</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
