@@ -1,7 +1,7 @@
-import {Link, useParams} from "react-router-dom";
+import {Link, useNavigate, useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
 import {Button, Input, InputWrapper, MultiSelect, Notification, SimpleGrid, Skeleton} from "@mantine/core";
-import {At, Check, Id, LetterCase, Numbers} from "tabler-icons-react";
+import {At, Check, ChevronLeft, Id, LetterCase, Numbers} from "tabler-icons-react";
 
 function UserEdit() {
     const {identifier} = useParams();
@@ -10,6 +10,7 @@ function UserEdit() {
     const [isLoading, setIsLoading] = useState(true);
     const [newRoles, setNewRoles] = useState([]);
     const [notification, setNotification] = useState(false);
+    const navigate = useNavigate();
 
     const fetchUser = () => {
         fetch(`http://localhost:8000/api/v1/users/${identifier}`, {
@@ -65,6 +66,9 @@ function UserEdit() {
 
     if (isLoading) {
         return (<>
+            <Button variant="outline" compact leftIcon={<ChevronLeft/>} onClick={() => navigate('/admin/users')}>
+                Retour
+            </Button>
             <Skeleton my={38} height={10} width={150} />
             <h2>Général</h2>
             <form>
@@ -99,14 +103,16 @@ function UserEdit() {
     }
 
     return (<>
-        {notification ? <Notification onClose={() => setNotification(false)} icon={<Check size={18} />} color="teal" title="Mise à jour de l'utilisateur">
+        {notification ? <Notification mb={20} onClose={() => setNotification(false)} icon={<Check size={18} />} color="teal" title="Mise à jour de l'utilisateur">
                 Utilisateur {user.username} correctement mis à jour !
         </Notification> : null}
-        <h1>Utilisateur {user.username}</h1>
+        <Button variant="outline" compact leftIcon={<ChevronLeft/>} onClick={() => navigate('/admin/users')}>
+            Retour
+        </Button>
+        <h1 style={{marginTop: 0}}>Utilisateur {user.username}</h1>
         <h2>Général</h2>
         <form>
             <SimpleGrid cols={2}>
-
                 <InputWrapper
                     label={"Nom d'utilisateur"}
                 >

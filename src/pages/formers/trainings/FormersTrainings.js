@@ -9,7 +9,6 @@ function FormersTrainings() {
     const [opened, setOpened] = useState(false);
     const [currTrainingModal, setCurrTrainingModal] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
-    const [trainers, setTrainers] = useState([]);
     const navigate = useNavigate();
 
     const fetchTrainings = (page) => {

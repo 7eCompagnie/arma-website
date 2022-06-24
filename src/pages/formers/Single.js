@@ -1,12 +1,14 @@
 import {useEffect, useState} from "react";
-import {Badge, Image, Skeleton, Text} from "@mantine/core";
-import {useParams} from "react-router-dom";
+import {Alert, Badge, Button, Image, Skeleton, Text} from "@mantine/core";
+import {useNavigate, useParams} from "react-router-dom";
+import {ChevronLeft, InfoCircle} from "tabler-icons-react";
 
 function Single() {
     const {id} = useParams();
     const [training, setTraining] = useState(null);
     const [trainers, setTrainers] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const navigate = useNavigate();
 
     const fetchTraining = () => {
         fetch(`http://localhost:8000/api/v1/trainings/${id}`, {
@@ -64,7 +66,10 @@ function Single() {
         </>)
     }
     return (<>
-        <h1>{training.title}</h1>
+        <Button variant="outline" compact leftIcon={<ChevronLeft/>} onClick={() => navigate('/trainings')}>
+            Retour
+        </Button>
+        <h1 style={{marginTop: 0}}>{training.title}</h1>
         <Image
             radius="md"
             src={`/img/trainings/${training.picture}`}
@@ -83,6 +88,10 @@ function Single() {
         <div style={{ marginBottom: '4rem' }}>
             {trainersToDisplay}
         </div>
+
+        <Alert icon={<InfoCircle size={16} />} title="Demande de formation" variant="filled">
+            Pour suivre une formation, veuillez contacter un des formateurs sur le channel <a style={{color: "#fff", textDecoration: "non", fontWeight: "bold"}} href={"https://discord.com/channels/864865934233960448/889940051016962118"} target={"_blank"}>#formations</a>.
+        </Alert>
     </>);
 }
 
