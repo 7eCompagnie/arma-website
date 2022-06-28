@@ -97,7 +97,7 @@ function UserEdit() {
             <h1>Impossible de trouvé l'utilisateur demandé</h1>
             <p>
                 L'utilisateur que vous recherchez n'existe pas. <br />
-                Vous pouvez retourner sur la liste des utilisateurs <Link to="/users">ici</Link>.
+                Vous pouvez retourner sur la liste des utilisateurs <Link to="/admin/users">ici</Link>.
             </p>
         </>)
     }

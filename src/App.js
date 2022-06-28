@@ -15,6 +15,7 @@ import Settings from "./pages/Settings";
 import {useEffect, useState} from "react";
 import UserEdit from "./pages/admin/users/UserEdit";
 import FormersTrainings from "./pages/formers/trainings/FormersTrainings";
+import FormersTrainingEdit from "./pages/formers/trainings/FormersTrainingEdit";
 
 function App() {
     const { pathname } = useLocation();
@@ -99,6 +100,7 @@ function App() {
                     <Route path="/trainings/:id" element={<SingleFormation />}/>
 
                     <Route path="/formers/trainings" element={<FormersTrainings />}/>
+                    <Route path="/formers/trainings/:id" element={<FormersTrainingEdit />}/>
 
                     <Route path="/admin/users" element={<Users isLoading={isLoading}/>}/>
                     <Route path="/admin/users/:identifier" element={<UserEdit/>}/>
