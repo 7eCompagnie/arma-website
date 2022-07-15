@@ -28,7 +28,7 @@ function App() {
     const fetchData = () => {
         const token = localStorage.getItem('token');
 
-        fetch(`http://localhost:8000/api/v1/users/token/${token}`, {
+        fetch(`${process.env.REACT_APP_ENDPOINT_URL}/users/token/${token}`, {
             method: 'GET',
             headers: {
                 'x-access-token': token
@@ -46,7 +46,7 @@ function App() {
         const body = new URLSearchParams();
         body.append('code', urlParams.get('code'));
 
-        fetch('http://localhost:8000/api/v1/login', {
+        fetch(`${process.env.REACT_APP_ENDPOINT_URL}/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',

@@ -12,7 +12,7 @@ function DashboardHeader({isLoading, user}) {
         const body = new URLSearchParams();
         body.append('token', localStorage.getItem('token'));
 
-        await fetch(`http://localhost:8000/api/v1/revoke`, {
+        await fetch(`${process.env.REACT_APP_ENDPOINT_URL}/revoke`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',

@@ -11,7 +11,7 @@ function Single() {
     const navigate = useNavigate();
 
     const fetchTraining = () => {
-        fetch(`http://localhost:8000/api/v1/trainings/${id}`, {
+        fetch(`${process.env.REACT_APP_ENDPOINT_URL}/trainings/${id}`, {
             method: 'GET',
             headers: {
                 'x-access-token': localStorage.getItem('token')
@@ -27,7 +27,7 @@ function Single() {
 
     const fetchTrainers = (t) => {
         t.forEach((trainer) => {
-            fetch(`http://localhost:8000/api/v1/users/${trainer}`, {
+            fetch(`${process.env.REACT_APP_ENDPOINT_URL}/users/${trainer}`, {
                 method: 'GET',
                 headers: {
                     'x-access-token': localStorage.getItem('token')

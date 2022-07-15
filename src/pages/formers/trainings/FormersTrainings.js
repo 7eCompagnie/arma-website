@@ -14,7 +14,7 @@ function FormersTrainings() {
     const fetchTrainings = (page) => {
         const currPage = page || 1;
 
-        fetch(`http://localhost:8000/api/v1/trainings?page=${currPage}`, {
+        fetch(`${process.env.REACT_APP_ENDPOINT_URL}/trainings?page=${currPage}`, {
             method: 'GET',
             headers: {
                 'x-access-token': localStorage.getItem('token')
@@ -30,7 +30,7 @@ function FormersTrainings() {
     }
 
     const fetchMaxPages = () => {
-        fetch(`http://localhost:8000/api/v1/trainings/maxPages`, {
+        fetch(`${process.env.REACT_APP_ENDPOINT_URL}/trainings/maxPages`, {
             method: 'GET',
             headers: {
                 'x-access-token': localStorage.getItem('token')
@@ -50,7 +50,7 @@ function FormersTrainings() {
 
     const deleteTraining = (training) => {
         setOpened(false);
-        fetch(`http://localhost:8000/api/v1/trainings/${training._id}`, {
+        fetch(`${process.env.REACT_APP_ENDPOINT_URL}/trainings/${training._id}`, {
             method: 'DELETE',
             headers: {
                 'x-access-token': localStorage.getItem('token')

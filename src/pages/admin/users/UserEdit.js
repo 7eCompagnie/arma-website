@@ -13,7 +13,7 @@ function UserEdit() {
     const navigate = useNavigate();
 
     const fetchUser = () => {
-        fetch(`http://localhost:8000/api/v1/users/${identifier}`, {
+        fetch(`${process.env.REACT_APP_ENDPOINT_URL}v1/users/${identifier}`, {
             method: 'GET',
             headers: {
                 'x-access-token': localStorage.getItem('token')
@@ -38,7 +38,7 @@ function UserEdit() {
             body.append('roles', role);
         })
 
-        fetch(`http://localhost:8000/api/v1/users/${identifier}`, {
+        fetch(`${process.env.REACT_APP_ENDPOINT_URL}/users/${identifier}`, {
             method: 'PATCH',
             headers: {
                 'x-access-token': localStorage.getItem('token')

@@ -13,7 +13,7 @@ function Users({isLoading}) {
     const fetchUsers = (page) => {
         const currPage = page || 1;
 
-        fetch(`http://localhost:8000/api/v1/users?page=${currPage}`, {
+        fetch(`${process.env.REACT_APP_ENDPOINT_URL}/users?page=${currPage}`, {
             method: 'GET',
             headers: {
                 'x-access-token': localStorage.getItem('token')
@@ -28,7 +28,7 @@ function Users({isLoading}) {
     }
 
     const fetchMaxPages = () => {
-        fetch(`http://localhost:8000/api/v1/users/maxPages`, {
+        fetch(`${process.env.REACT_APP_ENDPOINT_URL}/users/maxPages`, {
             method: 'GET',
             headers: {
                 'x-access-token': localStorage.getItem('token')
@@ -48,7 +48,7 @@ function Users({isLoading}) {
 
     const deleteUser = (user) => {
         setOpened(false);
-        fetch(`http://localhost:8000/api/v1/users/${user.identifier}`, {
+        fetch(`${process.env.REACT_APP_ENDPOINT_URL}/users/${user.identifier}`, {
             method: 'DELETE',
             headers: {
                 'x-access-token': localStorage.getItem('token')

@@ -18,7 +18,7 @@ function Trainings() {
     const [trainings, setTrainings] = useState([]);
 
     const fetchTrainings = () => {
-        fetch(`http://localhost:8000/api/v1/trainings/`,
+        fetch(`${process.env.REACT_APP_ENDPOINT_URL}/trainings/`,
             {
                 method: 'GET',
                 headers: {
