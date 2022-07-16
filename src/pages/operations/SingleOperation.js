@@ -11,10 +11,11 @@ import Moment from "moment";
 import 'moment/locale/fr';
 Moment.locale('fr');
 
-function SingleOperation() {
+function SingleOperation({user, isUserLoading}) {
     const {id} = useParams();
     const [operation, setOperation] = useState({});
     const [isLoading, setIsLoading] = useState(true);
+    const [groups, setGroups] = useState([]);
     const theme = useMantineTheme();
     const navigate = useNavigate();
 
@@ -28,6 +29,7 @@ function SingleOperation() {
             .then(res => res.json())
             .then(data => {
                 setOperation(data.data);
+                setGroups(data.data.roles);
                 setIsLoading(false);
                 document.title = `${data.data.title} - La 7ème Compagnie`;
             })
@@ -43,6 +45,37 @@ function SingleOperation() {
             <div>loading</div>
         )
     }
+
+    const roles = groups.map((group, index) => {
+        return (group.group.map((role, i) => {
+            if (isUserLoading)
+                return;
+            if (user.trained.includes(role.training)) {
+                return (
+                    <tr key={i}>
+                        <td>{role.role}</td>
+                        <td>{group.title}</td>
+                        <td>{role.team}</td>
+                        <td>
+                            <Button color={"green"} compact>S'inscrire</Button>
+                        </td>
+                    </tr>
+                )
+            }
+            if (!role.training && user.roles.includes('ADMIN_ROLE')) {
+                return (
+                    <tr key={i}>
+                        <td>{role.role}</td>
+                        <td>{group.title}</td>
+                        <td>{role.team}</td>
+                        <td>
+                            <Button color={"green"} compact>S'inscrire</Button>
+                        </td>
+                    </tr>
+                )
+            }
+        }))
+    });
 
     return(<>
         <Button variant="outline" compact leftIcon={<ChevronLeft/>} onClick={() => navigate('/operations')}>
@@ -86,38 +119,7 @@ function SingleOperation() {
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <td>Fusillier</td>
-                <td>India 3</td>
-                <td>300</td>
-                <td>
-                    <Button color={"green"} compact>S'inscrire</Button>
-                </td>
-            </tr>
-            <tr>
-                <td>Tireur de précision</td>
-                <td>India 2</td>
-                <td>600</td>
-                <td>
-                    <Button color={"green"} compact>S'inscrire</Button>
-                </td>
-            </tr>
-            <tr>
-                <td>Chef d'équipe</td>
-                <td>India 2</td>
-                <td>600</td>
-                <td>
-                    <Button color={"green"} compact>S'inscrire</Button>
-                </td>
-            </tr>
-            <tr>
-                <td>Pilote de tigre</td>
-                <td>Dragon 1</td>
-                <td><Ban size={16}/></td>
-                <td>
-                    <Button color={"green"} compact disabled>S'inscrire</Button>
-                </td>
-            </tr>
+            {roles}
             </tbody>
         </Table>
 
