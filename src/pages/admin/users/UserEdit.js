@@ -63,7 +63,7 @@ function UserEdit() {
     const roles = [
         { value: 'USER_ROLE', label: 'Utilisateur' },
         { value: 'TRAINER_ROLE', label: 'Formateur' },
-        { value: 'ADMIN_ROLE', label: 'Administrateur' },
+        { value: 'ADMIN_ROLE', label: 'Zeus' },
     ]
 
     if (isLoading) {
@@ -108,7 +108,7 @@ function UserEdit() {
         {notification ? <Notification mb={20} onClose={() => setNotification(false)} icon={<Check size={18} />} color="teal" title="Mise à jour de l'utilisateur">
                 Utilisateur {user.username} correctement mis à jour !
         </Notification> : null}
-        <Button variant="outline" compact leftIcon={<ChevronLeft/>} onClick={() => navigate('/admin/users')}>
+        <Button variant="outline" compact leftIcon={<ChevronLeft/>} onClick={() => navigate('/zeus/users')}>
             Retour
         </Button>
         <h1 style={{marginTop: 0}}>Utilisateur {user.username}</h1>

@@ -1,6 +1,6 @@
 import {Navbar, Skeleton} from "@mantine/core";
 import DashboardNavbarLink from "./DashboardNavbarLink";
-import {Award, Book, BookUpload, CalendarEvent, CalendarPlus, Users} from "tabler-icons-react";
+import {Award, Book, BookUpload, CalendarEvent, CalendarPlus, CalendarStats, Users} from "tabler-icons-react";
 import {Dashboard} from "tabler-icons-react";
 
 function DashboardNavbar({active, isLoading, user}) {
@@ -20,7 +20,7 @@ function DashboardNavbar({active, isLoading, user}) {
         },
         {
             icon: <Award size={16}/>,
-            color: "red",
+            color: "yellow",
             label: "Suivre une formation",
             to: "/trainings"
         }
@@ -34,8 +34,14 @@ function DashboardNavbar({active, isLoading, user}) {
 
     const adminLinks = [
         {
+            icon: <CalendarStats size={16}/>,
+            color: "orange",
+            label: "Gérer les opérations",
+            to: "/zeus/operations"
+        },
+        {
             icon: <CalendarPlus size={16}/>,
-            color: "grape",
+            color: "cyan",
             label: "Créer une opération",
             to: "/zeus/operations/new"
         },
@@ -56,13 +62,13 @@ function DashboardNavbar({active, isLoading, user}) {
     const trainersLinks = [
         {
             icon: <Book size={16}/>,
-            color: "yellow",
+            color: "orange",
             label: "Gérer les formations",
             to: "/formers/trainings"
         },
         {
             icon: <BookUpload size={16}/>,
-            color: "green",
+            color: "cyan",
             label: "Créer une formation",
             to: "/formers/trainings/new"
         }

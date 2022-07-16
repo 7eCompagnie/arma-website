@@ -78,7 +78,7 @@ function Users({isLoading}) {
                     if (role === 'USER_ROLE')
                         result = "Utilisateur"
                     else if (role === 'ADMIN_ROLE')
-                        result = "Administrateur"
+                        result = "Zeus"
                     else if (role === 'TRAINER_ROLE')
                         result = "Formateur"
                     if (i < user.roles.length - 1)
