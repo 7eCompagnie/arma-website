@@ -45,7 +45,7 @@ function Trainings() {
 
             <Group position="apart" style={{ marginBottom: 5, marginTop: theme.spacing.sm }}>
                 <Text weight={900} size={"xl"}>{training.title}</Text>
-                {training.isOpen ? <Badge color="green" variant="light">Ouvert</Badge> : <Badge color="red" variant="light">Fermé</Badge>}
+                {training.isOpen === true ? <Badge color="green" variant="light">Ouvert</Badge> : <Badge color="red" variant="light">Fermé</Badge>}
             </Group>
 
             <Text size="sm" style={{ color: secondaryColor, lineHeight: 1.5 }}>

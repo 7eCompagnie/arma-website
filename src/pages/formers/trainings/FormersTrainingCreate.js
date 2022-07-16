@@ -83,8 +83,6 @@ function FormersTrainingCreate() {
         const name = document.getElementById('input-name').value;
         const description = document.getElementById('input-description').value;
 
-
-        console.log(trainingPicture)
         if (name == null || name === "" || description == null || description === "" || trainers == null || trainers.length === 0 || trainingPicture === null) {
             setNotificationError(true);
             return;

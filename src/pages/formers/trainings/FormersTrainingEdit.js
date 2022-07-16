@@ -29,6 +29,7 @@ function FormersTrainingEdit() {
     const navigate = useNavigate();
     const theme = useMantineTheme();
     const openRef = useRef();
+    const switchRef = useRef();
 
     const fetchTraining = () => {
         fetch(`${process.env.REACT_APP_ENDPOINT_URL}/trainings/${id}`, {
@@ -42,7 +43,6 @@ function FormersTrainingEdit() {
                 setTraining(data.data);
                 fetchTrainers(data.data.trainers);
                 document.title = `${data.data.title} - La 7ème Compagnie`;
-
                 setTrainingTitle(data.data.title);
                 setTrainingDescription(data.data.description);
                 setTrainingPicture(data.data.picture);
@@ -54,6 +54,8 @@ function FormersTrainingEdit() {
     }
 
     const fetchTrainers = (t) => {
+        if (t.length === 0)
+            fetchAllTrainers();
         t.forEach((trainer) => {
             fetch(`${process.env.REACT_APP_ENDPOINT_URL}/users/${trainer}`, {
                 method: 'GET',
@@ -64,6 +66,7 @@ function FormersTrainingEdit() {
                 .then(res => res.json())
                 .then(data => {
                     setTrainers(trainers => trainers.concat(data.data));
+                    setNewTrainers(trainers => trainers.concat(data.data.identifier));
                     fetchAllTrainers();
                 })
                 .catch(err => console.log(err));
@@ -151,18 +154,25 @@ function FormersTrainingEdit() {
     )
 
     const handleOnClick = () => {
+        let body = {}
+
+        if (trainingTitle !== training.title)
+            body.title = trainingTitle;
+        if (trainingDescription !== training.description)
+            body.description = trainingDescription;
+        if (trainingPicture !== training.picture)
+            body.picture = trainingPicture;
+        body.trainers = newTrainers;
+        if (switchRef.current.checked !== training.isOpen)
+            body.isOpen = switchRef.current.checked;
+
         fetch(`${process.env.REACT_APP_ENDPOINT_URL}/trainings/${training._id}`, {
             method: 'PATCH',
             headers: {
                 'x-access-token': localStorage.getItem('token'),
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({
-                "title": trainingTitle,
-                "description": trainingDescription,
-                "picture": trainingPicture,
-                "trainers": newTrainers
-            })
+            body: JSON.stringify(body)
         })
             .then((res) => res.json())
             .then((data) => {
@@ -252,7 +262,6 @@ function FormersTrainingEdit() {
                     <Dropzone
                         style={{display: 'none'}}
                         onDrop={(files) => {
-                            console.log('accepted files', files[files.length - 1].name);
                             document.getElementById("btn-select-files").firstChild.firstChild.innerHTML = files[files.length - 1].name;
                         }}
                         onReject={(files) => console.log('rejected files', files)}
@@ -269,7 +278,7 @@ function FormersTrainingEdit() {
                 </InputWrapper>
 
                 <Group>
-                    <Switch onLabel="OUI" offLabel="NON" defaultChecked={training.isOpen}
+                    <Switch onLabel="OUI" offLabel="NON" defaultChecked={training.isOpen} ref={switchRef}
                             label="Les joueurs peuvent demander à être formé dès à présent"
                     />
                 </Group>
