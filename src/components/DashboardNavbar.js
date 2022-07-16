@@ -1,6 +1,6 @@
 import {Navbar, Skeleton} from "@mantine/core";
 import DashboardNavbarLink from "./DashboardNavbarLink";
-import {Award, Book, BookUpload, CalendarEvent, CalendarPlus, CalendarStats, Users} from "tabler-icons-react";
+import {Award, Book, Books, BookUpload, CalendarEvent, CalendarPlus, CalendarStats, Users} from "tabler-icons-react";
 import {Dashboard} from "tabler-icons-react";
 
 function DashboardNavbar({active, isLoading, user}) {
@@ -71,6 +71,12 @@ function DashboardNavbar({active, isLoading, user}) {
             color: "cyan",
             label: "Créer une formation",
             to: "/formers/trainings/new"
+        },
+        {
+            icon: <Books size={16}/>,
+            color: "red",
+            label: "Faire passer une formation",
+            to: "/formers/trainings/pass"
         }
     ]
 
