@@ -80,11 +80,9 @@ function CreateOperation() {
         group: [
             { role: 'Zeus', team: "Zeus" },
             { role: 'Co-Zeus', team: "Zeus" },
-            { role: 'Fusilier', team: "300" },
         ],
         teams: [
             { name: "Zeus" },
-            { name: "300" },
         ]
     }]);
 
@@ -118,14 +116,6 @@ function CreateOperation() {
             const diff = date2.getTime() - date1.getTime();
             return diff / (1000 * 60 * 60);
         }
-        const diff = getDifference(duration[0], duration[1]) * 60;
-        const timeConvert = (n) => {
-            let hours = (n / 60);
-            let rhours = Math.floor(hours);
-            let minutes = (hours - rhours) * 60;
-            let rminutes = Math.round(minutes);
-            return rhours + "h" + ("0" + rminutes).slice(-2) + "min";
-        }
 
         if (titleInput.current.value == null || titleInput.current.value === "" || descriptionInput.current.value == null || descriptionInput.current.value === "" ||
             date === null || operationPicture == null) {
@@ -141,6 +131,7 @@ function CreateOperation() {
         body.append('duration', duration[1].toString());
         body.append('connectionStartTime', startTime.toString());
         body.append('picture', operationPicture);
+        body.append('roles', JSON.stringify(tabs));
 
         fetch(`${process.env.REACT_APP_ENDPOINT_URL}/operations`, {
             method: 'POST',
