@@ -1,6 +1,6 @@
-import {Alert, Avatar, Button, Center, Divider, Menu, Modal, Skeleton, Text} from "@mantine/core";
+import {Alert, Avatar, Badge, Button, Center, Divider, Menu, Modal, Skeleton, Text} from "@mantine/core";
 import '../css/dashboard.css';
-import {AlertCircle, BellRinging, Logout, Settings} from "tabler-icons-react";
+import {AlertCircle, BellRinging, Logout, Settings, Tools} from "tabler-icons-react";
 import {useNavigate} from "react-router-dom";
 import {useState} from "react";
 
@@ -32,6 +32,11 @@ function DashboardHeader({isLoading, user}) {
             <Center style={{ height: '100%'}}>
                 <img src="/img/logo.webp" alt="Logo de la 7ème Compagnie" height="90%" />
                 <span style={{ marginLeft: '1rem', fontWeight: 900, fontSize: '14pt' }}>La 7ème Compagnie</span>
+                <Badge ml={10} color="yellow" variant="outline">
+                    <Center>
+                        <Tools size={14} style={{marginRight: '3px'}}/>{process.env.REACT_APP_VERSION}
+                    </Center>
+                </Badge>
             </Center>
             <div>
                 <Menu control={
@@ -54,6 +59,11 @@ function DashboardHeader({isLoading, user}) {
         <Center style={{ height: '100%'}}>
             <img src="/img/logo.webp" alt="Logo de la 7ème Compagnie" height="90%" />
             <span style={{ marginLeft: '1rem', fontWeight: 900, fontSize: '14pt' }}>La 7ème Compagnie</span>
+            <Badge ml={10} color="yellow" variant="outline">
+                <Center>
+                    <Tools size={14} style={{marginRight: '3px'}}/>{process.env.REACT_APP_VERSION}
+                </Center>
+            </Badge>
         </Center>
         <div>
             <Menu control={

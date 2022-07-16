@@ -33,17 +33,19 @@ function UserEdit() {
     }
 
     const updateUser = () => {
-        const body = new URLSearchParams();
-        newRoles.forEach((role) => {
-            body.append('roles', role);
-        })
+        let body = {};
+
+        body.roles = newRoles;
+
+        console.log(body);
 
         fetch(`${process.env.REACT_APP_ENDPOINT_URL}/users/${identifier}`, {
             method: 'PATCH',
             headers: {
-                'x-access-token': localStorage.getItem('token')
+                'x-access-token': localStorage.getItem('token'),
+                'Content-Type': 'application/json'
             },
-            body: body
+            body: JSON.stringify(body)
         })
             .then((res) => res.json())
             .then((data) => {

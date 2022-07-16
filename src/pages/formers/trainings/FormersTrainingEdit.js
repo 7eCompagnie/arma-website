@@ -154,7 +154,7 @@ function FormersTrainingEdit() {
     )
 
     const handleOnClick = () => {
-        let body = {}
+        let body = {};
 
         if (trainingTitle !== training.title)
             body.title = trainingTitle;
