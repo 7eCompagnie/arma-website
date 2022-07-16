@@ -55,7 +55,6 @@ const dropzoneChildren = (status, theme) => (
 function FormersTrainingCreate() {
     const [isLoading, setIsLoading] = useState(false);
     const [notificationError, setNotificationError] = useState(false);
-    const [notification, setNotification] = useState(false);
     const [allTrainers, setAllTrainers] = useState([]);
     const [trainers, setTrainers] = useState([]);
     const [trainingPicture, setTrainingPicture] = useState(null);
