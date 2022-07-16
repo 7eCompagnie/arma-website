@@ -1,27 +1,80 @@
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import {
     Badge,
     Button,
     Image, SimpleGrid,
     Table, Text, useMantineTheme,
 } from "@mantine/core";
-import {Ban} from "tabler-icons-react";
+import {Ban, ChevronLeft} from "tabler-icons-react";
+import {useNavigate, useParams} from "react-router-dom";
+import Moment from "moment";
+import 'moment/locale/fr';
+Moment.locale('fr');
 
 function SingleOperation() {
+    const {id} = useParams();
+    const [operation, setOperation] = useState({});
+    const [isLoading, setIsLoading] = useState(true);
     const theme = useMantineTheme();
+    const navigate = useNavigate();
+
+    const fetchOperation = () => {
+        fetch(`${process.env.REACT_APP_ENDPOINT_URL}/operations/${id}`, {
+            method: 'GET',
+            headers: {
+                'x-access-token': localStorage.getItem('token')
+            },
+        })
+            .then(res => res.json())
+            .then(data => {
+                setOperation(data.data);
+                setIsLoading(false);
+                document.title = `${data.data.title} - La 7ème Compagnie`;
+            })
+            .catch(err => console.log(err));
+    }
 
     useEffect(() => {
-        document.title = "Opération Bosso - La 7ème Compagnie";
+        fetchOperation();
     }, []);
 
+    if (isLoading) {
+        return (
+            <div>loading</div>
+        )
+    }
+
     return(<>
-        <h1>Opération Bosso</h1>
+        <Button variant="outline" compact leftIcon={<ChevronLeft/>} onClick={() => navigate('/operations')}>
+            Retour
+        </Button>
+        <h1>{operation.title}</h1>
         <Image
             radius="md"
-            src="/img/bosso.png"
+            src={`${process.env.REACT_APP_ENDPOINT_PUBLIC}/operations/${operation.picture}`}
             alt="Image de soldats de la 7ème Compagnie lors de l'opération Bosso"
             height={250}
         />
+        <h2>Informations générales</h2>
+        <SimpleGrid columns={2} spacing={4}>
+            <Text><strong>Description:</strong> {operation.description}</Text>
+            <Text>
+                <strong>Date:</strong>
+                <span style={{textTransform: "capitalize", marginLeft: '4px'}}>
+                    {Moment(operation.date).format('dddd')}
+                </span> {Moment(operation.date).format('D MMMM YYYY')}
+            </Text>
+            <Text>
+                <strong style={{marginRight: '4px'}}>Durée:</strong>
+                {Moment(operation.duration[0]).format('HH[h]mm')}
+                <span style={{margin: '0 4px'}}>-</span>
+                {Moment(operation.duration[1]).format('HH[h]mm')}
+            </Text>
+            <Text>
+                <strong>Début des connexions:</strong> {Moment(operation.connectionStartTime).format('HH[h]mm')}
+            </Text>
+        </SimpleGrid>
+
         <h2>Rôles disponibles</h2>
         <Table>
             <thead>

@@ -18,6 +18,8 @@ import FormersTrainings from "./pages/formers/trainings/FormersTrainings";
 import FormersTrainingEdit from "./pages/formers/trainings/FormersTrainingEdit";
 import FormersTrainingCreate from "./pages/formers/trainings/FormersTrainingCreate";
 import SingleTraining from "./pages/formers/SingleTraining";
+import ZeusOperations from "./pages/operations/ZeusOperations";
+import ZeusOperationEdit from "./pages/operations/ZeusOperationEdit";
 
 function App() {
     const { pathname } = useLocation();
@@ -106,6 +108,8 @@ function App() {
 
                     <Route path="/zeus/users" element={<Users isLoading={isLoading}/>}/>
                     <Route path="/zeus/users/:identifier" element={<UserEdit/>}/>
+                    <Route path="/zeus/operations" element={<ZeusOperations />}/>
+                    <Route path="/zeus/operations/:id" element={<ZeusOperationEdit />}/>
                     <Route path="/zeus/operations/new" element={<CreateOperation />}/>
 
                     <Route path="*" element={<NotFound />}/>

@@ -1,20 +1,31 @@
-import {useEffect, useRef, useState} from "react";
 import {
-    Button, Checkbox,
-    Container, Group,
+    Badge,
+    Button, Checkbox, Container, Group,
     Input,
-    InputWrapper, Notification,
+    InputWrapper,
+    MultiSelect,
+    Notification,
     SimpleGrid,
-    Table,
-    Tabs, Text,
+    Skeleton, Switch, Table, Tabs, Text,
     Textarea, useMantineTheme
 } from "@mantine/core";
-import {LetterCaseToggle, Calendar, SquarePlus, Pencil, Trash, X, Photo, AlertTriangle} from "tabler-icons-react";
-import {DatePicker, TimeInput, TimeRangeInput} from "@mantine/dates";
-import 'dayjs/locale/fr';
-import dayjs from "dayjs";
+import {
+    AlignJustified,
+    At, Calendar,
+    Check,
+    ChevronLeft,
+    Id,
+    LetterCase,
+    LetterCaseToggle,
+    Numbers, Pencil,
+    Photo, SquarePlus, Trash,
+    X
+} from "tabler-icons-react";
+import {useEffect, useRef, useState} from "react";
+import {Link, useNavigate, useParams} from "react-router-dom";
 import {Dropzone, IMAGE_MIME_TYPE} from "@mantine/dropzone";
-import {useNavigate} from "react-router-dom";
+import {DatePicker, TimeInput, TimeRangeInput} from "@mantine/dates";
+import dayjs from "dayjs";
 
 function getIconColor(status, theme) {
     return status.accepted
@@ -53,77 +64,113 @@ const dropzoneChildren = (status, theme) => (
     </Group>
 )
 
-function CreateOperation() {
-    const titleInput = useRef();
-    const descriptionInput = useRef();
+function ZeusOperationEdit() {
+    const {id} = useParams();
+    const [operation, setOperation] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
+    const [notFound, setNotFound] = useState(false);
+    const [notification, setNotification] = useState(false);
+    const [operationTitle, setOperationTitle] = useState('');
+    const [operationDate, setOperationDate] = useState(null);
+    const [operationDescription, setOperationDescription] = useState('');
+    const [operationPicture, setOperationPicture] = useState('');
+    const [startTime, setStartTime] = useState(null);
+    const [duration, setDuration] = useState(null);
     const [activeTab, setActiveTab] = useState(0);
-    const [date, setDate] = useState(null);
-    const [duration, setDuration] = useState([new Date(new Date().setHours(21, 0, 0, 0)), new Date(new Date().setHours(23, 0, 0, 0))]);
-    const [startTime, setStartTime] = useState(new Date(new Date().setHours(20, 0, 0, 0)));
-    const [operationPicture, setOperationPicture] = useState(null);
-    const [notificationError, setNotificationError] = useState(false);
-    const theme = useMantineTheme();
-    const openRef = useRef();
     const navigate = useNavigate();
+    const openRef = useRef();
+    const theme = useMantineTheme();
 
     const onChange = (active, tabKey) => {
         setActiveTab(active);
         console.log('tabKey', tabKey);
     };
 
-    useEffect(() => {
-        document.title = "Création d'une opération - La 7ème Compagnie";
-    }, []);
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        const getDifference = (date1, date2) => {
-            const diff = date2.getTime() - date1.getTime();
-            return diff / (1000 * 60 * 60);
-        }
-        const diff = getDifference(duration[0], duration[1]) * 60;
-        const timeConvert = (n) => {
-            let hours = (n / 60);
-            let rhours = Math.floor(hours);
-            let minutes = (hours - rhours) * 60;
-            let rminutes = Math.round(minutes);
-            return rhours + "h" + ("0" + rminutes).slice(-2) + "min";
-        }
-
-        if (titleInput.current.value == null || titleInput.current.value === "" || descriptionInput.current.value == null || descriptionInput.current.value === "" ||
-            date === null || operationPicture == null) {
-            setNotificationError(true);
-            return;
-        }
-
-        let body = new FormData();
-        body.append('title', titleInput.current.value);
-        body.append('description', descriptionInput.current.value);
-        body.append('date', date.toString());
-        body.append('duration', duration[0].toString());
-        body.append('duration', duration[1].toString());
-        body.append('connectionStartTime', startTime.toString());
-        body.append('picture', operationPicture);
-
-        fetch(`${process.env.REACT_APP_ENDPOINT_URL}/operations`, {
-            method: 'POST',
+    const fetchOperation = () => {
+        fetch(`${process.env.REACT_APP_ENDPOINT_URL}/operations/${id}`, {
+            method: 'GET',
             headers: {
-                'x-access-token': localStorage.getItem('token'),
+                'x-access-token': localStorage.getItem('token')
             },
-            body: body
         })
             .then(res => res.json())
             .then(data => {
-                navigate('/zeus/operations');
+                setOperation(data.data);
+                document.title = `${data.data.title} - La 7ème Compagnie`;
+                setOperationTitle(data.data.title);
+                setOperationDate(new Date(data.data.date));
+                setOperationDescription(data.data.description);
+                setOperationPicture(data.data.picture);
+                setStartTime(new Date(data.data.connectionStartTime));
+                setDuration([new Date(data.data.duration[0]), new Date(data.data.duration[1])]);
+                setIsLoading(false);
             })
-            .catch(err => console.log(err));
+            .catch(err => {
+                console.log(err);
+                setNotFound(true);
+            });
+    }
+
+    useEffect(() => {
+        fetchOperation();
+    }, []);
+
+
+    const handleSubmit = () => {
+        let body = {};
+
+        if (operationTitle !== operation.title)
+            body.title = operationTitle;
+        if (operationDescription !== operation.description)
+            body.description = operationDescription;
+        if (operationDate !== operation.date)
+            body.date = operationDate;
+        if (startTime !== operation.connectionStartTime)
+            body.connectionStartTime = startTime;
+        if (duration !== operation.duration)
+            body.duration = duration;
+
+        fetch(`${process.env.REACT_APP_ENDPOINT_URL}/operations/${operation._id}`, {
+            method: 'PATCH',
+            headers: {
+                'x-access-token': localStorage.getItem('token'),
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(body)
+        })
+            .then((res) => res.json())
+            .then((data) => {
+                setNotification(true);
+            })
+            .catch(err => {
+                console.log(err);
+            });
+    }
+
+    if (isLoading) {
+        return (<>
+            loading...
+        </>)
+    }
+
+    if (notFound) {
+        return (<>
+            <h1>Impossible de trouvé la formation demandé</h1>
+            <p>
+                La formation que vous recherchez n'existe pas. <br />
+                Vous pouvez retourner sur la liste des formations <Link to="/formers/operations">ici</Link>.
+            </p>
+        </>)
     }
 
     return (<>
-        {notificationError ? <Notification mb={20} onClose={() => setNotificationError(false)} icon={<AlertTriangle size={18} />} color="red" title="Erreur lors de la création de la formation">
-            Veuillez remplir tous les champs !
+        {notification ? <Notification mb={20} onClose={() => setNotification(false)} icon={<Check size={18} />} color="teal" title="Mise à jour de l'opération">
+            L'opération {operation.title} correctement mis à jour !
         </Notification> : null}
-        <h1>Créer une opération</h1>
+        <Button variant="outline" compact leftIcon={<ChevronLeft/>} onClick={() => navigate('/zeus/operations')}>
+            Retour
+        </Button>
+        <h1>{operation.title}</h1>
         <form>
             <SimpleGrid cols={2}>
                 <InputWrapper
@@ -131,9 +178,10 @@ function CreateOperation() {
                     required
                 >
                     <Input
-                        ref={titleInput}
                         icon={<LetterCaseToggle/>}
                         placeholder="Ex: Opération Bosso"
+                        onChange={(e) => setOperationTitle(e.target.value)}
+                        value={operationTitle}
                     />
                 </InputWrapper>
                 <DatePicker
@@ -144,8 +192,8 @@ function CreateOperation() {
                     inputFormat="D MMMM YYYY"
                     icon={<Calendar size={16} />}
                     required
-                    value={date}
-                    onChange={(value) => setDate(value)}
+                    value={operationDate}
+                    onChange={(date) => setOperationDate(date)}
                 />
 
                 <TimeRangeInput
@@ -166,7 +214,8 @@ function CreateOperation() {
                     label="Description de l'opération"
                     placeholder='Ex: Le Corps de la Légion Etrangère pose pied au Sahel. Leur première mission : "Prendre la température".'
                     required
-                    ref={descriptionInput}
+                    value={operationDescription}
+                    onChange={(e) => setOperationDescription(e.target.value)}
                 />
 
                 <InputWrapper
@@ -189,7 +238,7 @@ function CreateOperation() {
                     </Dropzone>
 
                     <Group>
-                        <Button color={"green"} onClick={() => openRef.current()} id="btn-select-files">Sélectionner une image</Button>
+                        <Button color={"green"} onClick={() => openRef.current()} id="btn-select-files" disabled title={"Désactiver momentanément. Veuillez supprimer, puis recréer la formation."}>{operationPicture}</Button>
                     </Group>
                 </InputWrapper>
             </SimpleGrid>
@@ -277,7 +326,7 @@ function CreateOperation() {
                     </Table>
 
                     <Container>
-                    <h3>Créer une équipe</h3>
+                        <h3>Créer une équipe</h3>
                         <div style={{display: 'flex', alignItems: 'end'}}>
                             <InputWrapper
                                 label="Nom de l'équipe"
@@ -312,4 +361,4 @@ function CreateOperation() {
     </>)
 }
 
-export default CreateOperation;
+export default ZeusOperationEdit;

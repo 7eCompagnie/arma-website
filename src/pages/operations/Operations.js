@@ -1,15 +1,18 @@
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import {
     Badge,
     Button,
-    Card,
+    Card, Center,
     Group,
-    Image,
+    Image, Pagination,
     SimpleGrid,
     Text, useMantineTheme
 } from "@mantine/core";
 import {Calendar} from "tabler-icons-react";
 import {useNavigate} from "react-router-dom";
+import Moment from "moment";
+import 'moment/locale/fr';
+Moment.locale('fr');
 
 function Operations() {
     const navigate = useNavigate();
@@ -17,35 +20,64 @@ function Operations() {
     const secondaryColor = theme.colorScheme === 'dark'
         ? theme.colors.dark[1]
         : theme.colors.gray[7];
+    const [operations, setOperations] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [activePage, setPage] = useState(1);
+    const [maxPages, setMaxPages] = useState(1);
+
+    const fetchOperations = () => {
+        fetch(`${process.env.REACT_APP_ENDPOINT_URL}/operations/`,
+            {
+                method: 'GET',
+                headers: {
+                    'x-access-token': localStorage.getItem('token')
+                },
+            })
+            .then(res => res.json())
+            .then(data => {
+                setOperations(data.data);
+                setIsLoading(false);
+            })
+            .catch(err => console.log(err));
+    }
 
     useEffect(() => {
+        fetchOperations();
         document.title = "Inscriptions aux opérations - La 7ème Compagnie";
     }, []);
 
+    const operationsCards = operations.map((operation, i) => {
+        return (<Card shadow="sm" p="lg" key={i}>
+            <Card.Section>
+                <Image src={`${process.env.REACT_APP_ENDPOINT_PUBLIC}/operations/${operation.picture}`} height={160} alt="Norway" />
+            </Card.Section>
+
+            <Group position="apart" style={{ marginBottom: 5, marginTop: theme.spacing.sm }}>
+                <Text weight={900} size={"xl"}>{operation.title}</Text>
+                <Badge color="pink" variant="light">4 places restantes</Badge>
+            </Group>
+
+            <Text mb={20} style={{display: 'flex', alignItems: 'center'}}><Calendar size={20} style={{marginRight: '4px'}}/>
+                <span style={{textTransform: "capitalize", marginRight: '4px'}}>{Moment(operation.date).format('dddd')}</span> {Moment(operation.date).format('D MMMM YYYY')}
+            </Text>
+
+            <Text size="sm" style={{ color: secondaryColor, lineHeight: 1.5 }}>
+                {operation.description}
+            </Text>
+
+            <Button onClick={() => { navigate(`/operations/${operation._id}`) }} variant="light" color="blue" fullWidth style={{ marginTop: 14 }}>
+                En savoir plus
+            </Button>
+        </Card>)
+    });
+
+    if (isLoading)
+        return <div>Loading...</div>
+
     return(<>
-        <h1>Inscriptions au opérations</h1>
+        <h1>Inscription aux opérations</h1>
         <SimpleGrid cols={2}>
-            <Card shadow="sm" p="lg">
-                <Card.Section>
-                    <Image src="/img/bosso.png" height={160} alt="Norway" />
-                </Card.Section>
-
-                <Group position="apart" style={{ marginBottom: 5, marginTop: theme.spacing.sm }}>
-                    <Text weight={900} size={"xl"}>Opération Bosso</Text>
-                    <Badge color="pink" variant="light">4 places restantes
-                    </Badge>
-                </Group>
-
-                <Text mb={20} style={{display: 'flex', alignItems: 'center'}}><Calendar size={20} style={{marginRight: '4px'}}/> 24 mai 2022</Text>
-
-                <Text size="sm" style={{ color: secondaryColor, lineHeight: 1.5 }}>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, urna eu tincidunt consectetur, nisl nunc euismod nisi, eu porta nisl nisi euismod nisi.
-                </Text>
-
-                <Button onClick={() => { navigate('/operations/operation-bosso') }} variant="light" color="blue" fullWidth style={{ marginTop: 14 }}>
-                    En savoir plus
-                </Button>
-            </Card>
+            {operationsCards}
         </SimpleGrid>
     </>);
 }
