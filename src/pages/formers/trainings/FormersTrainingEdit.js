@@ -1,27 +1,34 @@
 import {
     Badge,
-    Button,
+    Button, Checkbox, Group,
     Input,
     InputWrapper,
     MultiSelect,
     Notification,
     SimpleGrid,
-    Skeleton,
-    Textarea
+    Skeleton, Switch, Text,
+    Textarea, useMantineTheme
 } from "@mantine/core";
-import {AlignJustified, At, Check, ChevronLeft, Id, LetterCase, Numbers} from "tabler-icons-react";
-import {useEffect, useState} from "react";
+import {AlignJustified, At, Check, ChevronLeft, Id, LetterCase, Numbers, Photo, X} from "tabler-icons-react";
+import {useEffect, useRef, useState} from "react";
 import {Link, useNavigate, useParams} from "react-router-dom";
+import {Dropzone, IMAGE_MIME_TYPE} from "@mantine/dropzone";
 
 function FormersTrainingEdit() {
     const {id} = useParams();
     const [training, setTraining] = useState(null);
     const [trainers, setTrainers] = useState([]);
+    const [newTrainers, setNewTrainers] = useState([]);
     const [allTrainers, setAllTrainers] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [notFound, setNotFound] = useState(false);
     const [notification, setNotification] = useState(false);
+    const [trainingTitle, setTrainingTitle] = useState('');
+    const [trainingDescription, setTrainingDescription] = useState('');
+    const [trainingPicture, setTrainingPicture] = useState('');
     const navigate = useNavigate();
+    const theme = useMantineTheme();
+    const openRef = useRef();
 
     const fetchTraining = () => {
         fetch(`${process.env.REACT_APP_ENDPOINT_URL}/trainings/${id}`, {
@@ -34,6 +41,11 @@ function FormersTrainingEdit() {
             .then(data => {
                 setTraining(data.data);
                 fetchTrainers(data.data.trainers);
+                document.title = `${data.data.title} - La 7ème Compagnie`;
+
+                setTrainingTitle(data.data.title);
+                setTrainingDescription(data.data.description);
+                setTrainingPicture(data.data.picture);
             })
             .catch(err => {
                 console.log(err);
@@ -52,7 +64,6 @@ function FormersTrainingEdit() {
                 .then(res => res.json())
                 .then(data => {
                     setTrainers(trainers => trainers.concat(data.data));
-                    document.title = `${data.data.title} - La 7ème Compagnie`;
                     fetchAllTrainers();
                 })
                 .catch(err => console.log(err));
@@ -78,13 +89,89 @@ function FormersTrainingEdit() {
         fetchTraining();
     }, []);
 
-    // const trainersName = trainers.map((trainer, i) => {
-    //     return (trainer.username);
-    // });
+    const trainersName = trainers.map((trainer, i) => {
+        if (isLoading === true) {
+            return (
+                <Skeleton key={i}/>
+            )
+        } else {
+            return (
+                trainer.identifier
+            );
+        }
+    });
 
-    const allTrainersName = allTrainers.map((trainer) => {
-        return (trainer.name);
+    const allTrainersName = allTrainers.map((trainer, i) => {
+        if (isLoading === true) {
+            return (
+                <Skeleton key={i}/>
+            )
+        } else {
+            return (
+                {value: trainer.identifier, label: trainer.username}
+            );
+        }
     })
+
+    function getIconColor(status, theme) {
+        return status.accepted
+            ? theme.colors[theme.primaryColor][theme.colorScheme === 'dark' ? 4 : 6]
+            : status.rejected
+                ? theme.colors.red[theme.colorScheme === 'dark' ? 4 : 6]
+                : theme.colorScheme === 'dark'
+                    ? theme.colors.dark[0]
+                    : theme.colors.gray[7];
+    }
+
+    function ImageUploadIcon({status, ...props}) {
+        if (status.accepted) {
+            return <Checkbox {...props} />;
+        }
+
+        if (status.rejected) {
+            return <X {...props} />;
+        }
+
+        return <Photo {...props} />;
+    }
+
+    const dropzoneChildren = (status, theme) => (
+        <Group position="center" spacing="xl" style={{ minHeight: 220, pointerEvents: 'none' }}>
+            <ImageUploadIcon status={status} style={{ color: getIconColor(status, theme) }} size={80} />
+
+            <div>
+                <Text size="xl" inline>
+                    Faites glisser l'image ici ou cliquez pour en sélectionner une.
+                </Text>
+                <Text size="sm" color="dimmed" inline mt={7}>
+                    La taille de l'image ne doit pas dépasser 5Mo.
+                </Text>
+            </div>
+        </Group>
+    )
+
+    const handleOnClick = () => {
+        fetch(`${process.env.REACT_APP_ENDPOINT_URL}/trainings/${training._id}`, {
+            method: 'PATCH',
+            headers: {
+                'x-access-token': localStorage.getItem('token'),
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                "title": trainingTitle,
+                "description": trainingDescription,
+                "picture": trainingPicture,
+                "trainers": newTrainers
+            })
+        })
+            .then((res) => res.json())
+            .then((data) => {
+                setNotification(true);
+            })
+            .catch(err => {
+                console.log(err);
+            });
+    }
 
     if (isLoading) {
         return (<>
@@ -138,33 +225,59 @@ function FormersTrainingEdit() {
                 >
                     <Input
                         icon={<LetterCase/>}
-                        value={training.title}
-                        disabled
+                        value={trainingTitle}
+                        onChange={(e) => setTrainingTitle(e.target.value)}
                     />
                 </InputWrapper>
+
+                <MultiSelect
+                    data={allTrainersName}
+                    label="Formateurs"
+                    placeholder="Ajouter / Supprimer des formateurs"
+                    defaultValue={trainersName}
+                    searchable
+                    nothingFound="Aucun formateur trouvé"
+                    onChange={setNewTrainers}
+                />
+
+                <Textarea
+                    label="Description de la formation"
+                    value={trainingDescription}
+                    onChange={(e) => setTrainingDescription(e.target.value)}
+                />
 
                 <InputWrapper
-                    label={"Description"}
+                    label={"Image de la formation"}
                 >
-                    <Textarea
-                        icon={<AlignJustified/>}
-                        value={training.description}
-                        disabled
-                    />
+                    <Dropzone
+                        style={{display: 'none'}}
+                        onDrop={(files) => {
+                            console.log('accepted files', files[files.length - 1].name);
+                            document.getElementById("btn-select-files").firstChild.firstChild.innerHTML = files[files.length - 1].name;
+                        }}
+                        onReject={(files) => console.log('rejected files', files)}
+                        maxSize={3 * 1024 ** 2}
+                        accept={IMAGE_MIME_TYPE}
+                        openRef={openRef}
+                    >
+                        {(status) => dropzoneChildren(status, theme)}
+                    </Dropzone>
+
+                    <Group>
+                        <Button color={"green"} onClick={() => openRef.current()} id="btn-select-files" disabled title={"Désactiver momentanément. Veuillez supprimer, puis recréer la formation."}>{trainingPicture}</Button>
+                    </Group>
                 </InputWrapper>
 
-                {/*<MultiSelect*/}
-                {/*    data={allTrainersName}*/}
-                {/*    label="Formateurs"*/}
-                {/*    placeholder="Ajouter / Supprimer des formateurs"*/}
-                {/*    // defaultValue={trainersName}*/}
-                {/*    searchable*/}
-                {/*    nothingFound="Aucun formateur trouvé"*/}
-                {/*    onChange={setTrainers}*/}
-                {/*/>*/}
+                <Group>
+                    <Switch onLabel="OUI" offLabel="NON" defaultChecked={training.isOpen}
+                            label="Les joueurs peuvent demander à être formé dès à présent"
+                    />
+                </Group>
             </SimpleGrid>
 
-            {/*<Button mt={"2rem"} onClick={updateUser}>Sauvegarder</Button>*/}
+            <Button mt={"lg"} onClick={handleOnClick}>
+                Sauvegarder
+            </Button>
         </form>
     </>)
 }

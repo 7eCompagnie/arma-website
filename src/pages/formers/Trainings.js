@@ -40,7 +40,7 @@ function Trainings() {
     const trainingsToDisplay = trainings.map((training, i) => {
         return (<Card shadow="sm" p="lg" key={i}>
             <Card.Section>
-                <Image src={`/img/trainings/${training.picture}`} height={160} alt={training.title} />
+                <Image src={`${process.env.REACT_APP_ENDPOINT_PUBLIC}/trainings/${training.picture}`} height={160} alt={training.title} />
             </Card.Section>
 
             <Group position="apart" style={{ marginBottom: 5, marginTop: theme.spacing.sm }}>

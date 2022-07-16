@@ -1,6 +1,7 @@
 import {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {Button, Center, Modal, Pagination, Skeleton, Table, Text} from "@mantine/core";
+import {Plus} from "tabler-icons-react";
 
 function FormersTrainings() {
     const [trainings, setTrainings] = useState([]);
@@ -87,6 +88,7 @@ function FormersTrainings() {
 
     return (<>
         <h1>Gérer les formations</h1>
+        <Button leftIcon={<Plus size={22}/>} onClick={() => navigate('/formers/trainings/new')}>Créer une formation</Button>
         <Center mb={"1rem"}>
             <Pagination page={activePage} onChange={setPage} total={maxPages} withEdges />
         </Center>

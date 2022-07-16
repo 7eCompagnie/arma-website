@@ -21,6 +21,7 @@ function Single() {
             .then(data => {
                 setTraining(data.data);
                 fetchTrainers(data.data.trainers);
+                document.title = `${data.data.title} - La 7ème Compagnie`;
             })
             .catch(err => console.log(err));
     }
@@ -37,7 +38,6 @@ function Single() {
                 .then(data => {
                     setTrainers(trainers => trainers.concat(data.data));
                     setIsLoading(false);
-                    document.title = `${data.data.title} - La 7ème Compagnie`;
                 })
                 .catch(err => console.log(err));
         })
@@ -48,9 +48,15 @@ function Single() {
     }, []);
 
     const trainersToDisplay = trainers.map((trainer, i) => {
-        return (
-            <Badge variant="outline" key={i} mr={10}>{trainer.username}#{trainer.discriminator}</Badge>
-        );
+        if (isLoading === true) {
+            return (
+                <Skeleton key={i}/>
+            )
+        } else {
+            return (
+                <Badge variant="outline" key={i} mr={10}>{trainer.username}#{trainer.discriminator}</Badge>
+            );
+        }
     });
 
     if (isLoading) {
@@ -72,7 +78,7 @@ function Single() {
         <h1 style={{marginTop: 0}}>{training.title}</h1>
         <Image
             radius="md"
-            src={`/img/trainings/${training.picture}`}
+            src={`${process.env.REACT_APP_ENDPOINT_PUBLIC}/trainings/${training.picture}`}
             alt={training.title}
             height={250}
         />
