@@ -1,11 +1,11 @@
 import {Routes, Route, useLocation, useNavigate} from "react-router-dom";
 import Home from "./pages/Home";
 import Dashboard from "./pages/Dashboard";
-import Register from "./pages/operations/Register";
+import Operations from "./pages/operations/Operations";
 import Trainings from "./pages/formers/Trainings";
-import SingleOperation from "./pages/operations/Single";
-import SingleFormation from "./pages/formers/Single";
-import Create from "./pages/operations/Create";
+import SingleOperation from "./pages/operations/SingleOperation";
+import SingleFormation from "./pages/formers/SingleTraining";
+import CreateOperation from "./pages/operations/CreateOperation";
 import NotFound from "./pages/NotFound";
 import Users from "./pages/admin/users/Users";
 import {AppShell, Container, Header, Navbar} from "@mantine/core";
@@ -17,6 +17,7 @@ import UserEdit from "./pages/admin/users/UserEdit";
 import FormersTrainings from "./pages/formers/trainings/FormersTrainings";
 import FormersTrainingEdit from "./pages/formers/trainings/FormersTrainingEdit";
 import FormersTrainingCreate from "./pages/formers/trainings/FormersTrainingCreate";
+import SingleTraining from "./pages/formers/SingleTraining";
 
 function App() {
     const { pathname } = useLocation();
@@ -93,19 +94,19 @@ function App() {
                     <Route path="/settings" element={<Settings isLoading={isLoading} user={user}/>}/>
                     <Route path="/dashboard" element={<Dashboard />}/>
 
-                    <Route path="/operations" element={<Register />}/>
-                    <Route path="/operations/operation-bosso" element={<SingleOperation />}/>
-                    <Route path="/operations/create" element={<Create />}/>
+                    <Route path="/operations" element={<Operations />}/>
+                    <Route path="/operations/:id" element={<SingleOperation />}/>
 
                     <Route path="/trainings" element={<Trainings />}/>
-                    <Route path="/trainings/:id" element={<SingleFormation />}/>
+                    <Route path="/trainings/:id" element={<SingleTraining />}/>
 
                     <Route path="/formers/trainings" element={<FormersTrainings />}/>
                     <Route path="/formers/trainings/new" element={<FormersTrainingCreate />}/>
                     <Route path="/formers/trainings/:id" element={<FormersTrainingEdit />}/>
 
-                    <Route path="/admin/users" element={<Users isLoading={isLoading}/>}/>
-                    <Route path="/admin/users/:identifier" element={<UserEdit/>}/>
+                    <Route path="/zeus/users" element={<Users isLoading={isLoading}/>}/>
+                    <Route path="/zeus/users/:identifier" element={<UserEdit/>}/>
+                    <Route path="/zeus/operations/new" element={<CreateOperation />}/>
 
                     <Route path="*" element={<NotFound />}/>
                 </Routes>

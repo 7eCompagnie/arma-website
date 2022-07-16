@@ -3,7 +3,7 @@ import {Alert, Badge, Button, Image, Skeleton, Text} from "@mantine/core";
 import {useNavigate, useParams} from "react-router-dom";
 import {ChevronLeft, InfoCircle} from "tabler-icons-react";
 
-function Single() {
+function SingleTraining() {
     const {id} = useParams();
     const [training, setTraining] = useState(null);
     const [trainers, setTrainers] = useState([]);
@@ -101,4 +101,4 @@ function Single() {
     </>);
 }
 
-export default Single;
+export default SingleTraining;

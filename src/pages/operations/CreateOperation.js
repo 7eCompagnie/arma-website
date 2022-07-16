@@ -14,7 +14,7 @@ import {DatePicker, TimeInput, TimeRangeInput} from "@mantine/dates";
 import 'dayjs/locale/fr';
 import dayjs from "dayjs";
 
-function Create() {
+function CreateOperation() {
     useEffect(() => {
         document.title = "Création d'une opération - La 7ème Compagnie";
     }, []);
@@ -185,4 +185,4 @@ function Create() {
     </>)
 }
 
-export default Create;
+export default CreateOperation;

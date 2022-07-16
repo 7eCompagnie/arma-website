@@ -7,7 +7,7 @@ import {
 } from "@mantine/core";
 import {Ban} from "tabler-icons-react";
 
-function Single() {
+function SingleOperation() {
     const theme = useMantineTheme();
 
     useEffect(() => {
@@ -212,4 +212,4 @@ function Single() {
     </>);
 }
 
-export default Single;
+export default SingleOperation;

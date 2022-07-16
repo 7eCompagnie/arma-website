@@ -12,12 +12,12 @@ function DashboardNavbar({active, isLoading, user}) {
             label: "Tableau de bord",
             to: "/dashboard"
         },
-        // {
-        //     icon: <CalendarEvent size={16}/>,
-        //     color: "teal",
-        //     label: "Prochaines opérations",
-        //     to: "/operations"
-        // },
+        {
+            icon: <CalendarEvent size={16}/>,
+            color: "teal",
+            label: "Prochaines opérations",
+            to: "/operations"
+        },
         {
             icon: <Award size={16}/>,
             color: "red",
@@ -33,17 +33,17 @@ function DashboardNavbar({active, isLoading, user}) {
     })
 
     const adminLinks = [
-        // {
-        //     icon: <CalendarPlus size={16}/>,
-        //     color: "grape",
-        //     label: "Créer une opération",
-        //     to: "/operations/create"
-        // },
+        {
+            icon: <CalendarPlus size={16}/>,
+            color: "grape",
+            label: "Créer une opération",
+            to: "/zeus/operations/new"
+        },
         {
             icon: <Users size={16}/>,
             color: "lime",
             label: "Gérer les utilisateurs",
-            to: "/admin/users"
+            to: "/zeus/users"
         }
     ]
 
@@ -95,7 +95,7 @@ function DashboardNavbar({active, isLoading, user}) {
             {linksToDisplay}
             {user.roles.includes('TRAINER_ROLE') || user.roles.includes('ADMIN_ROLE') ? <h3 style={{fontSize: "1rem", margin: "1rem 0 0 .75rem", textTransform: "uppercase", color: "#b2bec3"}}>Formateurs</h3> : null}
             {user.roles.includes('TRAINER_ROLE') || user.roles.includes('ADMIN_ROLE') ? trainersLinksToDisplay : null}
-            {user.roles.includes('ADMIN_ROLE') ? <h3 style={{fontSize: "1rem", margin: "1rem 0 0 .75rem", textTransform: "uppercase", color: "#b2bec3"}}>Administrateurs</h3> : null}
+            {user.roles.includes('ADMIN_ROLE') ? <h3 style={{fontSize: "1rem", margin: "1rem 0 0 .75rem", textTransform: "uppercase", color: "#b2bec3"}}>Zeus</h3> : null}
             {user.roles.includes('ADMIN_ROLE') ? adminLinksToDisplay : null}
         </Navbar.Section>
     </>);

@@ -11,7 +11,7 @@ import {
 import {Calendar} from "tabler-icons-react";
 import {useNavigate} from "react-router-dom";
 
-function Register() {
+function Operations() {
     const navigate = useNavigate();
     const theme = useMantineTheme();
     const secondaryColor = theme.colorScheme === 'dark'
@@ -50,4 +50,4 @@ function Register() {
     </>);
 }
 
-export default Register;
+export default Operations;
