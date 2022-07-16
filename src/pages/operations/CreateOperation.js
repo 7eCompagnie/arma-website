@@ -1,9 +1,8 @@
 import {useEffect, useRef, useState} from "react";
 import {
-    Button, Checkbox,
-    Container, Group,
+    Button, Checkbox, Group,
     Input,
-    InputWrapper, Notification,
+    InputWrapper, Notification, Select,
     SimpleGrid,
     Table,
     Tabs, Text,
@@ -53,6 +52,12 @@ const dropzoneChildren = (status, theme) => (
     </Group>
 )
 
+function uuidv4() {
+    return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
+        (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+    );
+}
+
 function CreateOperation() {
     const titleInput = useRef();
     const descriptionInput = useRef();
@@ -62,16 +67,48 @@ function CreateOperation() {
     const [startTime, setStartTime] = useState(new Date(new Date().setHours(20, 0, 0, 0)));
     const [operationPicture, setOperationPicture] = useState(null);
     const [notificationError, setNotificationError] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
+    const [trainings, setTrainings] = useState([]);
+    const [currentTraining, setCurrentTraining] = useState(null);
+    const [currentTeam, setCurrentTeam] = useState(null);
     const theme = useMantineTheme();
     const openRef = useRef();
     const navigate = useNavigate();
 
-    const onChange = (active, tabKey) => {
+    const [tabs, setTabs] = useState([{
+        title: "Zeus",
+        group: [
+            { role: 'Zeus', team: "Zeus" },
+            { role: 'Co-Zeus', team: "Zeus" },
+            { role: 'Fusilier', team: "300" },
+        ],
+        teams: [
+            { name: "Zeus" },
+            { name: "300" },
+        ]
+    }]);
+
+    const changeTab = (active, tabKey) => {
         setActiveTab(active);
-        console.log('tabKey', tabKey);
     };
 
+    const fetchTrainings = () => {
+        fetch(`${process.env.REACT_APP_ENDPOINT_URL}/trainings`, {
+            method: 'GET',
+            headers: {
+                'x-access-token': localStorage.getItem('token')
+            },
+        })
+            .then(res => res.json())
+            .then(data => {
+                setTrainings(data.data);
+                setIsLoading(false);
+            })
+            .catch(err => console.log(err));
+    }
+
     useEffect(() => {
+        fetchTrainings();
         document.title = "Création d'une opération - La 7ème Compagnie";
     }, []);
 
@@ -118,6 +155,70 @@ function CreateOperation() {
             })
             .catch(err => console.log(err));
     }
+
+    const addTab = () => {
+        const input = document.getElementById('group-name');
+
+        if (input.value === '' || input.value === null)
+            return;
+
+        setTabs([...tabs, {
+            title: input.value,
+            group: [],
+            teams: [{ name: input.value }]
+        }]);
+    }
+
+    const addRole = (tab) => {
+        const input = document.getElementById('role-name');
+
+        if (input.value === '' || input.value === null)
+            return;
+
+        let newArray = tabs[tab];
+
+        newArray.group.push({
+            role: input.value,
+            training: currentTraining,
+            team: currentTeam
+        });
+        setTabs([...tabs.slice(0, tab), newArray, ...tabs.slice(tab + 1)]);
+    }
+
+    const addTeam = (tab) => {
+        const input = document.getElementById('team-name');
+
+        if (input.value === '' || input.value === null)
+            return;
+
+        let newArray = tabs[tab];
+
+        newArray.teams.push({
+            name: input.value
+        });
+        setTabs([...tabs.slice(0, tab), newArray, ...tabs.slice(tab + 1)]);
+    }
+
+    const trainingsData = trainings.map(training => {
+        return {
+            value: training._id,
+            label: training.title
+        }
+    });
+
+    const teamsData = (tab) => {
+        if (!tabs[tab])
+            return {};
+        return tabs[tab].teams.map(team => {
+            return {
+                value: team.name,
+                label: team.name
+            }
+        });
+    }
+
+    if (isLoading)
+        return (<div>Loading...</div>)
 
     return (<>
         {notificationError ? <Notification mb={20} onClose={() => setNotificationError(false)} icon={<AlertTriangle size={18} />} color="red" title="Erreur lors de la création de la formation">
@@ -195,103 +296,86 @@ function CreateOperation() {
             </SimpleGrid>
 
             <h2>Configuration des groupes et des équipes</h2>
-            <Tabs active={activeTab} onTabChange={onChange} >
-                <Tabs.Tab label="Zeus" tabKey="zeus">
-                    <Table>
-                        <thead>
-                        <tr>
-                            <th>Rôle</th>
-                            <th>Actions</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td>Zeus</td>
-                            <td>
-                                <Button mr={10} leftIcon={<Pencil size={16}/>} compact>Editer</Button>
-                                <Button ml={10} leftIcon={<Trash size={16}/>} compact color={"red"}>Supprimer</Button>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </Table>
-                </Tabs.Tab>
-                <Tabs.Tab label="India 2" tabKey="india2">
-                    <Table>
-                        <thead>
-                        <tr>
-                            <th>Rôle</th>
-                            <th>Actions</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td>Chef de Groupe</td>
-                            <td>
-                                <Button mr={10} leftIcon={<Pencil size={16}/>} compact>Editer</Button>
-                                <Button ml={10} leftIcon={<Trash size={16}/>} compact color={"red"}>Supprimer</Button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Auxiliaire Sanitaire</td>
-                            <td>
-                                <Button mr={10} leftIcon={<Pencil size={16}/>} compact>Editer</Button>
-                                <Button ml={10} leftIcon={<Trash size={16}/>} compact color={"red"}>Supprimer</Button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Tireur de précision</td>
-                            <td>
-                                <Button mr={10} leftIcon={<Pencil size={16}/>} compact>Editer</Button>
-                                <Button ml={10} leftIcon={<Trash size={16}/>} compact color={"red"}>Supprimer</Button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th style={{ textAlign: 'left', paddingLeft: 20 }}>300</th>
-                            <td>
-                                <Button mr={10} leftIcon={<Pencil size={16}/>} compact>Editer</Button>
-                                <Button ml={10} leftIcon={<Trash size={16}/>} compact color={"red"}>Supprimer</Button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Chef d'équipe</td>
-                            <td>
-                                <Button mr={10} leftIcon={<Pencil size={16}/>} compact>Editer</Button>
-                                <Button ml={10} leftIcon={<Trash size={16}/>} compact color={"red"}>Supprimer</Button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Fusillier</td>
-                            <td>
-                                <Button mr={10} leftIcon={<Pencil size={16}/>} compact>Editer</Button>
-                                <Button ml={10} leftIcon={<Trash size={16}/>} compact color={"red"}>Supprimer</Button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>MG</td>
-                            <td>
-                                <Button mr={10} leftIcon={<Pencil size={16}/>} compact>Editer</Button>
-                                <Button ml={10} leftIcon={<Trash size={16}/>} compact color={"red"}>Supprimer</Button>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </Table>
-
-                    <Container>
-                    <h3>Créer une équipe</h3>
-                        <div style={{display: 'flex', alignItems: 'end'}}>
+            <Tabs active={activeTab} onTabChange={changeTab}>
+                {tabs.map((tab, index) => (
+                    <Tabs.Tab label={tab.title} tabKey={tab.title} key={index}>
+                            {tab.teams.map((team, index) => (
+                                <div key={index}>
+                                    <h4>{team.name}</h4>
+                                    <Table>
+                                        <thead>
+                                        <tr>
+                                            <th>Rôle</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {tab.group.map((role, i) => {
+                                            if (role.team === team.name) {
+                                                return (
+                                                    <tr key={uuidv4()}>
+                                                        <td>{role.role}</td>
+                                                        <td>
+                                                            <Button mr={10} leftIcon={<Pencil size={16}/>} compact>Editer</Button>
+                                                            <Button ml={10} leftIcon={<Trash size={16}/>} compact color={"red"}>Supprimer</Button>
+                                                        </td>
+                                                    </tr>
+                                                )
+                                            }
+                                        })}
+                                        </tbody>
+                                    </Table>
+                                </div>))}
+                        <h3>Ajouter un rôle</h3>
+                        <SimpleGrid cols={2}>
                             <InputWrapper
-                                label="Nom de l'équipe"
+                                label="Nom du rôle"
                                 required
                             >
                                 <Input
-                                    id={'team-name'}
-                                    placeholder="Ex: 300"
+                                    id={'role-name'}
+                                    placeholder="Ex: Fusillier"
                                     required/>
                             </InputWrapper>
-                            <Button ml={20}>Créer</Button>
+                            <Select
+                                label="Choisir une formation"
+                                placeholder="Rechercher une formation..."
+                                data={trainingsData}
+                                searchable
+                                maxDropdownHeight={400}
+                                nothingFound="Aucune formation trouvée."
+                                onChange={(e) => { setCurrentTraining(e) }}
+                                required
+                            />
+                            <Select
+                                label="Choisir une équipe"
+                                placeholder="Rechercher une équipe..."
+                                data={teamsData(activeTab)}
+                                searchable
+                                maxDropdownHeight={400}
+                                nothingFound="Aucune équipe trouvée."
+                                onChange={(e) => { setCurrentTeam(e) }}
+                                required
+                            />
+                        </SimpleGrid>
+                        <Button mt={20} onClick={() => addRole(activeTab)}>Ajouter</Button>
+                        <div>
+                            <h3>Créer une équipe</h3>
+                            <div style={{display: 'flex', alignItems: 'end'}}>
+                                <InputWrapper
+                                    label="Nom de l'équipe"
+                                    required
+                                >
+                                    <Input
+                                        id={'team-name'}
+                                        placeholder="Ex: 300"
+                                        required/>
+                                </InputWrapper>
+                                <Button ml={20} onClick={() => addTeam(activeTab)}>Créer</Button>
+                            </div>
                         </div>
-                    </Container>
-                </Tabs.Tab>
+                    </Tabs.Tab>
+                ))}
                 <Tabs.Tab icon={<SquarePlus size={16}/>} label="Créer un groupe" tabKey="createGroup">
                     <div style={{display: 'flex', alignItems: 'end'}}>
                         <InputWrapper
@@ -299,15 +383,16 @@ function CreateOperation() {
                             required
                         >
                             <Input
-                                id={'team-name'}
-                                placeholder="Ex: 300"
+                                id={'group-name'}
+                                placeholder="Ex: India 2"
                                 required/>
                         </InputWrapper>
-                        <Button ml={20}>Créer</Button>
+                        <Button ml={20} onClick={addTab}>Créer</Button>
                     </div>
                 </Tabs.Tab>
             </Tabs>
-            <Button color={"green"} fullWidth mt={30} onClick={handleSubmit}>Créer l'opération</Button>
+
+            <Button mt={30} onClick={handleSubmit}>Créer l'opération</Button>
         </form>
     </>)
 }
