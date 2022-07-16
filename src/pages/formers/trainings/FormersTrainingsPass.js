@@ -87,7 +87,9 @@ function FormersTrainingsPass() {
                 setSelectedUser(data.data);
                 setNewTrained(data.data.trained)
             })
-            .catch(err => console.log(err));
+            .catch(err => {
+                console.log(err)
+            });
     }
 
     const trainingsData = trainings.map((training, i) => {
@@ -129,10 +131,6 @@ function FormersTrainingsPass() {
             searchable
             maxDropdownHeight={400}
             nothingFound="Aucun utilisateur trouvé."
-            filter={(value, item) =>
-                item.label.toLowerCase().includes(value.toLowerCase().trim()) ||
-                item.description.toLowerCase().includes(value.toLowerCase().trim())
-            }
             onChange={(e) => { setCurrentUser(e) }}
         />
 
