@@ -8,7 +8,17 @@ import {
     Tabs, Text,
     Textarea, useMantineTheme
 } from "@mantine/core";
-import {LetterCaseToggle, Calendar, SquarePlus, Pencil, Trash, X, Photo, AlertTriangle} from "tabler-icons-react";
+import {
+    LetterCaseToggle,
+    Calendar,
+    SquarePlus,
+    Pencil,
+    Trash,
+    X,
+    Photo,
+    AlertTriangle,
+    CircleCheck
+} from "tabler-icons-react";
 import {DatePicker, TimeInput, TimeRangeInput} from "@mantine/dates";
 import 'dayjs/locale/fr';
 import dayjs from "dayjs";
@@ -78,8 +88,8 @@ function CreateOperation() {
     const [tabs, setTabs] = useState([{
         title: "Zeus",
         group: [
-            { role: 'Zeus', team: "Zeus", player: null },
-            { role: 'Co-Zeus', team: "Zeus", player: null },
+            { role: 'Zeus', team: "Zeus", player: null, isEditing: false },
+            { role: 'Co-Zeus', team: "Zeus", player: null, isEditing: false },
         ],
         teams: [
             { name: "Zeus" },
@@ -214,9 +224,32 @@ function CreateOperation() {
             return {};
 
         let newArray = tabs[activeTab];
-
         let toRemove = newArray.group.find(role => role.role === currentRole.role);
+
         newArray.group.splice(newArray.group.indexOf(toRemove), 1);
+        setTabs([...tabs.slice(0, activeTab), newArray, ...tabs.slice(activeTab + 1)]);
+    }
+
+    const editRole = (currentRole) => {
+        if (!tabs[activeTab])
+            return {};
+
+        let newArray = tabs[activeTab];
+        let toEdit = newArray.group.find(role => role.role === currentRole.role);
+
+        toEdit.isEditing = true;
+        setTabs([...tabs.slice(0, activeTab), newArray, ...tabs.slice(activeTab + 1)]);
+    }
+
+    const confirmEdit = (currentRole, elId) => {
+        if (!tabs[activeTab])
+            return {};
+
+        let newArray = tabs[activeTab];
+        let toEdit = newArray.group.find(role => role.role === currentRole.role);
+
+        toEdit.role = document.getElementById(elId).value;
+        toEdit.isEditing = false;
         setTabs([...tabs.slice(0, activeTab), newArray, ...tabs.slice(activeTab + 1)]);
     }
 
@@ -317,9 +350,9 @@ function CreateOperation() {
                                             if (role.team === team.name) {
                                                 return (
                                                     <tr key={uuidv4()}>
-                                                        <td>{role.role}</td>
+                                                        <td>{role.isEditing ? <Input id={tab.title + "-" + team.name + "-" + role.role} placeholder="Ex: Fusillier" defaultValue={role.role} required/> : role.role}</td>
                                                         <td>
-                                                            <Button mr={10} leftIcon={<Pencil size={16}/>} compact>Editer</Button>
+                                                            {role.isEditing ? <Button color={"green"} mr={10} leftIcon={<CircleCheck size={16}/>} compact onClick={() => {confirmEdit(role, tab.title + "-" + team.name + "-" + role.role)}}>Valider</Button> : <Button mr={10} leftIcon={<Pencil size={16}/>} compact onClick={() => editRole(role)}>Editer</Button>}
                                                             <Button ml={10} leftIcon={<Trash size={16}/>} compact color={"red"} onClick={() => removeRole(role)}>Supprimer</Button>
                                                         </td>
                                                     </tr>
