@@ -98,7 +98,7 @@ function App() {
                     <Route path="/dashboard" element={<Dashboard />}/>
 
                     <Route path="/operations" element={<Operations />}/>
-                    <Route path="/operations/:id" element={<SingleOperation user={user} isUserLoading={isLoading}/>}/>
+                    <Route path="/operations/:id" element={<SingleOperation />}/>
 
                     <Route path="/trainings" element={<Trainings />}/>
                     <Route path="/trainings/:id" element={<SingleTraining />}/>

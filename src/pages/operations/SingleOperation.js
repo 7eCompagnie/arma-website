@@ -12,18 +12,19 @@ import Moment from "moment";
 import 'moment/locale/fr';
 Moment.locale('fr');
 
-function SingleOperation({user, isUserLoading}) {
+function SingleOperation() {
     const {id} = useParams();
     const [operation, setOperation] = useState({});
     const [isLoading, setIsLoading] = useState(true);
     const [groups, setGroups] = useState([]);
+    const [updatedUser, setUpdatedUser] = useState({});
     const theme = useMantineTheme();
     const navigate = useNavigate();
 
     const isUserRegistered = () => {
         for (let i = 0; i < groups.length; i++) {
             for (let j = 0; j < groups[i].group.length; j++)
-                if (groups[i].group[j].player === user.identifier)
+                if (groups[i].group[j].player === updatedUser.identifier)
                     return true;
         }
         return false;
@@ -40,8 +41,25 @@ function SingleOperation({user, isUserLoading}) {
             .then(data => {
                 setOperation(data.data);
                 setGroups(data.data.roles);
-                setIsLoading(false);
                 document.title = `${data.data.title} - La 7ème Compagnie`;
+                fetchUser();
+            })
+            .catch(err => console.log(err));
+    }
+
+    const fetchUser = () => {
+        const token = localStorage.getItem('token');
+
+        fetch(`${process.env.REACT_APP_ENDPOINT_URL}/users/token/${token}`, {
+            method: 'GET',
+            headers: {
+                'x-access-token': token
+            }
+        })
+            .then(res => res.json())
+            .then(data => {
+                setUpdatedUser(data.data);
+                setIsLoading(false);
             })
             .catch(err => console.log(err));
     }
@@ -50,18 +68,12 @@ function SingleOperation({user, isUserLoading}) {
         fetchOperation();
     }, []);
 
-    if (isLoading) {
-        return (
-            <div>loading</div>
-        )
-    }
-
     const unregisterPlayer = () => {
         let newRoles = [...operation.roles];
 
         for (let i = 0; i < newRoles.length; i++) {
             for (let j = 0; j < newRoles[i].group.length; j++) {
-                if (newRoles[i].group[j].player === user.identifier)
+                if (newRoles[i].group[j].player === updatedUser.identifier)
                     newRoles[i].group[j].player = null;
             }
         }
@@ -89,7 +101,7 @@ function SingleOperation({user, isUserLoading}) {
     const getPlayerInfo = () => {
         for (let i = 0; i < groups.length; i++) {
             for (let j = 0; j < groups[i].group.length; j++) {
-                if (groups[i].group[j].player === user.identifier) {
+                if (groups[i].group[j].player === updatedUser.identifier) {
                     let infos = groups[i].group[j];
                     infos.group = groups[i].title;
                     return infos;
@@ -102,7 +114,7 @@ function SingleOperation({user, isUserLoading}) {
     const registerPlayer = (group, role) => {
         let newRoles = [...operation.roles];
 
-        newRoles.find(r => r.title === group.title).group.find(r => r.title === role.title && r.team === role.team).player = user.identifier;
+        newRoles.find(r => r.title === group.title).group.find(r => r.role === role.role && r.team === role.team).player = updatedUser.identifier;
 
         const body = {
             roles: newRoles
@@ -126,7 +138,7 @@ function SingleOperation({user, isUserLoading}) {
 
     const roles = groups.map((group, index) => {
         return (group.group.map((role, i) => {
-            if (isUserLoading)
+            if (isLoading)
                 return;
             if (role.player === null) {
                 return (
@@ -135,12 +147,14 @@ function SingleOperation({user, isUserLoading}) {
                         <td>{group.title}</td>
                         <td>{role.team}</td>
                         <td>
-                            <Button color={"green"} compact onClick={() => registerPlayer(group, role)}>S'inscrire</Button>
+                            { updatedUser.trained.includes(role.training) || (role.training === undefined && updatedUser.roles.includes('ADMIN_ROLE')) ?
+                                <Button color={"green"} compact onClick={() => registerPlayer(group, role)}>S'inscrire</Button> :
+                                <Button color={"green"} compact disabled title={"Vous n'avez pas la formation requise"}>S'inscrire</Button>}
                         </td>
                     </tr>
                 )
             }
-            if (!role.training && user.roles.includes('ADMIN_ROLE')) {
+            if (updatedUser.roles.includes('ADMIN_ROLE')) {
                 return (
                     <tr key={i}>
                         <td>{role.role}</td>
@@ -154,6 +168,12 @@ function SingleOperation({user, isUserLoading}) {
             }
         }))
     });
+
+    if (isLoading) {
+        return (
+            <div>loading</div>
+        )
+    }
 
     return(<>
         <Button variant="outline" compact leftIcon={<ChevronLeft/>} onClick={() => navigate('/operations')}>
