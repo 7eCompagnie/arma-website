@@ -92,7 +92,7 @@ function CreateOperation() {
             { role: 'Co-Zeus', team: "Zeus", player: null, isEditing: false },
         ],
         teams: [
-            { name: "Zeus" },
+            { name: "Zeus", isEditing: false },
         ]
     }]);
 
@@ -182,7 +182,8 @@ function CreateOperation() {
             role: input.value,
             training: currentTraining,
             team: currentTeam,
-            player: null
+            player: null,
+            isEditing: false
         });
         setTabs([...tabs.slice(0, tab), newArray, ...tabs.slice(tab + 1)]);
     }
@@ -196,7 +197,8 @@ function CreateOperation() {
         let newArray = tabs[tab];
 
         newArray.teams.push({
-            name: input.value
+            name: input.value,
+            isEditing: false
         });
         setTabs([...tabs.slice(0, tab), newArray, ...tabs.slice(tab + 1)]);
     }
@@ -259,8 +261,44 @@ function CreateOperation() {
 
         let newArray = tabs[activeTab];
         let toRemove = newArray.teams.find(team => team.name === currentTeam.name);
+        let toRemoves = [];
 
+        newArray.group.forEach(role => {
+            if (role.team === toRemove.name)
+                toRemoves.push(role);
+        });
+
+        toRemoves.forEach(role => {
+            newArray.group.splice(newArray.group.indexOf(role), 1);
+        });
         newArray.teams.splice(newArray.teams.indexOf(toRemove), 1);
+        setTabs([...tabs.slice(0, activeTab), newArray, ...tabs.slice(activeTab + 1)]);
+    }
+
+    const editTeam = (currentTeam) => {
+        if (!tabs[activeTab])
+            return {};
+
+        let newArray = tabs[activeTab];
+        let toEdit = newArray.teams.find(team => team.name === currentTeam.name);
+
+        toEdit.isEditing = true;
+        setTabs([...tabs.slice(0, activeTab), newArray, ...tabs.slice(activeTab + 1)]);
+    }
+
+    const confirmEditTeam = (currentTeam, elId) => {
+        if (!tabs[activeTab])
+            return {};
+
+        let newArray = tabs[activeTab];
+        let toEdit = newArray.teams.find(team => team.name === currentTeam.name);
+
+        newArray.group.forEach(role => {
+            if (role.team === toEdit.name)
+                role.team = document.getElementById(elId).value;
+        })
+        toEdit.name = document.getElementById(elId).value
+        toEdit.isEditing = false;
         setTabs([...tabs.slice(0, activeTab), newArray, ...tabs.slice(activeTab + 1)]);
     }
 
@@ -349,9 +387,11 @@ function CreateOperation() {
                             {tab.teams.map((team, index) => (
                                 <div key={index}>
                                     <SimpleGrid cols={2}>
-                                        <h4>{team.name}</h4>
+                                        <h4>
+                                            {team.isEditing ? <Input id={tab.title + "-" + team.name} placeholder="Ex: 300" defaultValue={team.name} required/> : team.name}
+                                        </h4>
                                         <Center>
-                                            {/*{role.isEditing ? <Button color={"green"} mr={10} leftIcon={<CircleCheck size={16}/>} compact onClick={() => {confirmEdit(role, tab.title + "-" + team.name + "-" + role.role)}}>Valider</Button> : <Button mr={10} leftIcon={<Pencil size={16}/>} compact onClick={() => editRole(role)}>Editer</Button>}*/}
+                                            {team.isEditing ? <Button color={"green"} mr={10} leftIcon={<CircleCheck size={16}/>} compact onClick={() => {confirmEditTeam(team, tab.title + "-" + team.name)}}>Valider</Button> : <Button mr={10} leftIcon={<Pencil size={16}/>} compact onClick={() => editTeam(team)}>Editer</Button>}
                                             <Button ml={10} leftIcon={<Trash size={16}/>} compact color={"red"} onClick={() => removeTeam(team)}>Supprimer</Button>
                                         </Center>
                                     </SimpleGrid>
