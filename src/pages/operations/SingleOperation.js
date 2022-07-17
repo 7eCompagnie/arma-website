@@ -18,6 +18,7 @@ function SingleOperation() {
     const [isLoading, setIsLoading] = useState(true);
     const [groups, setGroups] = useState([]);
     const [updatedUser, setUpdatedUser] = useState({});
+    const [allUsers, setAllUsers] = useState({});
     const theme = useMantineTheme();
     const navigate = useNavigate();
 
@@ -59,6 +60,21 @@ function SingleOperation() {
             .then(res => res.json())
             .then(data => {
                 setUpdatedUser(data.data);
+                fetchAllUsers();
+            })
+            .catch(err => console.log(err));
+    }
+
+    const fetchAllUsers = () => {
+        fetch(`${process.env.REACT_APP_ENDPOINT_URL}/users`, {
+            method: 'GET',
+            headers: {
+                'x-access-token': localStorage.getItem('token')
+            },
+        })
+            .then(res => res.json())
+            .then(data => {
+                setAllUsers(data.data);
                 setIsLoading(false);
             })
             .catch(err => console.log(err));
@@ -231,144 +247,34 @@ function SingleOperation() {
 
         <h2>Inscrits</h2>
         <SimpleGrid cols={3}>
-            <div>
-                <h3>India 2</h3>
-                <ul style={{ listStyle: "none" }}>
-                    <li>
-                        <div style={{display: 'flex', alignItems: 'center'}}>
-                            <Badge color={"blue"} mr={10}>CDG</Badge>
-                            Marston
-                        </div>
-                    </li>
-                    <li>
-                        <div style={{display: 'flex', alignItems: 'center'}}>
-                            <Badge color={"blue"} mr={10}>TP</Badge>
-                            Engourdy
-                        </div>
-                    </li>
-                    <li>
-                        <div style={{display: 'flex', alignItems: 'center'}}>
-                            <Badge color={"blue"} mr={10}>AUX. SAN</Badge>
-                            Rouliane
-                        </div>
-                    </li>
-                    <Text mt={10} style={{ fontWeight: 900 }}>
-                        300
-                    </Text>
-                    <ul style={{ listStyle: "none" }}>
-                        <li>
-                            <div style={{display: 'flex', alignItems: 'center'}}>
-                                <Badge color={"blue"} mr={10}>CDE</Badge>
-                                Fradom
-                            </div>
-                        </li>
-                        <li>
-                            <div style={{display: 'flex', alignItems: 'center'}}>
-                                <Badge color={"blue"} mr={10}>FUS</Badge>
-                                DJmaxou
-                            </div>
-                        </li>
-                        <li>
-                            <div style={{display: 'flex', alignItems: 'center'}}>
-                                <Badge color={"blue"} mr={10}>FUS</Badge>
-                                Kurt
-                            </div>
-                        </li>
-                    </ul>
-                    <Text mt={10} style={{ fontWeight: 900 }}>
-                        600
-                    </Text>
-                    <ul style={{ listStyle: "none" }}>
-                        <li>
-                            <div style={{color: theme.colors.gray[5], display: 'flex', alignItems: 'center'}}>
-                                <Badge color={"blue"} mr={10}>CDE</Badge>
-                                Disponible
-                            </div>
-                        </li>
-                        <li>
-                            <div style={{color: theme.colors.gray[5], display: 'flex', alignItems: 'center'}}>
-                                <Badge color={"blue"} mr={10}>MIT</Badge>
-                                Disponible
-                            </div>
-                        </li>
-                        <li>
-                            <div style={{color: theme.colors.gray[5], display: 'flex', alignItems: 'center'}}>
-                                <Badge color={"blue"} mr={10}>FUS</Badge>
-                                Disponible
-                            </div>
-                        </li>
-                    </ul>
-                </ul>
-            </div>
-            <div>
-                <h3>India 3</h3>
-                <ul style={{ listStyle: "none" }}>
-                    <li>
-                        <div style={{display: 'flex', alignItems: 'center'}}>
-                            <Badge color={"blue"} mr={10}>CDG</Badge>
-                            H1RO
-                        </div>
-                    </li>
-                    <li>
-                        <div style={{display: 'flex', alignItems: 'center'}}>
-                            <Badge color={"blue"} mr={10}>TP</Badge>
-                            Red
-                        </div>
-                    </li>
-                    <li>
-                        <div style={{display: 'flex', alignItems: 'center'}}>
-                            <Badge color={"blue"} mr={10}>AUX. SAN</Badge>
-                            Luco
-                        </div>
-                    </li>
-                    <Text mt={10} style={{ fontWeight: 900 }}>
-                        300
-                    </Text>
-                    <ul style={{ listStyle: "none" }}>
-                        <li>
-                            <div style={{display: 'flex', alignItems: 'center'}}>
-                                <Badge color={"blue"} mr={10}>CDE</Badge>
-                                Drake Sn0w
-                            </div>
-                        </li>
-                        <li>
-                            <div style={{display: 'flex', alignItems: 'center'}}>
-                                <Badge color={"blue"} mr={10}>FUS</Badge>
-                                Undertaker
-                            </div>
-                        </li>
-                        <li>
-                            <div style={{display: 'flex', alignItems: 'center'}}>
-                                <Badge color={"blue"} mr={10}>FUS</Badge>
-                                Myckaël
-                            </div>
-                        </li>
-                    </ul>
-                    <Text mt={10} style={{ fontWeight: 900 }}>
-                        600
-                    </Text>
-                    <ul style={{ listStyle: "none" }}>
-                        <li>
-                            <div style={{display: 'flex', alignItems: 'center'}}>
-                                <Badge color={"blue"} mr={10}>CDE</Badge>
-                                Sn0w
-                            </div>
-                        </li>
-                        <li>
-                            <div style={{display: 'flex', alignItems: 'center'}}>
-                                <Badge color={"blue"} mr={10}>MIT</Badge>
-                                XrayG4mer
-                            </div>
-                        </li>
-                        <li>
-                            <div style={{display: 'flex', alignItems: 'center'}}>
-                                <Badge color={"blue"} mr={10}>FUS</Badge>
-                                Alexios Gan
-                            </div>
-                        </li>
-                    </ul>
-                </ul>
-            </div>
+            {groups.map((group, index) => (
+                <div key={index}>
+                    <h3>{group.title}</h3>
+                    {group.teams.map((team, i) => (<div key={i}>
+                        <Text mt={10} style={{ fontWeight: 900 }}>
+                            {group.title !== team.name ? team.name : ""}
+                        </Text>
+                        <ul style={{ listStyle: "none", padding: 0 }}>
+                            {group.group.map((role, j) => {
+                                if (role.team === team.name) {
+                                    return (<li key={j}>
+                                        { role.player !== null ?
+                                            <div style={{display: 'flex', alignItems: 'center'}}>
+                                                <Badge color={"blue"} mr={10}>{role.role}</Badge>
+                                                { allUsers.find(user => user.identifier === role.player).username }
+                                            </div> :
+                                            <div style={{color: theme.colors.gray[5], display: 'flex', alignItems: 'center'}}>
+                                                <Badge color={"blue"} mr={10}>{role.role}</Badge>
+                                                Disponible
+                                            </div>
+                                        }
+                                    </li>)
+                                }
+                            })}
+                        </ul>
+                    </div>))}
+                </div>
+            ))}
         </SimpleGrid>
     </>);
 }
