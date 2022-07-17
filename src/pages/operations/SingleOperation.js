@@ -1,11 +1,12 @@
 import {useEffect, useState} from "react";
 import {
+    Alert,
     Badge,
     Button,
-    Image, SimpleGrid,
+    Image, Notification, SimpleGrid,
     Table, Text, useMantineTheme,
 } from "@mantine/core";
-import {Ban, ChevronLeft} from "tabler-icons-react";
+import {AlertCircle, Ban, Check, ChevronLeft} from "tabler-icons-react";
 import {useNavigate, useParams} from "react-router-dom";
 import Moment from "moment";
 import 'moment/locale/fr';
@@ -18,6 +19,15 @@ function SingleOperation({user, isUserLoading}) {
     const [groups, setGroups] = useState([]);
     const theme = useMantineTheme();
     const navigate = useNavigate();
+
+    const isUserRegistered = () => {
+        for (let i = 0; i < groups.length; i++) {
+            for (let j = 0; j < groups[i].group.length; j++)
+                if (groups[i].group[j].player === user.identifier)
+                    return true;
+        }
+        return false;
+    }
 
     const fetchOperation = () => {
         fetch(`${process.env.REACT_APP_ENDPOINT_URL}/operations/${id}`, {
@@ -46,18 +56,86 @@ function SingleOperation({user, isUserLoading}) {
         )
     }
 
+    const unregisterPlayer = () => {
+        let newRoles = [...operation.roles];
+
+        for (let i = 0; i < newRoles.length; i++) {
+            for (let j = 0; j < newRoles[i].group.length; j++) {
+                if (newRoles[i].group[j].player === user.identifier)
+                    newRoles[i].group[j].player = null;
+            }
+        }
+
+        const body = {
+            roles: newRoles
+        };
+        fetch(`${process.env.REACT_APP_ENDPOINT_URL}/operations/${id}`, {
+            method: 'PATCH',
+            headers: {
+                'x-access-token': localStorage.getItem('token'),
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(body)
+        })
+            .then((res) => res.json())
+            .then(() => {
+                fetchOperation();
+            })
+            .catch(err => {
+                console.log(err);
+            });
+    }
+
+    const getPlayerInfo = () => {
+        for (let i = 0; i < groups.length; i++) {
+            for (let j = 0; j < groups[i].group.length; j++) {
+                if (groups[i].group[j].player === user.identifier) {
+                    let infos = groups[i].group[j];
+                    infos.group = groups[i].title;
+                    return infos;
+                }
+            }
+        }
+        return false;
+    }
+
+    const registerPlayer = (group, role) => {
+        let newRoles = [...operation.roles];
+
+        newRoles.find(r => r.title === group.title).group.find(r => r.title === role.title && r.team === role.team).player = user.identifier;
+
+        const body = {
+            roles: newRoles
+        };
+        fetch(`${process.env.REACT_APP_ENDPOINT_URL}/operations/${id}`, {
+            method: 'PATCH',
+            headers: {
+                'x-access-token': localStorage.getItem('token'),
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(body)
+        })
+            .then((res) => res.json())
+            .then(() => {
+                fetchOperation();
+            })
+            .catch(err => {
+                console.log(err);
+            });
+    }
+
     const roles = groups.map((group, index) => {
         return (group.group.map((role, i) => {
             if (isUserLoading)
                 return;
-            if (user.trained.includes(role.training)) {
+            if (role.player === null) {
                 return (
                     <tr key={i}>
                         <td>{role.role}</td>
                         <td>{group.title}</td>
                         <td>{role.team}</td>
                         <td>
-                            <Button color={"green"} compact>S'inscrire</Button>
+                            <Button color={"green"} compact onClick={() => registerPlayer(group, role)}>S'inscrire</Button>
                         </td>
                     </tr>
                 )
@@ -109,19 +187,27 @@ function SingleOperation({user, isUserLoading}) {
         </SimpleGrid>
 
         <h2>Rôles disponibles</h2>
-        <Table>
-            <thead>
-            <tr>
-                <th>Rôle</th>
-                <th>Groupe</th>
-                <th>Equipe</th>
-                <th>Actions</th>
-            </tr>
-            </thead>
-            <tbody>
-            {roles}
-            </tbody>
-        </Table>
+        {isUserRegistered() ? <>
+            <Alert icon={<AlertCircle size={16} />} title="Déjà inscrit !" color="teal">
+                Vous êtes déjà inscrit sur cette opération en tant que <strong>{getPlayerInfo().role}</strong> dans le groupe <strong>{getPlayerInfo().group}</strong>, équipe <strong>{getPlayerInfo().team}</strong>.<br/>
+                Si vous souhaitez changer de rôle, vous pouvez vous désinscrire en dessous.
+            </Alert>
+            <Button color={"red"} mt={20} onClick={() => unregisterPlayer()}>Se désinscrire</Button>
+        </> : <>
+            <Table>
+                <thead>
+                <tr>
+                    <th>Rôle</th>
+                    <th>Groupe</th>
+                    <th>Equipe</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                {roles}
+                </tbody>
+            </Table>
+        </>}
 
         <h2>Inscrits</h2>
         <SimpleGrid cols={3}>

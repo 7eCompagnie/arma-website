@@ -78,8 +78,8 @@ function CreateOperation() {
     const [tabs, setTabs] = useState([{
         title: "Zeus",
         group: [
-            { role: 'Zeus', team: "Zeus" },
-            { role: 'Co-Zeus', team: "Zeus" },
+            { role: 'Zeus', team: "Zeus", player: null },
+            { role: 'Co-Zeus', team: "Zeus", player: null },
         ],
         teams: [
             { name: "Zeus" },
@@ -171,7 +171,8 @@ function CreateOperation() {
         newArray.group.push({
             role: input.value,
             training: currentTraining,
-            team: currentTeam
+            team: currentTeam,
+            player: null
         });
         setTabs([...tabs.slice(0, tab), newArray, ...tabs.slice(tab + 1)]);
     }
