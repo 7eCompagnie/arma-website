@@ -209,6 +209,17 @@ function CreateOperation() {
         });
     }
 
+    const removeRole = (currentRole) => {
+        if (!tabs[activeTab])
+            return {};
+
+        let newArray = tabs[activeTab];
+
+        let toRemove = newArray.group.find(role => role.role === currentRole.role);
+        newArray.group.splice(newArray.group.indexOf(toRemove), 1);
+        setTabs([...tabs.slice(0, activeTab), newArray, ...tabs.slice(activeTab + 1)]);
+    }
+
     if (isLoading)
         return (<div>Loading...</div>)
 
@@ -309,7 +320,7 @@ function CreateOperation() {
                                                         <td>{role.role}</td>
                                                         <td>
                                                             <Button mr={10} leftIcon={<Pencil size={16}/>} compact>Editer</Button>
-                                                            <Button ml={10} leftIcon={<Trash size={16}/>} compact color={"red"}>Supprimer</Button>
+                                                            <Button ml={10} leftIcon={<Trash size={16}/>} compact color={"red"} onClick={() => removeRole(role)}>Supprimer</Button>
                                                         </td>
                                                     </tr>
                                                 )
