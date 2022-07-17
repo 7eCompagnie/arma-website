@@ -1,6 +1,6 @@
 import {useEffect, useRef, useState} from "react";
 import {
-    Button, Checkbox, Group,
+    Button, Center, Checkbox, Group,
     Input,
     InputWrapper, Notification, Select,
     SimpleGrid,
@@ -253,6 +253,17 @@ function CreateOperation() {
         setTabs([...tabs.slice(0, activeTab), newArray, ...tabs.slice(activeTab + 1)]);
     }
 
+    const removeTeam = (currentTeam) => {
+        if (!tabs[activeTab])
+            return {};
+
+        let newArray = tabs[activeTab];
+        let toRemove = newArray.teams.find(team => team.name === currentTeam.name);
+
+        newArray.teams.splice(newArray.teams.indexOf(toRemove), 1);
+        setTabs([...tabs.slice(0, activeTab), newArray, ...tabs.slice(activeTab + 1)]);
+    }
+
     if (isLoading)
         return (<div>Loading...</div>)
 
@@ -337,7 +348,13 @@ function CreateOperation() {
                     <Tabs.Tab label={tab.title} tabKey={tab.title} key={index}>
                             {tab.teams.map((team, index) => (
                                 <div key={index}>
-                                    <h4>{team.name}</h4>
+                                    <SimpleGrid cols={2}>
+                                        <h4>{team.name}</h4>
+                                        <Center>
+                                            {/*{role.isEditing ? <Button color={"green"} mr={10} leftIcon={<CircleCheck size={16}/>} compact onClick={() => {confirmEdit(role, tab.title + "-" + team.name + "-" + role.role)}}>Valider</Button> : <Button mr={10} leftIcon={<Pencil size={16}/>} compact onClick={() => editRole(role)}>Editer</Button>}*/}
+                                            <Button ml={10} leftIcon={<Trash size={16}/>} compact color={"red"} onClick={() => removeTeam(team)}>Supprimer</Button>
+                                        </Center>
+                                    </SimpleGrid>
                                     <Table>
                                         <thead>
                                         <tr>
