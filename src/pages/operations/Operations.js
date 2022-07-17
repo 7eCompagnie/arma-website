@@ -59,25 +59,34 @@ function Operations() {
     }
 
     const operationsCards = operations.map((operation, i) => {
+        if (new Date(operation.date) < new Date())
+            return;
         return (<Card shadow="sm" p="lg" key={i}>
             <Card.Section>
-                <Image src={`${process.env.REACT_APP_ENDPOINT_PUBLIC}/operations/${operation.picture}`} height={160} alt="Norway" />
+                <Image src={`${process.env.REACT_APP_ENDPOINT_PUBLIC}/operations/${operation.picture}`} height={160}
+                       alt="Norway"/>
             </Card.Section>
 
-            <Group position="apart" style={{ marginBottom: 5, marginTop: theme.spacing.sm }}>
+            <Group position="apart" style={{marginBottom: 5, marginTop: theme.spacing.sm}}>
                 <Text weight={900} size={"xl"}>{operation.title}</Text>
                 <Badge color="pink" variant="light">{getRemainingSeats(operation)} place(s) restante(s)</Badge>
             </Group>
 
-            <Text mb={20} style={{display: 'flex', alignItems: 'center'}}><Calendar size={20} style={{marginRight: '4px'}}/>
-                <span style={{textTransform: "capitalize", marginRight: '4px'}}>{Moment(operation.date).format('dddd')}</span> {Moment(operation.date).format('D MMMM YYYY')}
+            <Text mb={20} style={{display: 'flex', alignItems: 'center'}}><Calendar size={20}
+                                                                                    style={{marginRight: '4px'}}/>
+                <span style={{
+                    textTransform: "capitalize",
+                    marginRight: '4px'
+                }}>{Moment(operation.date).format('dddd')}</span> {Moment(operation.date).format('D MMMM YYYY')}
             </Text>
 
-            <Text size="sm" style={{ color: secondaryColor, lineHeight: 1.5 }}>
+            <Text size="sm" style={{color: secondaryColor, lineHeight: 1.5}}>
                 {operation.description}
             </Text>
 
-            <Button onClick={() => { navigate(`/operations/${operation._id}`) }} variant="light" color="blue" fullWidth style={{ marginTop: 14 }}>
+            <Button onClick={() => {
+                navigate(`/operations/${operation._id}`)
+            }} variant="light" color="blue" fullWidth style={{marginTop: 14}}>
                 En savoir plus
             </Button>
         </Card>)
