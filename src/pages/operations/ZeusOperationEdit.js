@@ -26,6 +26,7 @@ import {Link, useNavigate, useParams} from "react-router-dom";
 import {Dropzone, IMAGE_MIME_TYPE} from "@mantine/dropzone";
 import {DatePicker, TimeInput, TimeRangeInput} from "@mantine/dates";
 import dayjs from "dayjs";
+import RolesCreation from "../../components/RolesCreation";
 
 function getIconColor(status, theme) {
     return status.accepted
@@ -76,15 +77,10 @@ function ZeusOperationEdit() {
     const [operationPicture, setOperationPicture] = useState('');
     const [startTime, setStartTime] = useState(null);
     const [duration, setDuration] = useState(null);
-    const [activeTab, setActiveTab] = useState(0);
+    const [roles, setRoles] = useState([]);
     const navigate = useNavigate();
     const openRef = useRef();
     const theme = useMantineTheme();
-
-    const onChange = (active, tabKey) => {
-        setActiveTab(active);
-        console.log('tabKey', tabKey);
-    };
 
     const fetchOperation = () => {
         fetch(`${process.env.REACT_APP_ENDPOINT_URL}/operations/${id}`, {
@@ -103,6 +99,7 @@ function ZeusOperationEdit() {
                 setOperationPicture(data.data.picture);
                 setStartTime(new Date(data.data.connectionStartTime));
                 setDuration([new Date(data.data.duration[0]), new Date(data.data.duration[1])]);
+                setRoles(data.data.roles);
                 setIsLoading(false);
             })
             .catch(err => {
@@ -116,7 +113,11 @@ function ZeusOperationEdit() {
     }, []);
 
 
-    const handleSubmit = () => {
+    const callback = (data) => {
+        handleSubmit(data);
+    }
+
+    const handleSubmit = (data) => {
         let body = {};
 
         if (operationTitle !== operation.title)
@@ -129,6 +130,7 @@ function ZeusOperationEdit() {
             body.connectionStartTime = startTime;
         if (duration !== operation.duration)
             body.duration = duration;
+        body.roles = data;
 
         fetch(`${process.env.REACT_APP_ENDPOINT_URL}/operations/${operation._id}`, {
             method: 'PATCH',
@@ -139,7 +141,7 @@ function ZeusOperationEdit() {
             body: JSON.stringify(body)
         })
             .then((res) => res.json())
-            .then((data) => {
+            .then(() => {
                 setNotification(true);
             })
             .catch(err => {
@@ -244,119 +246,7 @@ function ZeusOperationEdit() {
             </SimpleGrid>
 
             <h2>Configuration des groupes et des équipes</h2>
-            <Tabs active={activeTab} onTabChange={onChange} >
-                <Tabs.Tab label="Zeus" tabKey="zeus">
-                    <Table>
-                        <thead>
-                        <tr>
-                            <th>Rôle</th>
-                            <th>Actions</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td>Zeus</td>
-                            <td>
-                                <Button mr={10} leftIcon={<Pencil size={16}/>} compact>Editer</Button>
-                                <Button ml={10} leftIcon={<Trash size={16}/>} compact color={"red"}>Supprimer</Button>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </Table>
-                </Tabs.Tab>
-                <Tabs.Tab label="India 2" tabKey="india2">
-                    <Table>
-                        <thead>
-                        <tr>
-                            <th>Rôle</th>
-                            <th>Actions</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td>Chef de Groupe</td>
-                            <td>
-                                <Button mr={10} leftIcon={<Pencil size={16}/>} compact>Editer</Button>
-                                <Button ml={10} leftIcon={<Trash size={16}/>} compact color={"red"}>Supprimer</Button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Auxiliaire Sanitaire</td>
-                            <td>
-                                <Button mr={10} leftIcon={<Pencil size={16}/>} compact>Editer</Button>
-                                <Button ml={10} leftIcon={<Trash size={16}/>} compact color={"red"}>Supprimer</Button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Tireur de précision</td>
-                            <td>
-                                <Button mr={10} leftIcon={<Pencil size={16}/>} compact>Editer</Button>
-                                <Button ml={10} leftIcon={<Trash size={16}/>} compact color={"red"}>Supprimer</Button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th style={{ textAlign: 'left', paddingLeft: 20 }}>300</th>
-                            <td>
-                                <Button mr={10} leftIcon={<Pencil size={16}/>} compact>Editer</Button>
-                                <Button ml={10} leftIcon={<Trash size={16}/>} compact color={"red"}>Supprimer</Button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Chef d'équipe</td>
-                            <td>
-                                <Button mr={10} leftIcon={<Pencil size={16}/>} compact>Editer</Button>
-                                <Button ml={10} leftIcon={<Trash size={16}/>} compact color={"red"}>Supprimer</Button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Fusillier</td>
-                            <td>
-                                <Button mr={10} leftIcon={<Pencil size={16}/>} compact>Editer</Button>
-                                <Button ml={10} leftIcon={<Trash size={16}/>} compact color={"red"}>Supprimer</Button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>MG</td>
-                            <td>
-                                <Button mr={10} leftIcon={<Pencil size={16}/>} compact>Editer</Button>
-                                <Button ml={10} leftIcon={<Trash size={16}/>} compact color={"red"}>Supprimer</Button>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </Table>
-
-                    <Container>
-                        <h3>Créer une équipe</h3>
-                        <div style={{display: 'flex', alignItems: 'end'}}>
-                            <InputWrapper
-                                label="Nom de l'équipe"
-                                required
-                            >
-                                <Input
-                                    id={'team-name'}
-                                    placeholder="Ex: 300"
-                                    required/>
-                            </InputWrapper>
-                            <Button ml={20}>Créer</Button>
-                        </div>
-                    </Container>
-                </Tabs.Tab>
-                <Tabs.Tab icon={<SquarePlus size={16}/>} label="Créer un groupe" tabKey="createGroup">
-                    <div style={{display: 'flex', alignItems: 'end'}}>
-                        <InputWrapper
-                            label="Nom de l'équipe"
-                            required
-                        >
-                            <Input
-                                id={'team-name'}
-                                placeholder="Ex: 300"
-                                required/>
-                        </InputWrapper>
-                        <Button ml={20}>Créer</Button>
-                    </div>
-                </Tabs.Tab>
-            </Tabs>
-            <Button color={"green"} fullWidth mt={30} onClick={handleSubmit}>Créer l'opération</Button>
+            <RolesCreation callback={callback} data={roles} buttonText={"Sauvegarder"}/>
         </form>
     </>)
 }

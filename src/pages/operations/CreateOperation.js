@@ -190,7 +190,7 @@ function CreateOperation() {
             </SimpleGrid>
 
             <h2>Configuration des groupes et des équipes</h2>
-            <RolesCreation callback={callback}/>
+            <RolesCreation callback={callback} buttonText={"Créer l'opération"}/>
         </form>
     </>)
 }

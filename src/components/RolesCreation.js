@@ -8,13 +8,13 @@ function uuidv4() {
     );
 }
 
-function RolesCreation({callback}) {
+function RolesCreation({callback, data, buttonText}) {
     const [activeTab, setActiveTab] = useState(0);
     const [trainings, setTrainings] = useState([]);
     const [currentTraining, setCurrentTraining] = useState(null);
     const [currentTeam, setCurrentTeam] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
-    const [tabs, setTabs] = useState([{
+    const [tabs, setTabs] = useState(data || [{
         title: "Zeus",
         group: [
             { role: 'Zeus', team: "Zeus", player: null, isEditing: false },
@@ -303,7 +303,7 @@ function RolesCreation({callback}) {
         <Button mt={30} onClick={(e) => {
             callback(tabs);
             e.preventDefault();
-        }}>Créer l'opération</Button>
+        }}>{buttonText}</Button>
     </>);
 }
 
