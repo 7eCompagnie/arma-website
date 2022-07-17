@@ -24,6 +24,7 @@ import 'dayjs/locale/fr';
 import dayjs from "dayjs";
 import {Dropzone, IMAGE_MIME_TYPE} from "@mantine/dropzone";
 import {useNavigate} from "react-router-dom";
+import RolesCreation from "../../components/RolesCreation";
 
 function getIconColor(status, theme) {
     return status.accepted
@@ -62,71 +63,27 @@ const dropzoneChildren = (status, theme) => (
     </Group>
 )
 
-function uuidv4() {
-    return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
-        (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
-    );
-}
-
 function CreateOperation() {
     const titleInput = useRef();
     const descriptionInput = useRef();
-    const [activeTab, setActiveTab] = useState(0);
+    const openRef = useRef();
     const [date, setDate] = useState(null);
     const [duration, setDuration] = useState([new Date(new Date().setHours(21, 0, 0, 0)), new Date(new Date().setHours(23, 0, 0, 0))]);
     const [startTime, setStartTime] = useState(new Date(new Date().setHours(20, 0, 0, 0)));
     const [operationPicture, setOperationPicture] = useState(null);
     const [notificationError, setNotificationError] = useState(false);
-    const [isLoading, setIsLoading] = useState(true);
-    const [trainings, setTrainings] = useState([]);
-    const [currentTraining, setCurrentTraining] = useState(null);
-    const [currentTeam, setCurrentTeam] = useState(null);
     const theme = useMantineTheme();
-    const openRef = useRef();
     const navigate = useNavigate();
 
-    const [tabs, setTabs] = useState([{
-        title: "Zeus",
-        group: [
-            { role: 'Zeus', team: "Zeus", player: null, isEditing: false },
-            { role: 'Co-Zeus', team: "Zeus", player: null, isEditing: false },
-        ],
-        teams: [
-            { name: "Zeus", isEditing: false },
-        ]
-    }]);
-
-    const changeTab = (active, tabKey) => {
-        setActiveTab(active);
-    };
-
-    const fetchTrainings = () => {
-        fetch(`${process.env.REACT_APP_ENDPOINT_URL}/trainings`, {
-            method: 'GET',
-            headers: {
-                'x-access-token': localStorage.getItem('token')
-            },
-        })
-            .then(res => res.json())
-            .then(data => {
-                setTrainings(data.data);
-                setIsLoading(false);
-            })
-            .catch(err => console.log(err));
-    }
-
     useEffect(() => {
-        fetchTrainings();
         document.title = "Création d'une opération - La 7ème Compagnie";
     }, []);
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        const getDifference = (date1, date2) => {
-            const diff = date2.getTime() - date1.getTime();
-            return diff / (1000 * 60 * 60);
-        }
+    const callback = (data) => {
+        handleSubmit(data);
+    }
 
+    const handleSubmit = (data) => {
         if (titleInput.current.value == null || titleInput.current.value === "" || descriptionInput.current.value == null || descriptionInput.current.value === "" ||
             date === null || operationPicture == null) {
             setNotificationError(true);
@@ -141,7 +98,7 @@ function CreateOperation() {
         body.append('duration', duration[1].toString());
         body.append('connectionStartTime', startTime.toString());
         body.append('picture', operationPicture);
-        body.append('roles', JSON.stringify(tabs));
+        body.append('roles', JSON.stringify(data));
 
         fetch(`${process.env.REACT_APP_ENDPOINT_URL}/operations`, {
             method: 'POST',
@@ -156,154 +113,6 @@ function CreateOperation() {
             })
             .catch(err => console.log(err));
     }
-
-    const addTab = () => {
-        const input = document.getElementById('group-name');
-
-        if (input.value === '' || input.value === null)
-            return;
-
-        setTabs([...tabs, {
-            title: input.value,
-            group: [],
-            teams: [{ name: input.value }]
-        }]);
-    }
-
-    const addRole = (tab) => {
-        const input = document.getElementById('role-name');
-
-        if (input.value === '' || input.value === null)
-            return;
-
-        let newArray = tabs[tab];
-
-        newArray.group.push({
-            role: input.value,
-            training: currentTraining,
-            team: currentTeam,
-            player: null,
-            isEditing: false
-        });
-        setTabs([...tabs.slice(0, tab), newArray, ...tabs.slice(tab + 1)]);
-    }
-
-    const addTeam = (tab) => {
-        const input = document.getElementById('team-name');
-
-        if (input.value === '' || input.value === null)
-            return;
-
-        let newArray = tabs[tab];
-
-        newArray.teams.push({
-            name: input.value,
-            isEditing: false
-        });
-        setTabs([...tabs.slice(0, tab), newArray, ...tabs.slice(tab + 1)]);
-    }
-
-    const trainingsData = trainings.map(training => {
-        return {
-            value: training._id,
-            label: training.title
-        }
-    });
-
-    const teamsData = (tab) => {
-        if (!tabs[tab])
-            return {};
-        return tabs[tab].teams.map(team => {
-            return {
-                value: team.name,
-                label: team.name
-            }
-        });
-    }
-
-    const removeRole = (currentRole) => {
-        if (!tabs[activeTab])
-            return {};
-
-        let newArray = tabs[activeTab];
-        let toRemove = newArray.group.find(role => role.role === currentRole.role);
-
-        newArray.group.splice(newArray.group.indexOf(toRemove), 1);
-        setTabs([...tabs.slice(0, activeTab), newArray, ...tabs.slice(activeTab + 1)]);
-    }
-
-    const editRole = (currentRole) => {
-        if (!tabs[activeTab])
-            return {};
-
-        let newArray = tabs[activeTab];
-        let toEdit = newArray.group.find(role => role.role === currentRole.role);
-
-        toEdit.isEditing = true;
-        setTabs([...tabs.slice(0, activeTab), newArray, ...tabs.slice(activeTab + 1)]);
-    }
-
-    const confirmEdit = (currentRole, elId) => {
-        if (!tabs[activeTab])
-            return {};
-
-        let newArray = tabs[activeTab];
-        let toEdit = newArray.group.find(role => role.role === currentRole.role);
-
-        toEdit.role = document.getElementById(elId).value;
-        toEdit.isEditing = false;
-        setTabs([...tabs.slice(0, activeTab), newArray, ...tabs.slice(activeTab + 1)]);
-    }
-
-    const removeTeam = (currentTeam) => {
-        if (!tabs[activeTab])
-            return {};
-
-        let newArray = tabs[activeTab];
-        let toRemove = newArray.teams.find(team => team.name === currentTeam.name);
-        let toRemoves = [];
-
-        newArray.group.forEach(role => {
-            if (role.team === toRemove.name)
-                toRemoves.push(role);
-        });
-
-        toRemoves.forEach(role => {
-            newArray.group.splice(newArray.group.indexOf(role), 1);
-        });
-        newArray.teams.splice(newArray.teams.indexOf(toRemove), 1);
-        setTabs([...tabs.slice(0, activeTab), newArray, ...tabs.slice(activeTab + 1)]);
-    }
-
-    const editTeam = (currentTeam) => {
-        if (!tabs[activeTab])
-            return {};
-
-        let newArray = tabs[activeTab];
-        let toEdit = newArray.teams.find(team => team.name === currentTeam.name);
-
-        toEdit.isEditing = true;
-        setTabs([...tabs.slice(0, activeTab), newArray, ...tabs.slice(activeTab + 1)]);
-    }
-
-    const confirmEditTeam = (currentTeam, elId) => {
-        if (!tabs[activeTab])
-            return {};
-
-        let newArray = tabs[activeTab];
-        let toEdit = newArray.teams.find(team => team.name === currentTeam.name);
-
-        newArray.group.forEach(role => {
-            if (role.team === toEdit.name)
-                role.team = document.getElementById(elId).value;
-        })
-        toEdit.name = document.getElementById(elId).value
-        toEdit.isEditing = false;
-        setTabs([...tabs.slice(0, activeTab), newArray, ...tabs.slice(activeTab + 1)]);
-    }
-
-    if (isLoading)
-        return (<div>Loading...</div>)
 
     return (<>
         {notificationError ? <Notification mb={20} onClose={() => setNotificationError(false)} icon={<AlertTriangle size={18} />} color="red" title="Erreur lors de la création de la formation">
@@ -381,111 +190,7 @@ function CreateOperation() {
             </SimpleGrid>
 
             <h2>Configuration des groupes et des équipes</h2>
-            <Tabs active={activeTab} onTabChange={changeTab}>
-                {tabs.map((tab, index) => (
-                    <Tabs.Tab label={tab.title} tabKey={tab.title} key={index}>
-                            {tab.teams.map((team, index) => (
-                                <div key={index}>
-                                    <SimpleGrid cols={2}>
-                                        <h4>
-                                            {team.isEditing ? <Input id={tab.title + "-" + team.name} placeholder="Ex: 300" defaultValue={team.name} required/> : team.name}
-                                        </h4>
-                                        <Center>
-                                            {team.isEditing ? <Button color={"green"} mr={10} leftIcon={<CircleCheck size={16}/>} compact onClick={() => {confirmEditTeam(team, tab.title + "-" + team.name)}}>Valider</Button> : <Button mr={10} leftIcon={<Pencil size={16}/>} compact onClick={() => editTeam(team)}>Editer</Button>}
-                                            <Button ml={10} leftIcon={<Trash size={16}/>} compact color={"red"} onClick={() => removeTeam(team)}>Supprimer</Button>
-                                        </Center>
-                                    </SimpleGrid>
-                                    <Table>
-                                        <thead>
-                                        <tr>
-                                            <th>Rôle</th>
-                                            <th>Actions</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        {tab.group.map((role, i) => {
-                                            if (role.team === team.name) {
-                                                return (
-                                                    <tr key={uuidv4()}>
-                                                        <td>{role.isEditing ? <Input id={tab.title + "-" + team.name + "-" + role.role} placeholder="Ex: Fusillier" defaultValue={role.role} required/> : role.role}</td>
-                                                        <td>
-                                                            {role.isEditing ? <Button color={"green"} mr={10} leftIcon={<CircleCheck size={16}/>} compact onClick={() => {confirmEdit(role, tab.title + "-" + team.name + "-" + role.role)}}>Valider</Button> : <Button mr={10} leftIcon={<Pencil size={16}/>} compact onClick={() => editRole(role)}>Editer</Button>}
-                                                            <Button ml={10} leftIcon={<Trash size={16}/>} compact color={"red"} onClick={() => removeRole(role)}>Supprimer</Button>
-                                                        </td>
-                                                    </tr>
-                                                )
-                                            }
-                                        })}
-                                        </tbody>
-                                    </Table>
-                                </div>))}
-                        <h3>Ajouter un rôle</h3>
-                        <SimpleGrid cols={2}>
-                            <InputWrapper
-                                label="Nom du rôle"
-                                required
-                            >
-                                <Input
-                                    id={'role-name'}
-                                    placeholder="Ex: Fusillier"
-                                    required/>
-                            </InputWrapper>
-                            <Select
-                                label="Choisir une formation"
-                                placeholder="Rechercher une formation..."
-                                data={trainingsData}
-                                searchable
-                                maxDropdownHeight={400}
-                                nothingFound="Aucune formation trouvée."
-                                onChange={(e) => { setCurrentTraining(e) }}
-                                required
-                            />
-                            <Select
-                                label="Choisir une équipe"
-                                placeholder="Rechercher une équipe..."
-                                data={teamsData(activeTab)}
-                                searchable
-                                maxDropdownHeight={400}
-                                nothingFound="Aucune équipe trouvée."
-                                onChange={(e) => { setCurrentTeam(e) }}
-                                required
-                            />
-                        </SimpleGrid>
-                        <Button mt={20} onClick={() => addRole(activeTab)}>Ajouter</Button>
-                        <div>
-                            <h3>Créer une équipe</h3>
-                            <div style={{display: 'flex', alignItems: 'end'}}>
-                                <InputWrapper
-                                    label="Nom de l'équipe"
-                                    required
-                                >
-                                    <Input
-                                        id={'team-name'}
-                                        placeholder="Ex: 300"
-                                        required/>
-                                </InputWrapper>
-                                <Button ml={20} onClick={() => addTeam(activeTab)}>Créer</Button>
-                            </div>
-                        </div>
-                    </Tabs.Tab>
-                ))}
-                <Tabs.Tab icon={<SquarePlus size={16}/>} label="Créer un groupe" tabKey="createGroup">
-                    <div style={{display: 'flex', alignItems: 'end'}}>
-                        <InputWrapper
-                            label="Nom de l'équipe"
-                            required
-                        >
-                            <Input
-                                id={'group-name'}
-                                placeholder="Ex: India 2"
-                                required/>
-                        </InputWrapper>
-                        <Button ml={20} onClick={addTab}>Créer</Button>
-                    </div>
-                </Tabs.Tab>
-            </Tabs>
-
-            <Button mt={30} onClick={handleSubmit}>Créer l'opération</Button>
+            <RolesCreation callback={callback}/>
         </form>
     </>)
 }
