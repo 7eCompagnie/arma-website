@@ -8,7 +8,7 @@ import SingleFormation from "./pages/formers/SingleTraining";
 import CreateOperation from "./pages/operations/CreateOperation";
 import NotFound from "./pages/NotFound";
 import Users from "./pages/admin/users/Users";
-import {AppShell, Container, Header, Navbar} from "@mantine/core";
+import {AppShell, Center, Container, Header, Navbar} from "@mantine/core";
 import DashboardNavbar from "./components/DashboardNavbar";
 import DashboardHeader from "./components/DashboardHeader";
 import Settings from "./pages/Settings";
@@ -21,6 +21,7 @@ import SingleTraining from "./pages/formers/SingleTraining";
 import ZeusOperations from "./pages/operations/ZeusOperations";
 import ZeusOperationEdit from "./pages/operations/ZeusOperationEdit";
 import FormersTrainingsPass from "./pages/formers/trainings/FormersTrainingsPass";
+import {Heart} from "tabler-icons-react";
 
 function App() {
     const { pathname } = useLocation();
@@ -117,6 +118,11 @@ function App() {
                     <Route path="*" element={<NotFound />}/>
                 </Routes>
             </Container>
+            <Center mt={40}>
+                <p>
+                    Développé avec <Heart style={{marginBottom: "-4px"}} color={"red"} size={20}/> par <a style={{color: 'teal', textDecoration: 'none', fontWeight: 'bold'}} href="https://sn00ww.github.io/portfolio/" target={"_blank"}>Sn0w</a>, le meilleur soldat de la 7ème Compagnie.
+                </p>
+            </Center>
         </AppShell>
     </>);
 }
