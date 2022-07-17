@@ -46,6 +46,18 @@ function Operations() {
         document.title = "Inscriptions aux opérations - La 7ème Compagnie";
     }, []);
 
+    const getRemainingSeats = (operation) => {
+        let counter = 0;
+
+        for (let i = 0; i < operation.roles.length; i++) {
+            for (let j = 0; j < operation.roles[i].group.length; j++) {
+                if (operation.roles[i].group[j].player === null)
+                    counter++;
+            }
+        }
+        return counter;
+    }
+
     const operationsCards = operations.map((operation, i) => {
         return (<Card shadow="sm" p="lg" key={i}>
             <Card.Section>
@@ -54,7 +66,7 @@ function Operations() {
 
             <Group position="apart" style={{ marginBottom: 5, marginTop: theme.spacing.sm }}>
                 <Text weight={900} size={"xl"}>{operation.title}</Text>
-                <Badge color="pink" variant="light">4 places restantes</Badge>
+                <Badge color="pink" variant="light">{getRemainingSeats(operation)} place(s) restante(s)</Badge>
             </Group>
 
             <Text mb={20} style={{display: 'flex', alignItems: 'center'}}><Calendar size={20} style={{marginRight: '4px'}}/>
