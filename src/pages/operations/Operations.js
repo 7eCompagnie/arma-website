@@ -63,8 +63,7 @@ function Operations() {
             return;
         return (<Card shadow="sm" p="lg" key={i}>
             <Card.Section>
-                <Image src={`${process.env.REACT_APP_ENDPOINT_PUBLIC}/operations/${operation.picture}`} height={160}
-                       alt="Norway"/>
+                { operation.picture.startsWith("http") ? <Image src={operation.picture} height={160} alt={operation.title} /> : <Image src={`${process.env.REACT_APP_ENDPOINT_PUBLIC}/operations/${operation.picture}`} height={160} alt={operation.title} /> }
             </Card.Section>
 
             <Group position="apart" style={{marginBottom: 5, marginTop: theme.spacing.sm}}>
@@ -72,8 +71,7 @@ function Operations() {
                 <Badge color="pink" variant="light">{getRemainingSeats(operation)} place(s) restante(s)</Badge>
             </Group>
 
-            <Text mb={20} style={{display: 'flex', alignItems: 'center'}}><Calendar size={20}
-                                                                                    style={{marginRight: '4px'}}/>
+            <Text lineClamp={4} mb={20} style={{display: 'flex', alignItems: 'center'}}><Calendar size={20} style={{marginRight: '4px'}}/>
                 <span style={{
                     textTransform: "capitalize",
                     marginRight: '4px'

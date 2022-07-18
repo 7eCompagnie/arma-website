@@ -76,12 +76,17 @@ function SingleTraining() {
             Retour
         </Button>
         <h1 style={{marginTop: 0}}>{training.title}</h1>
-        <Image
+        {training.picture.startsWith("http") ? <Image
+            radius="md"
+            src={training.picture}
+            alt={training.title}
+            height={250}
+        /> : <Image
             radius="md"
             src={`${process.env.REACT_APP_ENDPOINT_PUBLIC}/trainings/${training.picture}`}
             alt={training.title}
             height={250}
-        />
+        /> }
         <h2>Description de la formation</h2>
         <Text>
             <p>

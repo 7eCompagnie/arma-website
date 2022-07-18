@@ -87,12 +87,14 @@ function Users({isLoading}) {
                 })
             }</td>
             <td>
-                <Button color="yellow" size="md" compact onClick={() => navigate(`/zeus/users/${user.identifier}`)}>
-                    Editer
-                </Button>
-                <Button onClick={() => updateModal(user)} color="red" size="md" ml={".5rem"} compact>
-                    Supprimer
-                </Button>
+                <Center>
+                    <Button color="yellow" size="md" compact onClick={() => navigate(`/zeus/users/${user.identifier}`)}>
+                        Editer
+                    </Button>
+                    <Button onClick={() => updateModal(user)} color="red" size="md" ml={".5rem"} compact>
+                        Supprimer
+                    </Button>
+                </Center>
             </td>
         </tr>
     ));

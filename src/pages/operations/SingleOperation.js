@@ -196,12 +196,17 @@ function SingleOperation() {
             Retour
         </Button>
         <h1>{operation.title}</h1>
-        <Image
+        { operation.picture.startsWith("http") ? <Image
+            radius="md"
+            src={operation.picture}
+            alt={operation.title}
+            height={250}
+        />: <Image
             radius="md"
             src={`${process.env.REACT_APP_ENDPOINT_PUBLIC}/operations/${operation.picture}`}
-            alt="Image de soldats de la 7ème Compagnie lors de l'opération Bosso"
+            alt={operation.title}
             height={250}
-        />
+        /> }
         <h2>Informations générales</h2>
         <SimpleGrid columns={2} spacing={4}>
             <Text><strong>Description:</strong> {operation.description}</Text>

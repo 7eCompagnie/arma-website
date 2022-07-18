@@ -40,7 +40,7 @@ function Trainings() {
     const trainingsToDisplay = trainings.map((training, i) => {
         return (<Card shadow="sm" p="lg" key={i}>
             <Card.Section>
-                <Image src={`${process.env.REACT_APP_ENDPOINT_PUBLIC}/trainings/${training.picture}`} height={160} alt={training.title} />
+                { training.picture.startsWith("http") ? <Image src={training.picture} height={160} alt={training.title} /> : <Image src={`${process.env.REACT_APP_ENDPOINT_PUBLIC}/trainings/${training.picture}`} height={160} alt={training.title} /> }
             </Card.Section>
 
             <Group position="apart" style={{ marginBottom: 5, marginTop: theme.spacing.sm }}>
@@ -48,7 +48,7 @@ function Trainings() {
                 {training.isOpen === true ? <Badge color="green" variant="light">Ouvert</Badge> : <Badge color="red" variant="light">Fermé</Badge>}
             </Group>
 
-            <Text size="sm" style={{ color: secondaryColor, lineHeight: 1.5 }}>
+            <Text lineClamp={4} size="sm" style={{ color: secondaryColor, lineHeight: 1.5 }}>
                 {training.description}
             </Text>
 

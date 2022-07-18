@@ -74,14 +74,20 @@ function FormersTrainings() {
     const rows = (trainings.map((training, i) => (
         <tr key={i}>
             <td>{training.title}</td>
-            <td>{training.description}</td>
             <td>
-                <Button color="yellow" size="md" compact onClick={() => navigate(`/formers/trainings/${training._id}`)}>
-                    Editer
-                </Button>
-                <Button onClick={() => updateModal(training)} color="red" size="md" ml={".5rem"} compact>
-                    Supprimer
-                </Button>
+                <Text lineClamp={1} size={"14px"}>
+                    {training.description}
+                </Text>
+            </td>
+            <td>
+                <Center>
+                    <Button color="yellow" size="md" compact onClick={() => navigate(`/formers/trainings/${training._id}`)}>
+                        Editer
+                    </Button>
+                    <Button onClick={() => updateModal(training)} color="red" size="md" ml={".5rem"} compact>
+                        Supprimer
+                    </Button>
+                </Center>
             </td>
         </tr>
     )));

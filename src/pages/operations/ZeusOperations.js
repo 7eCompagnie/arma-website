@@ -74,14 +74,20 @@ function ZeusOperations() {
     const rows = (operations.map((operation, i) => (
         <tr key={i}>
             <td>{operation.title}</td>
-            <td>{operation.description}</td>
             <td>
-                <Button color="yellow" size="md" compact onClick={() => navigate(`/zeus/operations/${operation._id}`)}>
-                    Editer
-                </Button>
-                <Button onClick={() => updateModal(operation)} color="red" size="md" ml={".5rem"} compact>
-                    Supprimer
-                </Button>
+                <Text lineClamp={1} size={"14px"}>
+                    {operation.description}
+                </Text>
+            </td>
+            <td>
+                <Center>
+                    <Button color="yellow" size="md" compact onClick={() => navigate(`/zeus/operations/${operation._id}`)}>
+                        Editer
+                    </Button>
+                    <Button onClick={() => updateModal(operation)} color="red" size="md" ml={".5rem"} compact>
+                        Supprimer
+                    </Button>
+                </Center>
             </td>
         </tr>
     )));
