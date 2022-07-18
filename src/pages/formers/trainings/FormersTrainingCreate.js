@@ -53,7 +53,7 @@ const dropzoneChildren = (status, theme) => (
 )
 
 function FormersTrainingCreate() {
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
     const [notificationError, setNotificationError] = useState(false);
     const [allTrainers, setAllTrainers] = useState([]);
     const [trainers, setTrainers] = useState([]);
@@ -122,10 +122,74 @@ function FormersTrainingCreate() {
 
     useEffect(() => {
         fetchAllTrainers();
+        document.title = "Créer une formation - La 7ème Compagnie"
     }, []);
 
     if (isLoading) {
-        return ('Loading...')
+        return (<div>
+            <h1>Créer une nouvelle formation</h1>
+            <form id="create-training">
+                <SimpleGrid cols={2}>
+                    <InputWrapper
+                        label={"Nom de la formation"}
+                        required
+                    >
+                        <Input
+                            id={"input-name"}
+                            icon={<LetterCase/>}
+                            placeholder={"Pilote de tigre"}
+                        />
+                    </InputWrapper>
+
+                    <InputWrapper
+                        label={"Formateurs"}
+                    >
+                        <Skeleton height={36} width={"100%"}/>
+                    </InputWrapper>
+
+                    <Textarea
+                        id={"input-description"}
+                        label="Description de la formation"
+                        placeholder="Cette formation vous apprendra les bases du combat en hélicoptère."
+                        required
+                    />
+
+                    <InputWrapper
+                        label={"Image de la formation"}
+                        required
+                    >
+                        <Dropzone
+                            style={{display: 'none'}}
+                            onDrop={(files) => {
+                                console.log('accepted files', files[files.length - 1].name);
+                                document.getElementById("btn-select-files").firstChild.firstChild.innerHTML = files[files.length - 1].name;
+                                setTrainingPicture(files[files.length - 1]);
+                            }}
+                            onReject={(files) => console.log('rejected files', files)}
+                            maxSize={3 * 1024 ** 2}
+                            accept={IMAGE_MIME_TYPE}
+                            openRef={openRef}
+                        >
+                            {(status) => dropzoneChildren(status, theme)}
+                        </Dropzone>
+
+                        <Group>
+                            <Button color={"green"} onClick={() => openRef.current()} id="btn-select-files">Sélectionner une image</Button>
+                        </Group>
+                    </InputWrapper>
+
+                    <Group>
+                        <Switch onLabel="OUI" offLabel="NON" defaultChecked={true} id={"input-open"} ref={switchRef}
+                                label="Les joueurs peuvent demander à être formé dès à présent"
+                        />
+                    </Group>
+                </SimpleGrid>
+            </form>
+
+            <Button mt={"lg"} onClick={handleOnClick} disabled>
+                Créer la formation
+            </Button>
+        </div>)
     }
 
     return (<>

@@ -1,4 +1,4 @@
-import {Button, Center, Input, InputWrapper, Select, SimpleGrid, Table, Tabs} from "@mantine/core";
+import {Button, Center, Input, InputWrapper, Select, SimpleGrid, Skeleton, Table, Tabs} from "@mantine/core";
 import {CircleCheck, Pencil, SquarePlus, Trash} from "tabler-icons-react";
 import {useEffect, useState} from "react";
 
@@ -71,7 +71,7 @@ function RolesCreation({callback, data, buttonText}) {
     const addRole = (tab) => {
         const input = document.getElementById('role-name');
 
-        if (input.value === '' || input.value === null)
+        if (input.value === '' || input.value === null || currentTeam === null || currentTraining === null)
             return;
 
         let newArray = tabs[tab];
@@ -194,7 +194,110 @@ function RolesCreation({callback, data, buttonText}) {
     }
 
     if (isLoading)
-        return (<div>Loading...</div>)
+        return (<>
+            <Tabs active={activeTab} onTabChange={changeTab}>
+                {tabs.map((tab, index) => (
+                    <Tabs.Tab label={tab.title} tabKey={tab.title} key={index}>
+                        {tab.teams.map((team, index) => (
+                            <div key={index}>
+                                <SimpleGrid cols={2}>
+                                    <h4>
+                                        {team.isEditing ? <Input id={tab.title + "-" + team.name} placeholder="Ex: 300" defaultValue={team.name} required/> : team.name}
+                                    </h4>
+                                    <Center>
+                                        {team.isEditing ? <Button color={"green"} mr={10} leftIcon={<CircleCheck size={16}/>} compact onClick={() => {confirmEditTeam(team, tab.title + "-" + team.name)}}>Valider</Button> : <Button mr={10} leftIcon={<Pencil size={16}/>} compact onClick={() => editTeam(team)}>Editer</Button>}
+                                        <Button ml={10} leftIcon={<Trash size={16}/>} compact color={"red"} onClick={() => removeTeam(team)}>Supprimer</Button>
+                                    </Center>
+                                </SimpleGrid>
+                                <Table>
+                                    <thead>
+                                    <tr>
+                                        <th>Rôle</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {tab.group.map((role, i) => {
+                                        if (role.team === team.name) {
+                                            return (
+                                                <tr key={uuidv4()}>
+                                                    <td>{role.isEditing ? <Input id={tab.title + "-" + team.name + "-" + role.role} placeholder="Ex: Fusillier" defaultValue={role.role} required/> : role.role}</td>
+                                                    <td>
+                                                        {role.isEditing ? <Button color={"green"} mr={10} leftIcon={<CircleCheck size={16}/>} compact onClick={() => {confirmEdit(role, tab.title + "-" + team.name + "-" + role.role)}}>Valider</Button> : <Button mr={10} leftIcon={<Pencil size={16}/>} compact onClick={() => editRole(role)}>Editer</Button>}
+                                                        <Button ml={10} leftIcon={<Trash size={16}/>} compact color={"red"} onClick={() => removeRole(role)}>Supprimer</Button>
+                                                    </td>
+                                                </tr>
+                                            )
+                                        }
+                                    })}
+                                    </tbody>
+                                </Table>
+                            </div>))}
+                        <h3>Ajouter un rôle</h3>
+                        <SimpleGrid cols={2}>
+                            <InputWrapper
+                                label="Nom du rôle"
+                                required
+                            >
+                                <Input
+                                    id={'role-name'}
+                                    placeholder="Ex: Fusillier"
+                                    required/>
+                            </InputWrapper>
+                            <InputWrapper
+                                label={"Choisir une formation"}
+                            >
+                                <Skeleton height={36}/>
+                            </InputWrapper>
+                            <Select
+                                label="Choisir une équipe"
+                                placeholder="Rechercher une équipe..."
+                                data={teamsData(activeTab)}
+                                searchable
+                                maxDropdownHeight={400}
+                                nothingFound="Aucune équipe trouvée."
+                                onChange={(e) => { setCurrentTeam(e) }}
+                                required
+                            />
+                        </SimpleGrid>
+                        <Button mt={20} onClick={() => addRole(activeTab)} disabled>Ajouter</Button>
+                        <div>
+                            <h3>Créer une équipe</h3>
+                            <div style={{display: 'flex', alignItems: 'end'}}>
+                                <InputWrapper
+                                    label="Nom de l'équipe"
+                                    required
+                                >
+                                    <Input
+                                        id={'team-name'}
+                                        placeholder="Ex: 300"
+                                        required/>
+                                </InputWrapper>
+                                <Button ml={20} onClick={() => addTeam(activeTab)}>Créer</Button>
+                            </div>
+                        </div>
+                    </Tabs.Tab>
+                ))}
+                <Tabs.Tab icon={<SquarePlus size={16}/>} label="Créer un groupe" tabKey="createGroup">
+                    <div style={{display: 'flex', alignItems: 'end'}}>
+                        <InputWrapper
+                            label="Nom de l'équipe"
+                            required
+                        >
+                            <Input
+                                id={'group-name'}
+                                placeholder="Ex: India 2"
+                                required/>
+                        </InputWrapper>
+                        <Button ml={20} onClick={addTab}>Créer</Button>
+                    </div>
+                </Tabs.Tab>
+            </Tabs>
+            <Button disabled mt={30} onClick={(e) => {
+                callback(tabs);
+                e.preventDefault();
+            }}>{buttonText}</Button>
+        </>);
 
     return (<>
         <Tabs active={activeTab} onTabChange={changeTab}>

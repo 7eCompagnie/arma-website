@@ -5,7 +5,7 @@ import {
     Card, Center,
     Group,
     Image, Pagination,
-    SimpleGrid,
+    SimpleGrid, Skeleton,
     Text, useMantineTheme
 } from "@mantine/core";
 import {Calendar} from "tabler-icons-react";
@@ -22,8 +22,6 @@ function Operations() {
         : theme.colors.gray[7];
     const [operations, setOperations] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-    const [activePage, setPage] = useState(1);
-    const [maxPages, setMaxPages] = useState(1);
 
     const fetchOperations = () => {
         fetch(`${process.env.REACT_APP_ENDPOINT_URL}/operations/`,
@@ -43,7 +41,7 @@ function Operations() {
 
     useEffect(() => {
         fetchOperations();
-        document.title = "Inscriptions aux opérations - La 7ème Compagnie";
+        document.title = "Nos opérations - La 7ème Compagnie";
     }, []);
 
     const getRemainingSeats = (operation) => {
@@ -91,7 +89,13 @@ function Operations() {
     });
 
     if (isLoading)
-        return <div>Loading...</div>
+        return (<>
+            <h1>Inscription aux opérations</h1>
+            <SimpleGrid cols={2}>
+                <Skeleton height={300} />
+                <Skeleton height={300} />
+            </SimpleGrid>
+        </>);
 
     return(<>
         <h1>Inscription aux opérations</h1>

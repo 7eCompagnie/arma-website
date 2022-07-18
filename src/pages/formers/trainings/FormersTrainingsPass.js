@@ -1,4 +1,16 @@
-import {Avatar, Badge, Button, Center, Group, MultiSelect, Notification, Select, Skeleton, Text} from "@mantine/core";
+import {
+    Avatar,
+    Badge,
+    Button,
+    Center,
+    Group,
+    InputWrapper,
+    MultiSelect,
+    Notification,
+    Select,
+    Skeleton,
+    Text
+} from "@mantine/core";
 import {forwardRef, useEffect, useState} from 'react';
 import {Check} from "tabler-icons-react";
 
@@ -42,6 +54,7 @@ function FormersTrainingsPass({user}) {
 
     useEffect(() => {
         fetchAllUsers();
+        document.title = "Faire passer une formation - La 7ème Compagnie";
     }, []);
 
     const data = users.map((user, i) => {
@@ -52,14 +65,6 @@ function FormersTrainingsPass({user}) {
             key: i
         })
     });
-
-    if (isLoading) {
-        return (
-            <div>
-                loading...
-            </div>
-        );
-    }
 
     const SelectItem = forwardRef(
         ({ image, label, description, ...others }, ref) => (
@@ -93,25 +98,20 @@ function FormersTrainingsPass({user}) {
     }
 
     const trainingsData = trainings.map((training, i) => {
-        if (isLoading === true)
-            return (<Skeleton key={i}/>)
-        else {
-            if (user.roles.includes('ADMIN_ROLE')) {
-                return ({
-                    value: training._id,
-                    label: training.title,
-                    is_trained: 'true'});
-            } else {
-                return ({
-                    value: training._id,
-                    label: training.title,
-                    disabled: !user.trained.includes(training._id),
-                    is_trained: user.trained.includes(training._id).toString()
-                });
-            }
+        if (user.roles.includes('ADMIN_ROLE')) {
+            return ({
+                value: training._id,
+                label: training.title,
+                is_trained: 'true'});
+        } else {
+            return ({
+                value: training._id,
+                label: training.title,
+                disabled: !user.trained.includes(training._id),
+                is_trained: user.trained.includes(training._id).toString()
+            });
         }
     });
-
 
     const SelectItemTraining = forwardRef(
         ({ label, is_trained, ...others }, ref) => (
@@ -141,6 +141,31 @@ function FormersTrainingsPass({user}) {
             .catch(err => console.log(err));
     }
 
+    if (isLoading) {
+        return (<>
+            <h1>Ajouter une formation à un joueur</h1>
+            <InputWrapper
+                label={"Choisir un joueur"}
+            >
+                <Skeleton height={36}/>
+            </InputWrapper>
+
+            {selectedUser ? <>
+                <MultiSelect
+                    mt={10}
+                    data={trainingsData}
+                    label={`Modifier les formations de ${selectedUser.username}`}
+                    placeholder="Rechercher une formation..."
+                    searchable
+                    nothingFound="Aucune formation trouvée."
+                    value={newTrained}
+                    onChange={setNewTrained}
+                    itemComponent={SelectItemTraining}
+                />
+                <Button color={"green"} mt={20} onClick={handleClick}>Sauvegarder</Button>
+            </> : null}
+        </>);
+    }
     return (<>
         {notification ? <Notification mb={20} onClose={() => setNotification(false)} icon={<Check size={18} />} color="teal" title="Mise à jour de l'utilisateur">
             L'utilisateur {selectedUser.username} à bien été mis à jour !

@@ -2,12 +2,13 @@ import {Button, Center, Modal, Pagination, Skeleton, Table, Text} from "@mantine
 import {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 
-function Users({isLoading}) {
+function Users() {
     const [users, setUsers] = useState([]);
     const [activePage, setPage] = useState(1);
     const [maxPages, setMaxPages] = useState(1);
     const [opened, setOpened] = useState(false);
     const [currUserModal, setCurrUserModal] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
     const navigate = useNavigate();
 
     const fetchUsers = (page) => {
@@ -23,6 +24,7 @@ function Users({isLoading}) {
             .then(data => {
                 setUsers(data.data);
                 setCurrUserModal(data.data[0]);
+                fetchMaxPages();
             })
             .catch(err => console.log(err));
     }
@@ -37,6 +39,7 @@ function Users({isLoading}) {
             .then(res => res.json())
             .then(data => {
                 setMaxPages(data.data);
+                setIsLoading(false);
             })
             .catch(err => console.log(err));
     }
@@ -64,7 +67,6 @@ function Users({isLoading}) {
 
     useEffect(() => {
         fetchUsers(activePage);
-        fetchMaxPages();
         document.title = "Utilisateurs - La 7ème Compagnie";
     }, [activePage]);
 
@@ -98,6 +100,29 @@ function Users({isLoading}) {
             </td>
         </tr>
     ));
+
+    if (isLoading) {
+        return (<>
+            <h1>Gérer les utilisateurs</h1>
+            <Center mb={"1rem"}>
+                <Pagination page={activePage} onChange={setPage} total={maxPages} withEdges />
+            </Center>
+            <Table striped highlightOnHover>
+                <thead>
+                <tr>
+                    <th>Pseudo</th>
+                    <th>Adresse email</th>
+                    <th>Roles</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+            </Table>
+            <Skeleton height={250} mt={10} />
+            <Center mt={"1rem"}>
+                <Pagination page={activePage} onChange={setPage} total={maxPages} withEdges />
+            </Center>
+        </>)
+    }
 
     return (<>
         <h1>Gérer les utilisateurs</h1>
