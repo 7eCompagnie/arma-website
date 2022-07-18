@@ -25,7 +25,7 @@ function ZeusOperations() {
             .then(data => {
                 setOperations(data.data);
                 setCurrOperationModal(data.data[0]);
-                setIsLoading(false);
+                fetchMaxPages();
             })
             .catch(err => console.log(err));
     }
@@ -40,6 +40,7 @@ function ZeusOperations() {
             .then(res => res.json())
             .then(data => {
                 setMaxPages(data.data);
+                setIsLoading(false);
             })
             .catch(err => console.log(err));
     }
@@ -67,8 +68,7 @@ function ZeusOperations() {
 
     useEffect(() => {
         fetchOperations(activePage);
-        fetchMaxPages();
-        document.title = "Formations - La 7ème Compagnie";
+        document.title = "Opérations - La 7ème Compagnie";
     }, [activePage]);
 
     const rows = (operations.map((operation, i) => (
@@ -92,26 +92,47 @@ function ZeusOperations() {
         </tr>
     )));
 
+    if (isLoading) {
+        return (<>
+            <h1>Gérer les formations</h1>
+            <Button leftIcon={<Plus size={22}/>} onClick={() => navigate('/zeus/operations/new')}>Créer une opération</Button>
+            <Center mb={"1rem"}>
+                <Pagination page={activePage} onChange={setPage} total={maxPages} withEdges />
+            </Center>
+            <Table striped highlightOnHover>
+                <thead>
+                <tr>
+                    <th>Titre</th>
+                    <th>Description</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+            </Table>
+            <Skeleton height={250} mt={10} />
+            <Center mt={"1rem"}>
+                <Pagination page={activePage} onChange={setPage} total={maxPages} withEdges />
+            </Center>
+        </>);
+    }
+
     return (<>
         <h1>Gérer les formations</h1>
         <Button leftIcon={<Plus size={22}/>} onClick={() => navigate('/zeus/operations/new')}>Créer une opération</Button>
         <Center mb={"1rem"}>
             <Pagination page={activePage} onChange={setPage} total={maxPages} withEdges />
         </Center>
-        <Skeleton visible={isLoading}>
-            <Table striped highlightOnHover>
-                <thead>
-                    <tr>
-                        <th>Titre</th>
-                        <th>Description</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {rows}
-                </tbody>
-            </Table>
-        </Skeleton>
+        <Table striped highlightOnHover>
+            <thead>
+                <tr>
+                    <th>Titre</th>
+                    <th>Description</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {rows}
+            </tbody>
+        </Table>
         <Center mt={"1rem"}>
             <Pagination page={activePage} onChange={setPage} total={maxPages} withEdges />
         </Center>

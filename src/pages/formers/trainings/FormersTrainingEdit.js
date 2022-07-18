@@ -14,6 +14,43 @@ import {useEffect, useRef, useState} from "react";
 import {Link, useNavigate, useParams} from "react-router-dom";
 import {Dropzone, IMAGE_MIME_TYPE} from "@mantine/dropzone";
 
+function getIconColor(status, theme) {
+    return status.accepted
+        ? theme.colors[theme.primaryColor][theme.colorScheme === 'dark' ? 4 : 6]
+        : status.rejected
+            ? theme.colors.red[theme.colorScheme === 'dark' ? 4 : 6]
+            : theme.colorScheme === 'dark'
+                ? theme.colors.dark[0]
+                : theme.colors.gray[7];
+}
+
+function ImageUploadIcon({status, ...props}) {
+    if (status.accepted) {
+        return <Checkbox {...props} />;
+    }
+
+    if (status.rejected) {
+        return <X {...props} />;
+    }
+
+    return <Photo {...props} />;
+}
+
+const dropzoneChildren = (status, theme) => (
+    <Group position="center" spacing="xl" style={{ minHeight: 220, pointerEvents: 'none' }}>
+        <ImageUploadIcon status={status} style={{ color: getIconColor(status, theme) }} size={80} />
+
+        <div>
+            <Text size="xl" inline>
+                Faites glisser l'image ici ou cliquez pour en sélectionner une.
+            </Text>
+            <Text size="sm" color="dimmed" inline mt={7}>
+                La taille de l'image ne doit pas dépasser 5Mo.
+            </Text>
+        </div>
+    </Group>
+)
+
 function FormersTrainingEdit() {
     const {id} = useParams();
     const [training, setTraining] = useState(null);
@@ -116,43 +153,6 @@ function FormersTrainingEdit() {
         }
     })
 
-    function getIconColor(status, theme) {
-        return status.accepted
-            ? theme.colors[theme.primaryColor][theme.colorScheme === 'dark' ? 4 : 6]
-            : status.rejected
-                ? theme.colors.red[theme.colorScheme === 'dark' ? 4 : 6]
-                : theme.colorScheme === 'dark'
-                    ? theme.colors.dark[0]
-                    : theme.colors.gray[7];
-    }
-
-    function ImageUploadIcon({status, ...props}) {
-        if (status.accepted) {
-            return <Checkbox {...props} />;
-        }
-
-        if (status.rejected) {
-            return <X {...props} />;
-        }
-
-        return <Photo {...props} />;
-    }
-
-    const dropzoneChildren = (status, theme) => (
-        <Group position="center" spacing="xl" style={{ minHeight: 220, pointerEvents: 'none' }}>
-            <ImageUploadIcon status={status} style={{ color: getIconColor(status, theme) }} size={80} />
-
-            <div>
-                <Text size="xl" inline>
-                    Faites glisser l'image ici ou cliquez pour en sélectionner une.
-                </Text>
-                <Text size="sm" color="dimmed" inline mt={7}>
-                    La taille de l'image ne doit pas dépasser 5Mo.
-                </Text>
-            </div>
-        </Group>
-    )
-
     const handleOnClick = () => {
         let body = {};
 
@@ -188,24 +188,42 @@ function FormersTrainingEdit() {
             <Button variant="outline" compact leftIcon={<ChevronLeft/>} onClick={() => navigate('/admin/users')}>
                 Retour
             </Button>
-            <Skeleton my={38} height={10} width={150} />
+            <Skeleton my={38} height={16} width={200} />
             <form>
                 <SimpleGrid cols={2}>
-                    <div>
-                        <Skeleton height={8} width={100} my={10}/>
-                        <Skeleton height={36} width={"100%"}/>
-                    </div>
+                    <InputWrapper
+                        label={"Nom de la formation"}
+                    >
+                        <Skeleton height={36}/>
+                    </InputWrapper>
 
-                    <div>
-                        <Skeleton height={8} width={100} my={10}/>
-                        <Skeleton height={36} width={"100%"}/>
-                    </div>
+                    <InputWrapper
+                        label={"Formateurs"}
+                    >
+                        <Skeleton height={36}/>
+                    </InputWrapper>
 
-                    <div>
-                        <Skeleton height={8} width={100} my={10}/>
-                        <Skeleton height={36} width={"100%"}/>
-                    </div>
+                    <InputWrapper
+                        label={"Description"}
+                    >
+                        <Skeleton height={65}/>
+                    </InputWrapper>
+
+                    <InputWrapper
+                        label={"Image de la formation"}
+                    >
+                        <Skeleton height={36} />
+                    </InputWrapper>
+
+                    <InputWrapper
+                        label={"Les joueurs peuvent demander à être formé dès à présent"}
+                    >
+                        <Skeleton height={36} />
+                    </InputWrapper>
                 </SimpleGrid>
+                <Button mt={"lg"} onClick={handleOnClick} disabled>
+                    Sauvegarder
+                </Button>
             </form>
         </>)
     }
@@ -227,11 +245,11 @@ function FormersTrainingEdit() {
         <Button variant="outline" compact leftIcon={<ChevronLeft/>} onClick={() => navigate('/formers/trainings')}>
             Retour
         </Button>
-        <h1 style={{marginTop: 0}}>Formation {training.title}</h1>
+        <h1>Formation {training.title}</h1>
         <form>
             <SimpleGrid cols={2}>
                 <InputWrapper
-                    label={"Nom"}
+                    label={"Nom de la formation"}
                 >
                     <Input
                         icon={<LetterCase/>}

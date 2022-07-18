@@ -5,7 +5,7 @@ import {
     Card,
     Group,
     Image,
-    SimpleGrid, Text, useMantineTheme
+    SimpleGrid, Skeleton, Text, useMantineTheme
 } from "@mantine/core";
 import {useNavigate} from "react-router-dom";
 
@@ -16,6 +16,7 @@ function Trainings() {
         ? theme.colors.dark[1]
         : theme.colors.gray[7];
     const [trainings, setTrainings] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
 
     const fetchTrainings = () => {
         fetch(`${process.env.REACT_APP_ENDPOINT_URL}/trainings/`,
@@ -28,13 +29,14 @@ function Trainings() {
             .then(res => res.json())
             .then(data => {
                 setTrainings(data.data);
+                setIsLoading(false);
             })
             .catch(err => console.log(err));
     }
 
     useEffect(() => {
-        document.title = "Formations - La 7ème Compagnie";
         fetchTrainings();
+        document.title = "Nos formations - La 7ème Compagnie";
     }, []);
 
     const trainingsToDisplay = trainings.map((training, i) => {
@@ -57,6 +59,17 @@ function Trainings() {
             </Button>
         </Card>)
     });
+
+    if (isLoading) {
+        return (<>
+            <h1>Les formations disponibles</h1>
+            <SimpleGrid cols={3}>
+                <Skeleton height={300} />
+                <Skeleton height={300} />
+                <Skeleton height={300} />
+            </SimpleGrid>
+        </>)
+    }
 
     return(<>
         <h1>Les formations disponibles</h1>

@@ -25,7 +25,7 @@ function FormersTrainings() {
             .then(data => {
                 setTrainings(data.data);
                 setCurrTrainingModal(data.data[0]);
-                setIsLoading(false);
+                fetchMaxPages();
             })
             .catch(err => console.log(err));
     }
@@ -40,9 +40,15 @@ function FormersTrainings() {
             .then(res => res.json())
             .then(data => {
                 setMaxPages(data.data);
+                setIsLoading(false);
             })
             .catch(err => console.log(err));
     }
+
+    useEffect(() => {
+        fetchTrainings(activePage);
+        document.title = "Formations - La 7ème Compagnie";
+    }, [activePage]);
 
     const updateModal = (currTraining) => {
         setCurrTrainingModal(currTraining)
@@ -65,12 +71,6 @@ function FormersTrainings() {
             .catch(err => console.log(err));
     }
 
-    useEffect(() => {
-        fetchTrainings(activePage);
-        fetchMaxPages();
-        document.title = "Formations - La 7ème Compagnie";
-    }, [activePage]);
-
     const rows = (trainings.map((training, i) => (
         <tr key={i}>
             <td>{training.title}</td>
@@ -92,26 +92,47 @@ function FormersTrainings() {
         </tr>
     )));
 
+    if (isLoading) {
+        return (<>
+            <h1>Gérer les formations</h1>
+            <Button leftIcon={<Plus size={22}/>} onClick={() => navigate('/formers/trainings/new')}>Créer une formation</Button>
+            <Center mb={"1rem"}>
+                <Pagination page={activePage} onChange={setPage} total={maxPages} withEdges />
+            </Center>
+            <Table striped highlightOnHover>
+                <thead>
+                <tr>
+                    <th>Titre</th>
+                    <th>Description</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+            </Table>
+            <Skeleton height={250} mt={10} />
+            <Center mt={"1rem"}>
+                <Pagination page={activePage} onChange={setPage} total={maxPages} withEdges />
+            </Center>
+        </>);
+    }
+
     return (<>
         <h1>Gérer les formations</h1>
         <Button leftIcon={<Plus size={22}/>} onClick={() => navigate('/formers/trainings/new')}>Créer une formation</Button>
         <Center mb={"1rem"}>
             <Pagination page={activePage} onChange={setPage} total={maxPages} withEdges />
         </Center>
-        <Skeleton visible={isLoading}>
-            <Table striped highlightOnHover>
-                <thead>
-                    <tr>
-                        <th>Titre</th>
-                        <th>Description</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {rows}
-                </tbody>
-            </Table>
-        </Skeleton>
+        <Table striped highlightOnHover>
+            <thead>
+                <tr>
+                    <th>Titre</th>
+                    <th>Description</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {rows}
+            </tbody>
+        </Table>
         <Center mt={"1rem"}>
             <Pagination page={activePage} onChange={setPage} total={maxPages} withEdges />
         </Center>

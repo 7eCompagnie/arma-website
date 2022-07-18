@@ -23,8 +23,8 @@ function UserEdit() {
             .then(data => {
                 setUser(data.data);
                 setNewRoles(data.data.roles)
-                setIsLoading(false);
                 document.title = `Utilisateur ${data.data.username} - La 7ème Compagnie`;
+                setIsLoading(false);
             })
             .catch(err => {
                 console.log(err);
@@ -66,34 +66,6 @@ function UserEdit() {
         { value: 'ADMIN_ROLE', label: 'Zeus' },
     ]
 
-    if (isLoading) {
-        return (<>
-            <Button variant="outline" compact leftIcon={<ChevronLeft/>} onClick={() => navigate('/admin/users')}>
-                Retour
-            </Button>
-            <Skeleton my={38} height={10} width={150} />
-            <h2>Général</h2>
-            <form>
-                <SimpleGrid cols={2}>
-                    <div>
-                        <Skeleton height={8} width={100} my={10}/>
-                        <Skeleton height={36} width={"100%"}/>
-                    </div>
-
-                    <div>
-                        <Skeleton height={8} width={100} my={10}/>
-                        <Skeleton height={36} width={"100%"}/>
-                    </div>
-
-                    <div>
-                        <Skeleton height={8} width={100} my={10}/>
-                        <Skeleton height={36} width={"100%"}/>
-                    </div>
-                </SimpleGrid>
-            </form>
-        </>)
-    }
-
     if (notFound) {
         return (<>
             <h1>Impossible de trouvé l'utilisateur demandé</h1>
@@ -104,6 +76,51 @@ function UserEdit() {
         </>)
     }
 
+    if (isLoading) {
+        return (<>
+            <Button variant="outline" compact leftIcon={<ChevronLeft/>} onClick={() => navigate('/admin/users')}>
+                Retour
+            </Button>
+
+            <Skeleton my={38} height={16} width={200} />
+            <h2>Général</h2>
+            <form>
+                <SimpleGrid cols={2}>
+                    <InputWrapper
+                        label={"Nom d'utilisateur"}
+                    >
+                        <Skeleton height={36} width={"100%"}/>
+                    </InputWrapper>
+
+                    <InputWrapper
+                        label={"Discriminateur Discord"}
+                    >
+                        <Skeleton height={36} width={"100%"}/>
+                    </InputWrapper>
+
+                    <InputWrapper
+                        label={"Email"}
+                    >
+                        <Skeleton height={36} width={"100%"}/>
+                    </InputWrapper>
+
+                    <InputWrapper
+                        label={"Identifiant"}
+                    >
+                        <Skeleton height={36} width={"100%"}/>
+                    </InputWrapper>
+
+                    <InputWrapper
+                        label={"Rôles"}
+                    >
+                        <Skeleton height={36} width={"100%"}/>
+                    </InputWrapper>
+                </SimpleGrid>
+                <Button mt={"2rem"} onClick={updateUser} disabled>Sauvegarder</Button>
+            </form>
+        </>)
+    }
+
     return (<>
         {notification ? <Notification mb={20} onClose={() => setNotification(false)} icon={<Check size={18} />} color="teal" title="Mise à jour de l'utilisateur">
                 Utilisateur {user.username} correctement mis à jour !
@@ -111,7 +128,7 @@ function UserEdit() {
         <Button variant="outline" compact leftIcon={<ChevronLeft/>} onClick={() => navigate('/zeus/users')}>
             Retour
         </Button>
-        <h1 style={{marginTop: 0}}>Utilisateur {user.username}</h1>
+        <h1>Utilisateur {user.username}</h1>
         <h2>Général</h2>
         <form>
             <SimpleGrid cols={2}>
@@ -161,7 +178,7 @@ function UserEdit() {
 
                 <MultiSelect
                     data={roles}
-                    label="Roles"
+                    label="Rôles"
                     placeholder="Ajouter / Supprimer des rôles"
                     defaultValue={user.roles}
                     searchable
