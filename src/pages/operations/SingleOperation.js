@@ -3,7 +3,7 @@ import {
     Alert,
     Badge,
     Button,
-    Image, Notification, SimpleGrid, Skeleton,
+    Image, Input, InputWrapper, Notification, SimpleGrid, Skeleton,
     Table, Text, useMantineTheme,
 } from "@mantine/core";
 import {AlertCircle, Ban, Check, ChevronLeft} from "tabler-icons-react";
@@ -19,6 +19,9 @@ function SingleOperation() {
     const [groups, setGroups] = useState([]);
     const [updatedUser, setUpdatedUser] = useState({});
     const [allUsers, setAllUsers] = useState({});
+    const [playerRPName, setPlayerRPName] = useState('');
+    const [notificationError, setNotificationError] = useState(null);
+    const [notificationSuccess, setNotificationSuccess] = useState(null);
     const theme = useMantineTheme();
     const navigate = useNavigate();
 
@@ -105,48 +108,12 @@ function SingleOperation() {
 
         for (let i = 0; i < newRoles.length; i++) {
             for (let j = 0; j < newRoles[i].group.length; j++) {
-                if (newRoles[i].group[j].player === updatedUser.identifier)
+                if (newRoles[i].group[j].player === updatedUser.identifier) {
                     newRoles[i].group[j].player = null;
-            }
-        }
-
-        const body = {
-            roles: newRoles
-        };
-        fetch(`${process.env.REACT_APP_ENDPOINT_URL}/operations/${id}`, {
-            method: 'PATCH',
-            headers: {
-                'x-access-token': localStorage.getItem('token'),
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(body)
-        })
-            .then((res) => res.json())
-            .then(() => {
-                fetchOperation();
-            })
-            .catch(err => {
-                console.log(err);
-            });
-    }
-
-    const getPlayerInfo = () => {
-        for (let i = 0; i < groups.length; i++) {
-            for (let j = 0; j < groups[i].group.length; j++) {
-                if (groups[i].group[j].player === updatedUser.identifier) {
-                    let infos = groups[i].group[j];
-                    infos.group = groups[i].title;
-                    return infos;
+                    newRoles[i].group[j].playerRPName = null;
                 }
             }
         }
-        return false;
-    }
-
-    const registerPlayer = (group, role) => {
-        let newRoles = [...operation.roles];
-
-        newRoles.find(r => r.title === group.title).group.find(r => r.role === role.role && r.team === role.team).player = updatedUser.identifier;
 
         const body = {
             roles: newRoles
@@ -168,38 +135,36 @@ function SingleOperation() {
             });
     }
 
-    const roles = groups.map((group, index) => {
-        return (group.group.map((role, i) => {
-            if (isLoading)
-                return;
-            if (role.player === null) {
-                return (
-                    <tr key={i}>
-                        <td>{role.role}</td>
-                        <td>{group.title}</td>
-                        <td>{role.team}</td>
-                        <td>
-                            { updatedUser.trained.includes(role.training) || (role.training === undefined && updatedUser.roles.includes('ADMIN_ROLE')) ?
-                                <Button color={"green"} compact onClick={() => registerPlayer(group, role)}>S'inscrire</Button> :
-                                <Button color={"green"} compact disabled title={"Vous n'avez pas la formation requise"}>S'inscrire</Button>}
-                        </td>
-                    </tr>
-                )
-            }
-            if (updatedUser.roles.includes('ADMIN_ROLE')) {
-                return (
-                    <tr key={i}>
-                        <td>{role.role}</td>
-                        <td>{group.title}</td>
-                        <td>{role.team}</td>
-                        <td>
-                            <Button color={"green"} compact>S'inscrire</Button>
-                        </td>
-                    </tr>
-                )
-            }
-        }))
-    });
+    const registerPlayer = (group, role) => {
+        if (playerRPName === '') {
+            setNotificationError("Vous devez entrer un nom RP pour pouvoir vous inscrire.");
+            return;
+        }
+
+        let newRoles = [...operation.roles];
+
+        newRoles.find(r => r.title === group.title).group.find(r => r.role === role.role && r.team === role.team).player = updatedUser.identifier;
+        newRoles.find(r => r.title === group.title).group.find(r => r.role === role.role && r.team === role.team).playerRPName = playerRPName;
+
+        const body = {
+            roles: newRoles
+        };
+        fetch(`${process.env.REACT_APP_ENDPOINT_URL}/operations/${id}`, {
+            method: 'PATCH',
+            headers: {
+                'x-access-token': localStorage.getItem('token'),
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(body)
+        })
+            .then((res) => res.json())
+            .then(() => {
+                fetchOperation();
+            })
+            .catch(err => {
+                console.log(err);
+            });
+    }
 
     if (isLoading) {
         return (<>
@@ -230,20 +195,7 @@ function SingleOperation() {
                 </Text>
             </SimpleGrid>
 
-            <h2>Rôles disponibles</h2>
-            <Table>
-                <thead>
-                <tr>
-                    <th>Rôle</th>
-                    <th>Groupe</th>
-                    <th>Equipe</th>
-                    <th>Actions</th>
-                </tr>
-                </thead>
-            </Table>
-            <Skeleton height={200} mt={10} />
-
-            <h2>Inscrits</h2>
+            <h2>Inscription</h2>
             <SimpleGrid cols={3}>
                 <Skeleton height={200} />
                 <Skeleton height={200} />
@@ -268,6 +220,7 @@ function SingleOperation() {
             alt={operation.title}
             height={250}
         /> }
+
         <h2>Informations générales</h2>
         <SimpleGrid columns={2} spacing={4}>
             <Text><strong>Description:</strong> {operation.description}</Text>
@@ -288,31 +241,23 @@ function SingleOperation() {
             </Text>
         </SimpleGrid>
 
-        <h2>Rôles disponibles</h2>
-        {isUserRegistered() ? <>
-            <Alert icon={<AlertCircle size={16} />} title="Déjà inscrit !" color="teal">
-                Vous êtes déjà inscrit sur cette opération en tant que <strong>{getPlayerInfo().role}</strong> dans le groupe <strong>{getPlayerInfo().group}</strong>, équipe <strong>{getPlayerInfo().team}</strong>.<br/>
-                Si vous souhaitez changer de rôle, vous pouvez vous désinscrire en dessous.
-            </Alert>
-            <Button color={"red"} mt={20} onClick={() => unregisterPlayer()}>Se désinscrire</Button>
-        </> : <>
-            <Table>
-                <thead>
-                <tr>
-                    <th>Rôle</th>
-                    <th>Groupe</th>
-                    <th>Equipe</th>
-                    <th>Actions</th>
-                </tr>
-                </thead>
-                <tbody>
-                {roles}
-                </tbody>
-            </Table>
-        </>}
+        <h2>Inscription</h2>
 
-        <h2>Inscrits</h2>
-        <SimpleGrid cols={3}>
+        {notificationError !== null ? <Notification mb={20} onClose={() => setNotificationError(null)} icon={<Check size={18} />} color="red" title="Erreur">
+            {notificationError}
+        </Notification> : null}
+        {notificationSuccess !== null ? <Notification mb={20} onClose={() => setNotificationSuccess(null)} icon={<Check size={18} />} color="teal" title="Validé !">
+            {notificationSuccess}
+        </Notification> : null}
+
+        { !isUserRegistered() ? <SimpleGrid cols={2}>
+            <div style={{display: 'flex', alignItems: 'end'}}>
+                <InputWrapper label={"Nom RP"} required>
+                    <Input placeholder={"Ex: Augustin Hubert"} value={playerRPName} onChange={(e) => setPlayerRPName(e.target.value)}/>
+                </InputWrapper>
+            </div>
+        </SimpleGrid> : ""}
+        <SimpleGrid cols={2}>
             {groups.map((group, index) => (
                 <div key={index}>
                     <h3>{group.title}</h3>
@@ -327,11 +272,17 @@ function SingleOperation() {
                                         { role.player !== null ?
                                             <div style={{display: 'flex', alignItems: 'center'}}>
                                                 <Badge color={"blue"} mr={10}>{role.role}</Badge>
-                                                { allUsers.find(user => user.identifier === role.player).username }
+                                                <span>
+                                                    <strong>{ role.playerRPName ? role.playerRPName : playerRPName }</strong> ({ allUsers.find(user => user.identifier === role.player).username })
+                                                </span>
+                                                <Button ml={10} color={"red"} onClick={() => unregisterPlayer()} compact>Se désinscrire</Button>
                                             </div> :
                                             <div style={{color: theme.colors.gray[5], display: 'flex', alignItems: 'center'}}>
                                                 <Badge color={"blue"} mr={10}>{role.role}</Badge>
                                                 Disponible
+                                                { !isUserRegistered() ? (updatedUser.trained.includes(role.training) || (role.training === undefined && updatedUser.roles.includes('ADMIN_ROLE')) ?
+                                                        <Button ml={10} color={"green"} compact onClick={() => registerPlayer(group, role)}>S'inscrire</Button> :
+                                                        <Button ml={10} color={"green"} compact disabled title={"Vous n'avez pas la formation requise"}>S'inscrire</Button>) : ""}
                                             </div>
                                         }
                                     </li>)
