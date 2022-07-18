@@ -1,8 +1,8 @@
-import {Avatar, Button, Group, MultiSelect, Notification, Select, Skeleton, Text} from "@mantine/core";
+import {Avatar, Badge, Button, Center, Group, MultiSelect, Notification, Select, Skeleton, Text} from "@mantine/core";
 import {forwardRef, useEffect, useState} from 'react';
 import {Check} from "tabler-icons-react";
 
-function FormersTrainingsPass() {
+function FormersTrainingsPass({user}) {
     const [isLoading, setIsLoading] = useState(true);
     const [users, setUsers] = useState([]);
     const [newTrained, setNewTrained] = useState([]);
@@ -95,9 +95,32 @@ function FormersTrainingsPass() {
     const trainingsData = trainings.map((training, i) => {
         if (isLoading === true)
             return (<Skeleton key={i}/>)
-        else
-            return ({ value: training._id, label: training.title });
+        else {
+            if (user.roles.includes('ADMIN_ROLE')) {
+                return ({
+                    value: training._id,
+                    label: training.title,
+                    is_trained: 'true'});
+            } else {
+                return ({
+                    value: training._id,
+                    label: training.title,
+                    disabled: !user.trained.includes(training._id),
+                    is_trained: user.trained.includes(training._id).toString()
+                });
+            }
+        }
     });
+
+
+    const SelectItemTraining = forwardRef(
+        ({ label, is_trained, ...others }, ref) => (
+            <div style={{display: "flex", alignItems: "center", justifyContent: "space-between"}} ref={ref} {...others}>
+                <Text>{label}</Text>
+                { !(is_trained === 'true') ? <Badge color="red">Pas formé</Badge> : "" }
+            </div>
+        )
+    );
 
     const handleClick = () => {
         let body = {};
@@ -144,6 +167,7 @@ function FormersTrainingsPass() {
                 nothingFound="Aucune formation trouvée."
                 value={newTrained}
                 onChange={setNewTrained}
+                itemComponent={SelectItemTraining}
             />
             <Button color={"green"} mt={20} onClick={handleClick}>Sauvegarder</Button>
         </> : null}
