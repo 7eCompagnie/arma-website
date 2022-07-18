@@ -90,6 +90,15 @@ function CreateOperation() {
             return;
         }
 
+        data.forEach(group => {
+            group.group.forEach(item => {
+               delete item.isEditing;
+            });
+            group.teams.forEach(item => {
+                delete item.isEditing;
+            });
+        });
+
         let body = new FormData();
         body.append('title', titleInput.current.value);
         body.append('description', descriptionInput.current.value);
