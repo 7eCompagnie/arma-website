@@ -80,8 +80,24 @@ function SingleOperation() {
             .catch(err => console.log(err));
     }
 
+    const updateRegistered = () => {
+        fetch(`${process.env.REACT_APP_ENDPOINT_URL}/operations/${id}`, {
+            method: 'GET',
+            headers: {
+                'x-access-token': localStorage.getItem('token')
+            },
+        })
+            .then(res => res.json())
+            .then(data => {
+                setGroups(data.data.roles);
+            })
+            .catch(err => console.log(err));
+    }
+
     useEffect(() => {
         fetchOperation();
+        const interval = setInterval(() => { updateRegistered(); }, 2000);
+        return () => clearInterval(interval);
     }, []);
 
     const unregisterPlayer = () => {
