@@ -106,7 +106,7 @@ function App() {
 
                     <Route path="/formers/trainings" element={<FormersTrainings />}/>
                     <Route path="/formers/trainings/new" element={<FormersTrainingCreate />}/>
-                    <Route path="/formers/trainings/pass" element={<FormersTrainingsPass />}/>
+                    <Route path="/formers/trainings/pass" element={<FormersTrainingsPass user={user} />}/>
                     <Route path="/formers/trainings/:id" element={<FormersTrainingEdit />}/>
 
                     <Route path="/zeus/users" element={<Users isLoading={isLoading}/>}/>
