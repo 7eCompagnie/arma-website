@@ -1,4 +1,4 @@
-<h1 align="center">Welcome to my 7th-company 👋</h1>
+<h1 align="center">Welcome to arma-website 👋</h1>
 <p>
   <a href="https://twitter.com/Sn0wDev__" target="_blank">
     <img alt="Twitter: Sn0wDev__" src="https://img.shields.io/twitter/follow/Sn0wDev__.svg?style=social" />
@@ -16,7 +16,7 @@ I used ReactJS from the official documentation.
 ## Install
 
 ```sh
-git clone https://github.com/Sn00ww/7th-company
+https://github.com/7eCompagnie/arma-website.git
 ```
 
 ## Usage
