@@ -13,6 +13,7 @@ import {AlignJustified, At, Check, ChevronLeft, Id, LetterCase, Numbers, Photo, 
 import {useEffect, useRef, useState} from "react";
 import {Link, useNavigate, useParams} from "react-router-dom";
 import {Dropzone, IMAGE_MIME_TYPE} from "@mantine/dropzone";
+import {showNotification, updateNotification} from "@mantine/notifications";
 
 function getIconColor(status, theme) {
     return status.accepted
@@ -59,7 +60,6 @@ function FormersTrainingEdit() {
     const [allTrainers, setAllTrainers] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [notFound, setNotFound] = useState(false);
-    const [notification, setNotification] = useState(false);
     const [trainingTitle, setTrainingTitle] = useState('');
     const [trainingDescription, setTrainingDescription] = useState('');
     const [trainingPicture, setTrainingPicture] = useState('');
@@ -154,6 +154,15 @@ function FormersTrainingEdit() {
     })
 
     const handleOnClick = () => {
+        showNotification({
+            id: `edit-training-${training._id}`,
+            loading: true,
+            title: 'Mise à jour de la formation en cours...',
+            message: 'Veuillez patienter... Cette opération peut prendre quelques secondes.',
+            autoClose: false,
+            disallowClose: true,
+        });
+
         let body = {};
 
         if (trainingTitle !== training.title)
@@ -176,7 +185,14 @@ function FormersTrainingEdit() {
         })
             .then((res) => res.json())
             .then((data) => {
-                setNotification(true);
+                updateNotification({
+                    id: `edit-training-${data.data._id}`,
+                    color: 'teal',
+                    title: 'Edition terminée',
+                    message: `Vous avez correctement mis à jour la formation ${data.data.title}`,
+                    icon: <Check />,
+                    autoClose: 5000,
+                });
             })
             .catch(err => {
                 console.log(err);
@@ -239,9 +255,6 @@ function FormersTrainingEdit() {
     }
 
     return (<>
-        {notification ? <Notification mb={20} onClose={() => setNotification(false)} icon={<Check size={18} />} color="teal" title="Mise à jour de l'utilisateur">
-            Formation {training.title} correctement mis à jour !
-        </Notification> : null}
         <Button variant="outline" compact leftIcon={<ChevronLeft/>} onClick={() => navigate('/formers/trainings')}>
             Retour
         </Button>

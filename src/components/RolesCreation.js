@@ -1,6 +1,7 @@
 import {Button, Center, Input, InputWrapper, Select, SimpleGrid, Skeleton, Table, Tabs} from "@mantine/core";
-import {CircleCheck, Pencil, SquarePlus, Trash} from "tabler-icons-react";
+import {AlertTriangle, CircleCheck, Pencil, SquarePlus, Trash, X} from "tabler-icons-react";
 import {useEffect, useState} from "react";
+import {showNotification} from "@mantine/notifications";
 
 function uuidv4() {
     return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
@@ -58,8 +59,17 @@ function RolesCreation({callback, data, buttonText}) {
     const addTab = () => {
         const input = document.getElementById('group-name');
 
-        if (input.value === '' || input.value === null)
+        if (input.value === '' || input.value === null) {
+            showNotification({
+                id: "tab-creation-error",
+                title: 'Erreur lors de la création du groupe',
+                message: 'Veuillez renseigner les champs obligatoires.',
+                icon: <X/>,
+                autoClose: 5000,
+                color: "red"
+            });
             return;
+        }
 
         setTabs([...tabs, {
             title: input.value,
@@ -71,8 +81,26 @@ function RolesCreation({callback, data, buttonText}) {
     const addRole = (tab) => {
         const input = document.getElementById('role-name');
 
-        if (input.value === '' || input.value === null || currentTeam === null || currentTraining === null)
+        if (input.value === '' || input.value === null || currentTeam === null || currentTraining === null) {
+            showNotification({
+                id: "role-creation-error",
+                title: 'Erreur lors de l\'ajout du rôle',
+                message: 'Veuillez renseigner les champs obligatoires.',
+                icon: <X/>,
+                autoClose: 5000,
+                color: "red"
+            });
             return;
+        }
+
+        showNotification({
+            id: "confirm-delete-warning",
+            title: 'Ajout du rôle',
+            message: 'Pensez à bien sauvegarder les modifications, en cliquant sur le bouton "Sauvegarder" en bas de la page.',
+            icon: <AlertTriangle/>,
+            autoClose: 5000,
+            color: "orange"
+        });
 
         let newArray = tabs[tab];
 
@@ -89,8 +117,26 @@ function RolesCreation({callback, data, buttonText}) {
     const addTeam = (tab) => {
         const input = document.getElementById('team-name');
 
-        if (input.value === '' || input.value === null)
+        if (input.value === '' || input.value === null) {
+            showNotification({
+                id: "team-creation-error",
+                title: 'Erreur lors de la création de l\'équipe',
+                message: 'Veuillez renseigner les champs obligatoires.',
+                icon: <X/>,
+                autoClose: 5000,
+                color: "red"
+            });
             return;
+        }
+
+        showNotification({
+            id: "add-team-warning",
+            title: 'Création de l\'équipe',
+            message: 'Pensez à bien sauvegarder les modifications, en cliquant sur le bouton "Sauvegarder" en bas de la page.',
+            icon: <AlertTriangle/>,
+            autoClose: 5000,
+            color: "orange"
+        });
 
         let newArray = tabs[tab];
 
@@ -116,6 +162,15 @@ function RolesCreation({callback, data, buttonText}) {
         if (!tabs[activeTab])
             return {};
 
+        showNotification({
+            id: "delete-warning",
+            title: 'Suppression du rôle',
+            message: 'Pensez à bien sauvegarder les modifications, en cliquant sur le bouton "Sauvegarder" en bas de la page.',
+            icon: <AlertTriangle/>,
+            autoClose: 5000,
+            color: "yellow"
+        });
+
         let newArray = tabs[activeTab];
         let toRemove = newArray.group.find(role => role.role === currentRole.role);
 
@@ -138,6 +193,17 @@ function RolesCreation({callback, data, buttonText}) {
         if (!tabs[activeTab])
             return {};
 
+        if (buttonText === "Sauvegarder") {
+            showNotification({
+                id: "confirm-edit-warning",
+                title: 'Edition du nom du rôle',
+                message: 'Pensez à bien sauvegarder les modifications, en cliquant sur le bouton "Sauvegarder" en bas de la page.',
+                icon: <AlertTriangle/>,
+                autoClose: 5000,
+                color: "yellow"
+            });
+        }
+
         let newArray = tabs[activeTab];
         let toEdit = newArray.group.find(role => role.role === currentRole.role);
 
@@ -149,6 +215,15 @@ function RolesCreation({callback, data, buttonText}) {
     const removeTeam = (currentTeam) => {
         if (!tabs[activeTab])
             return {};
+
+        showNotification({
+            id: "delete-team-warning",
+            title: 'Suppression de l\'équipe',
+            message: 'Pensez à bien sauvegarder les modifications, en cliquant sur le bouton "Sauvegarder" en bas de la page.',
+            icon: <AlertTriangle/>,
+            autoClose: 5000,
+            color: "yellow"
+        });
 
         let newArray = tabs[activeTab];
         let toRemove = newArray.teams.find(team => team.name === currentTeam.name);
@@ -181,6 +256,17 @@ function RolesCreation({callback, data, buttonText}) {
         if (!tabs[activeTab])
             return {};
 
+        if (buttonText === "Sauvegarder") {
+            showNotification({
+                id: "confirm-edit-team-warning",
+                title: 'Edition du nom de l\'équipe',
+                message: 'Pensez à bien sauvegarder les modifications, en cliquant sur le bouton "Sauvegarder" en bas de la page.',
+                icon: <AlertTriangle/>,
+                autoClose: 5000,
+                color: "yellow"
+            });
+        }
+
         let newArray = tabs[activeTab];
         let toEdit = newArray.teams.find(team => team.name === currentTeam.name);
 
@@ -193,7 +279,7 @@ function RolesCreation({callback, data, buttonText}) {
         setTabs([...tabs.slice(0, activeTab), newArray, ...tabs.slice(activeTab + 1)]);
     }
 
-    if (isLoading)
+    if (isLoading) {
         return (<>
             <Tabs active={activeTab} onTabChange={changeTab}>
                 {tabs.map((tab, index) => (
@@ -202,11 +288,19 @@ function RolesCreation({callback, data, buttonText}) {
                             <div key={index}>
                                 <SimpleGrid cols={2}>
                                     <h4>
-                                        {team.isEditing ? <Input id={tab.title + "-" + team.name} placeholder="Ex: 300" defaultValue={team.name} required/> : team.name}
+                                        {team.isEditing ? <Input id={tab.title + "-" + team.name} placeholder="Ex: 300"
+                                                                 defaultValue={team.name} required/> : team.name}
                                     </h4>
                                     <Center>
-                                        {team.isEditing ? <Button color={"green"} mr={10} leftIcon={<CircleCheck size={16}/>} compact onClick={() => {confirmEditTeam(team, tab.title + "-" + team.name)}}>Valider</Button> : <Button mr={10} leftIcon={<Pencil size={16}/>} compact onClick={() => editTeam(team)}>Editer</Button>}
-                                        <Button ml={10} leftIcon={<Trash size={16}/>} compact color={"red"} onClick={() => removeTeam(team)}>Supprimer</Button>
+                                        {team.isEditing ?
+                                            <Button color={"green"} mr={10} leftIcon={<CircleCheck size={16}/>} compact
+                                                    onClick={() => {
+                                                        confirmEditTeam(team, tab.title + "-" + team.name)
+                                                    }}>Valider</Button> :
+                                            <Button mr={10} leftIcon={<Pencil size={16}/>} compact
+                                                    onClick={() => editTeam(team)}>Editer</Button>}
+                                        <Button ml={10} leftIcon={<Trash size={16}/>} compact color={"red"}
+                                                onClick={() => removeTeam(team)}>Supprimer</Button>
                                     </Center>
                                 </SimpleGrid>
                                 <Table>
@@ -221,10 +315,21 @@ function RolesCreation({callback, data, buttonText}) {
                                         if (role.team === team.name) {
                                             return (
                                                 <tr key={uuidv4()}>
-                                                    <td>{role.isEditing ? <Input id={tab.title + "-" + team.name + "-" + role.role} placeholder="Ex: Fusillier" defaultValue={role.role} required/> : role.role}</td>
+                                                    <td>{role.isEditing ?
+                                                        <Input id={tab.title + "-" + team.name + "-" + role.role}
+                                                               placeholder="Ex: Fusillier" defaultValue={role.role}
+                                                               required/> : role.role}</td>
                                                     <td>
-                                                        {role.isEditing ? <Button color={"green"} mr={10} leftIcon={<CircleCheck size={16}/>} compact onClick={() => {confirmEdit(role, tab.title + "-" + team.name + "-" + role.role)}}>Valider</Button> : <Button mr={10} leftIcon={<Pencil size={16}/>} compact onClick={() => editRole(role)}>Editer</Button>}
-                                                        <Button ml={10} leftIcon={<Trash size={16}/>} compact color={"red"} onClick={() => removeRole(role)}>Supprimer</Button>
+                                                        {role.isEditing ? <Button color={"green"} mr={10}
+                                                                                  leftIcon={<CircleCheck size={16}/>}
+                                                                                  compact onClick={() => {
+                                                                confirmEdit(role, tab.title + "-" + team.name + "-" + role.role)
+                                                            }}>Valider</Button> :
+                                                            <Button mr={10} leftIcon={<Pencil size={16}/>} compact
+                                                                    onClick={() => editRole(role)}>Editer</Button>}
+                                                        <Button ml={10} leftIcon={<Trash size={16}/>} compact
+                                                                color={"red"}
+                                                                onClick={() => removeRole(role)}>Supprimer</Button>
                                                     </td>
                                                 </tr>
                                             )
@@ -256,7 +361,9 @@ function RolesCreation({callback, data, buttonText}) {
                                 searchable
                                 maxDropdownHeight={400}
                                 nothingFound="Aucune équipe trouvée."
-                                onChange={(e) => { setCurrentTeam(e) }}
+                                onChange={(e) => {
+                                    setCurrentTeam(e)
+                                }}
                                 required
                             />
                         </SimpleGrid>
@@ -298,6 +405,7 @@ function RolesCreation({callback, data, buttonText}) {
                 e.preventDefault();
             }}>{buttonText}</Button>
         </>);
+    }
 
     return (<>
         <Tabs active={activeTab} onTabChange={changeTab}>

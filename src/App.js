@@ -8,7 +8,7 @@ import SingleFormation from "./pages/formers/SingleTraining";
 import CreateOperation from "./pages/operations/CreateOperation";
 import NotFound from "./pages/NotFound";
 import Users from "./pages/admin/users/Users";
-import {AppShell, Center, Container, Header, Navbar} from "@mantine/core";
+import {AppShell, Center, Container, Header, MantineProvider, Navbar} from "@mantine/core";
 import DashboardNavbar from "./components/DashboardNavbar";
 import DashboardHeader from "./components/DashboardHeader";
 import Settings from "./pages/Settings";
@@ -22,6 +22,7 @@ import ZeusOperations from "./pages/operations/ZeusOperations";
 import ZeusOperationEdit from "./pages/operations/ZeusOperationEdit";
 import FormersTrainingsPass from "./pages/formers/trainings/FormersTrainingsPass";
 import {Heart} from "tabler-icons-react";
+import {NotificationsProvider} from "@mantine/notifications";
 
 function App() {
     const { pathname } = useLocation();
@@ -80,51 +81,54 @@ function App() {
 
     if (pathname === '/')
         return <Home />;
-    return (<>
-        <AppShell
-            padding="md"
-            navbar={<Navbar width={{ base: 300 }} height={500} p="xs">
-                <DashboardNavbar active={pathname} isLoading={isLoading} user={user}/>
-            </Navbar>}
-            header={<Header height={60} p="xs">
-                <DashboardHeader isLoading={isLoading} user={user}/>
-            </Header>}
-            styles={(theme) => ({
-                main: { backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.colors.gray[0] },
-            })}
-        >
-            <Container>
-                <Routes>
-                    <Route path="/settings" element={<Settings isLoading={isLoading} user={user}/>}/>
-                    <Route path="/dashboard" element={<Dashboard />}/>
+    return (
+        <MantineProvider>
+            <NotificationsProvider limit={5}>
+                <AppShell
+                    padding="md"
+                    navbar={<Navbar width={{ base: 300 }} height={500} p="xs">
+                        <DashboardNavbar active={pathname} isLoading={isLoading} user={user}/>
+                    </Navbar>}
+                    header={<Header height={60} p="xs">
+                        <DashboardHeader isLoading={isLoading} user={user}/>
+                    </Header>}
+                    styles={(theme) => ({
+                        main: { backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.colors.gray[0] },
+                    })}
+                >
+                    <Container>
+                        <Routes>
+                            <Route path="/settings" element={<Settings isLoading={isLoading} user={user}/>}/>
+                            <Route path="/dashboard" element={<Dashboard />}/>
 
-                    <Route path="/operations" element={<Operations />}/>
-                    <Route path="/operations/:id" element={<SingleOperation />}/>
+                            <Route path="/operations" element={<Operations />}/>
+                            <Route path="/operations/:id" element={<SingleOperation />}/>
 
-                    <Route path="/trainings" element={<Trainings />}/>
-                    <Route path="/trainings/:id" element={<SingleTraining />}/>
+                            <Route path="/trainings" element={<Trainings />}/>
+                            <Route path="/trainings/:id" element={<SingleTraining />}/>
 
-                    <Route path="/formers/trainings" element={<FormersTrainings />}/>
-                    <Route path="/formers/trainings/new" element={<FormersTrainingCreate />}/>
-                    <Route path="/formers/trainings/pass" element={<FormersTrainingsPass user={user} />}/>
-                    <Route path="/formers/trainings/:id" element={<FormersTrainingEdit />}/>
+                            <Route path="/formers/trainings" element={<FormersTrainings />}/>
+                            <Route path="/formers/trainings/new" element={<FormersTrainingCreate />}/>
+                            <Route path="/formers/trainings/pass" element={<FormersTrainingsPass user={user} />}/>
+                            <Route path="/formers/trainings/:id" element={<FormersTrainingEdit />}/>
 
-                    <Route path="/zeus/users" element={<Users isLoading={isLoading}/>}/>
-                    <Route path="/zeus/users/:identifier" element={<UserEdit/>}/>
-                    <Route path="/zeus/operations" element={<ZeusOperations />}/>
-                    <Route path="/zeus/operations/new" element={<CreateOperation />}/>
-                    <Route path="/zeus/operations/:id" element={<ZeusOperationEdit />}/>
+                            <Route path="/zeus/users" element={<Users isLoading={isLoading}/>}/>
+                            <Route path="/zeus/users/:identifier" element={<UserEdit/>}/>
+                            <Route path="/zeus/operations" element={<ZeusOperations />}/>
+                            <Route path="/zeus/operations/new" element={<CreateOperation />}/>
+                            <Route path="/zeus/operations/:id" element={<ZeusOperationEdit />}/>
 
-                    <Route path="*" element={<NotFound />}/>
-                </Routes>
-            </Container>
-            <Center mt={40}>
-                <p>
-                    Développé avec <Heart style={{marginBottom: "-4px"}} color={"red"} size={20}/> par <a style={{color: 'teal', textDecoration: 'none', fontWeight: 'bold'}} href="https://sn00ww.github.io/portfolio/" target={"_blank"}>Sn0w</a>, le meilleur soldat de la 7ème Compagnie.
-                </p>
-            </Center>
-        </AppShell>
-    </>);
+                            <Route path="*" element={<NotFound />}/>
+                        </Routes>
+                    </Container>
+                    <Center mt={40}>
+                        <p>
+                            Développé avec <Heart style={{marginBottom: "-4px"}} color={"red"} size={20}/> par <a style={{color: 'teal', textDecoration: 'none', fontWeight: 'bold'}} href="https://sn00ww.github.io/portfolio/" target={"_blank"}>Sn0w</a>, le meilleur soldat de la 7ème Compagnie.
+                        </p>
+                    </Center>
+                </AppShell>
+            </NotificationsProvider>
+        </MantineProvider>);
 }
 
 export default App;

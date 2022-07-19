@@ -2,6 +2,7 @@ import {Link, useNavigate, useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
 import {Button, Input, InputWrapper, MultiSelect, Notification, SimpleGrid, Skeleton} from "@mantine/core";
 import {At, Check, ChevronLeft, Id, LetterCase, Numbers} from "tabler-icons-react";
+import {showNotification, updateNotification} from "@mantine/notifications";
 
 function UserEdit() {
     const {identifier} = useParams();
@@ -9,7 +10,6 @@ function UserEdit() {
     const [notFound, setNotFound] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [newRoles, setNewRoles] = useState([]);
-    const [notification, setNotification] = useState(false);
     const navigate = useNavigate();
 
     const fetchUser = () => {
@@ -37,7 +37,14 @@ function UserEdit() {
 
         body.roles = newRoles;
 
-        console.log(body);
+        showNotification({
+            id: `edit-user-${identifier}`,
+            loading: true,
+            title: 'Mise à jour de l\'utilisateur...',
+            message: 'Veuillez patienter... Cette opération peut prendre quelques secondes.',
+            autoClose: false,
+            disallowClose: true,
+        });
 
         fetch(`${process.env.REACT_APP_ENDPOINT_URL}/users/${identifier}`, {
             method: 'PATCH',
@@ -47,9 +54,16 @@ function UserEdit() {
             },
             body: JSON.stringify(body)
         })
-            .then((res) => res.json())
+            .then(res => res.json())
             .then((data) => {
-                setNotification(true);
+                updateNotification({
+                    id: `edit-user-${data.data.identifier}`,
+                    color: 'teal',
+                    title: 'Utilisateur mis à jour',
+                    message: `L'utilisateur ${data.data.username} a été correctement mis à jour.`,
+                    icon: <Check />,
+                    autoClose: 5000,
+                });
             })
             .catch(err => {
                 console.log(err);
@@ -122,9 +136,6 @@ function UserEdit() {
     }
 
     return (<>
-        {notification ? <Notification mb={20} onClose={() => setNotification(false)} icon={<Check size={18} />} color="teal" title="Mise à jour de l'utilisateur">
-                Utilisateur {user.username} correctement mis à jour !
-        </Notification> : null}
         <Button variant="outline" compact leftIcon={<ChevronLeft/>} onClick={() => navigate('/zeus/users')}>
             Retour
         </Button>
