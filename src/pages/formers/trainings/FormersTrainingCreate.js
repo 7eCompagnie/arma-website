@@ -14,6 +14,7 @@ import {AlertCircle, AlertTriangle, Check, Cross, LetterCase, Photo, Upload, X} 
 import {Dropzone, IMAGE_MIME_TYPE} from "@mantine/dropzone";
 import {useEffect, useRef, useState} from "react";
 import {useNavigate} from "react-router-dom";
+import {showNotification, updateNotification} from "@mantine/notifications";
 
 function getIconColor(status, theme) {
     return status.accepted
@@ -54,7 +55,6 @@ const dropzoneChildren = (status, theme) => (
 
 function FormersTrainingCreate() {
     const [isLoading, setIsLoading] = useState(true);
-    const [notificationError, setNotificationError] = useState(false);
     const [allTrainers, setAllTrainers] = useState([]);
     const [trainers, setTrainers] = useState([]);
     const [trainingPicture, setTrainingPicture] = useState(null);
@@ -83,9 +83,25 @@ function FormersTrainingCreate() {
         const description = document.getElementById('input-description').value;
 
         if (name == null || name === "" || description == null || description === "" || trainers == null || trainers.length === 0 || trainingPicture === null) {
-            setNotificationError(true);
+            showNotification({
+                id: "register-player-error",
+                title: 'Erreur lors de la création de l\'opération',
+                message: 'Veuillez renseigner les champs obligatoires.',
+                icon: <X/>,
+                autoClose: 5000,
+                color: "red"
+            });
             return;
         }
+
+        showNotification({
+            id: `create-training-${name}`,
+            loading: true,
+            title: 'Création de la formation en cours...',
+            message: 'Veuillez patienter... Cette opération peut prendre quelques secondes.',
+            autoClose: false,
+            disallowClose: true,
+        });
 
         let body = new FormData();
         body.append('title', name);
@@ -103,6 +119,14 @@ function FormersTrainingCreate() {
         })
             .then(res => res.json())
             .then(data => {
+                updateNotification({
+                    id: `create-training-${data.data.title}`,
+                    color: 'teal',
+                    title: 'Création terminée',
+                    message: `Vous avez correctement créer la formation ${data.data.title}.`,
+                    icon: <Check />,
+                    autoClose: 5000,
+                });
                 navigate('/formers/trainings');
             })
             .catch(err => console.log(err));
@@ -193,9 +217,6 @@ function FormersTrainingCreate() {
     }
 
     return (<>
-        {notificationError ? <Notification mb={20} onClose={() => setNotificationError(false)} icon={<AlertTriangle size={18} />} color="red" title="Erreur lors de la création de la formation">
-                Veuillez remplir tous les champs !
-            </Notification> : null}
         <div>
             <h1>Créer une nouvelle formation</h1>
             <form id="create-training">

@@ -13,6 +13,7 @@ import {
 } from "@mantine/core";
 import {forwardRef, useEffect, useState} from 'react';
 import {Check} from "tabler-icons-react";
+import {showNotification, updateNotification} from "@mantine/notifications";
 
 function FormersTrainingsPass({user}) {
     const [isLoading, setIsLoading] = useState(true);
@@ -20,7 +21,6 @@ function FormersTrainingsPass({user}) {
     const [newTrained, setNewTrained] = useState([]);
     const [trainings, setTrainings] = useState([]);
     const [selectedUser, setSelectedUser] = useState(null);
-    const [notification, setNotification] = useState(false);
 
     const fetchAllUsers = () => {
         fetch(`${process.env.REACT_APP_ENDPOINT_URL}/users/all`, {
@@ -126,6 +126,15 @@ function FormersTrainingsPass({user}) {
         let body = {};
         body.trained = newTrained;
 
+        showNotification({
+            id: `edit-user-training-${selectedUser.identifier}`,
+            loading: true,
+            title: 'Mise à jour de l\'utilisateur en cours...',
+            message: 'Veuillez patienter... Cette opération peut prendre quelques secondes.',
+            autoClose: false,
+            disallowClose: true,
+        });
+
         fetch(`${process.env.REACT_APP_ENDPOINT_URL}/users/${selectedUser.identifier}`, {
             method: 'PATCH',
             headers: {
@@ -136,7 +145,14 @@ function FormersTrainingsPass({user}) {
         })
             .then(res => res.json())
             .then(data => {
-                setNotification(true);
+                updateNotification({
+                    id: `edit-user-training-${data.data.identifier}`,
+                    color: 'teal',
+                    title: 'Edition terminée',
+                    message: `Vous avez correctement ajouter la formation à l'utilisateur ${data.data.username}`,
+                    icon: <Check />,
+                    autoClose: 5000,
+                });
             })
             .catch(err => console.log(err));
     }
@@ -167,9 +183,6 @@ function FormersTrainingsPass({user}) {
         </>);
     }
     return (<>
-        {notification ? <Notification mb={20} onClose={() => setNotification(false)} icon={<Check size={18} />} color="teal" title="Mise à jour de l'utilisateur">
-            L'utilisateur {selectedUser.username} à bien été mis à jour !
-        </Notification> : null}
         <h1>Ajouter une formation à un joueur</h1>
         <Select
             label="Choisir un joueur"

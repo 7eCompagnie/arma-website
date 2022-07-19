@@ -6,10 +6,11 @@ import {
     Image, Input, InputWrapper, Notification, SimpleGrid, Skeleton,
     Table, Text, useMantineTheme,
 } from "@mantine/core";
-import {AlertCircle, Ban, Check, ChevronLeft} from "tabler-icons-react";
+import {AlertCircle, Ban, Check, ChevronLeft, X} from "tabler-icons-react";
 import {useNavigate, useParams} from "react-router-dom";
 import Moment from "moment";
 import 'moment/locale/fr';
+import {showNotification, updateNotification} from "@mantine/notifications";
 Moment.locale('fr');
 
 function SingleOperation() {
@@ -20,8 +21,6 @@ function SingleOperation() {
     const [updatedUser, setUpdatedUser] = useState({});
     const [allUsers, setAllUsers] = useState({});
     const [playerRPName, setPlayerRPName] = useState('');
-    const [notificationError, setNotificationError] = useState(null);
-    const [notificationSuccess, setNotificationSuccess] = useState(null);
     const theme = useMantineTheme();
     const navigate = useNavigate();
 
@@ -104,6 +103,15 @@ function SingleOperation() {
     }, []);
 
     const unregisterPlayer = () => {
+        showNotification({
+            id: 'unregister-player',
+            loading: true,
+            title: 'Désinscription en cours...',
+            message: 'Veuillez patienter... Cette opération peut prendre quelques secondes.',
+            autoClose: false,
+            disallowClose: true,
+        });
+
         let newRoles = [...operation.roles];
 
         for (let i = 0; i < newRoles.length; i++) {
@@ -128,6 +136,14 @@ function SingleOperation() {
         })
             .then((res) => res.json())
             .then(() => {
+                updateNotification({
+                    id: 'unregister-player',
+                    color: 'teal',
+                    title: 'Désincription validée',
+                    message: 'Vous vous êtes correctement désinscrit.',
+                    icon: <Check />,
+                    autoClose: 5000,
+                });
                 fetchOperation();
             })
             .catch(err => {
@@ -137,10 +153,25 @@ function SingleOperation() {
 
     const registerPlayer = (group, role) => {
         if (playerRPName === '') {
-            setNotificationError("Vous devez entrer un nom RP pour pouvoir vous inscrire.");
+            showNotification({
+                id: "register-player-error",
+                title: 'Erreur lors de l\'inscription',
+                message: 'Veuillez renseigner un nom RP avant de vous inscrire.',
+                icon: <X/>,
+                autoClose: 5000,
+                color: "red"
+            });
             return;
         }
 
+        showNotification({
+            id: 'register-player',
+            loading: true,
+            title: 'Inscription en cours...',
+            message: 'Veuillez patienter... Cette opération peut prendre quelques secondes.',
+            autoClose: false,
+            disallowClose: true,
+        });
         let newRoles = [...operation.roles];
 
         newRoles.find(r => r.title === group.title).group.find(r => r.role === role.role && r.team === role.team).player = updatedUser.identifier;
@@ -159,6 +190,14 @@ function SingleOperation() {
         })
             .then((res) => res.json())
             .then(() => {
+                updateNotification({
+                    id: 'register-player',
+                    color: 'teal',
+                    title: 'Inscription validée',
+                    message: 'Vous vous êtes correctement inscrit.',
+                    icon: <Check />,
+                    autoClose: 5000,
+                });
                 fetchOperation();
             })
             .catch(err => {
@@ -242,13 +281,6 @@ function SingleOperation() {
         </SimpleGrid>
 
         <h2>Inscription</h2>
-
-        {notificationError !== null ? <Notification mb={20} onClose={() => setNotificationError(null)} icon={<Check size={18} />} color="red" title="Erreur">
-            {notificationError}
-        </Notification> : null}
-        {notificationSuccess !== null ? <Notification mb={20} onClose={() => setNotificationSuccess(null)} icon={<Check size={18} />} color="teal" title="Validé !">
-            {notificationSuccess}
-        </Notification> : null}
 
         { !isUserRegistered() ? <SimpleGrid cols={2}>
             <div style={{display: 'flex', alignItems: 'end'}}>

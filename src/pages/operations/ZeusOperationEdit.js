@@ -27,6 +27,7 @@ import {Dropzone, IMAGE_MIME_TYPE} from "@mantine/dropzone";
 import {DatePicker, TimeInput, TimeRangeInput} from "@mantine/dates";
 import dayjs from "dayjs";
 import RolesCreation from "../../components/RolesCreation";
+import {showNotification, updateNotification} from "@mantine/notifications";
 
 function getIconColor(status, theme) {
     return status.accepted
@@ -70,7 +71,6 @@ function ZeusOperationEdit() {
     const [operation, setOperation] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [notFound, setNotFound] = useState(false);
-    const [notification, setNotification] = useState(false);
     const [operationTitle, setOperationTitle] = useState('');
     const [operationDate, setOperationDate] = useState(null);
     const [operationDescription, setOperationDescription] = useState('');
@@ -118,6 +118,15 @@ function ZeusOperationEdit() {
     }
 
     const handleSubmit = (data) => {
+        showNotification({
+            id: `edit-operation-${operation._id}`,
+            loading: true,
+            title: 'Mise à jour de l\'opération en cours...',
+            message: 'Veuillez patienter... Cette opération peut prendre quelques secondes.',
+            autoClose: false,
+            disallowClose: true,
+        });
+
         let body = {};
 
         if (operationTitle !== operation.title)
@@ -141,8 +150,15 @@ function ZeusOperationEdit() {
             body: JSON.stringify(body)
         })
             .then((res) => res.json())
-            .then(() => {
-                setNotification(true);
+            .then((data) => {
+                updateNotification({
+                    id: `edit-operation-${data.data._id}`,
+                    color: 'teal',
+                    title: 'Edition terminée',
+                    message: `Vous avez mis à jour correctement l'opération ${data.data.title}`,
+                    icon: <Check />,
+                    autoClose: 5000,
+                });
             })
             .catch(err => {
                 console.log(err);
@@ -195,7 +211,7 @@ function ZeusOperationEdit() {
                 </SimpleGrid>
 
                 <h2>Configuration des groupes et des équipes</h2>
-                <RolesCreation callback={callback} data={roles} buttonText={"Sauvegarder"}/>
+                <Skeleton height={200} />
             </form>
         </>)
     }
@@ -211,9 +227,6 @@ function ZeusOperationEdit() {
     }
 
     return (<>
-        {notification ? <Notification mb={20} onClose={() => setNotification(false)} icon={<Check size={18} />} color="teal" title="Mise à jour de l'opération">
-            L'opération {operation.title} correctement mis à jour !
-        </Notification> : null}
         <Button variant="outline" compact leftIcon={<ChevronLeft/>} onClick={() => navigate('/zeus/operations')}>
             Retour
         </Button>
