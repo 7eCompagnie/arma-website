@@ -32,7 +32,7 @@ function SingleOperation() {
         return false;
     }
 
-    const fetchOperation = () => {
+    const fetchUpdate = () => {
         fetch(`${process.env.REACT_APP_ENDPOINT_URL}/operations/${id}`, {
             method: 'GET',
             headers: {
@@ -44,62 +44,105 @@ function SingleOperation() {
                 setOperation(data.data);
                 setGroups(data.data.roles);
                 document.title = `${data.data.title} - La 7ème Compagnie`;
-                fetchUser();
-            })
-            .catch(err => console.log(err));
-    }
 
-    const fetchUser = () => {
-        const token = localStorage.getItem('token');
+                const token = localStorage.getItem('token');
 
-        fetch(`${process.env.REACT_APP_ENDPOINT_URL}/users/token/${token}`, {
-            method: 'GET',
-            headers: {
-                'x-access-token': token
-            }
-        })
-            .then(res => res.json())
-            .then(data => {
-                setUpdatedUser(data.data);
-                fetchAllUsers();
-            })
-            .catch(err => console.log(err));
-    }
+                fetch(`${process.env.REACT_APP_ENDPOINT_URL}/users/token/${token}`, {
+                    method: 'GET',
+                    headers: {
+                        'x-access-token': token
+                    }
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        setUpdatedUser(data.data);
 
-    const fetchAllUsers = () => {
-        fetch(`${process.env.REACT_APP_ENDPOINT_URL}/users`, {
-            method: 'GET',
-            headers: {
-                'x-access-token': localStorage.getItem('token')
-            },
-        })
-            .then(res => res.json())
-            .then(data => {
-                setAllUsers(data.data);
-                setIsLoading(false);
-            })
-            .catch(err => console.log(err));
-    }
-
-    const updateRegistered = () => {
-        fetch(`${process.env.REACT_APP_ENDPOINT_URL}/operations/${id}`, {
-            method: 'GET',
-            headers: {
-                'x-access-token': localStorage.getItem('token')
-            },
-        })
-            .then(res => res.json())
-            .then(data => {
-                setGroups(data.data.roles);
+                        fetch(`${process.env.REACT_APP_ENDPOINT_URL}/users`, {
+                            method: 'GET',
+                            headers: {
+                                'x-access-token': localStorage.getItem('token')
+                            },
+                        })
+                            .then(res => res.json())
+                            .then(data => {
+                                setAllUsers(data.data);
+                                setIsLoading(false);
+                            })
+                            .catch(err => console.log(err));
+                    })
+                    .catch(err => console.log(err));
             })
             .catch(err => console.log(err));
     }
 
     useEffect(() => {
+        const fetchOperation = () => {
+            fetch(`${process.env.REACT_APP_ENDPOINT_URL}/operations/${id}`, {
+                method: 'GET',
+                headers: {
+                    'x-access-token': localStorage.getItem('token')
+                },
+            })
+                .then(res => res.json())
+                .then(data => {
+                    setOperation(data.data);
+                    setGroups(data.data.roles);
+                    document.title = `${data.data.title} - La 7ème Compagnie`;
+                    fetchUser();
+                })
+                .catch(err => console.log(err));
+        }
+
+        const fetchUser = () => {
+            const token = localStorage.getItem('token');
+
+            fetch(`${process.env.REACT_APP_ENDPOINT_URL}/users/token/${token}`, {
+                method: 'GET',
+                headers: {
+                    'x-access-token': token
+                }
+            })
+                .then(res => res.json())
+                .then(data => {
+                    setUpdatedUser(data.data);
+                    fetchAllUsers();
+                })
+                .catch(err => console.log(err));
+        }
+
+        const fetchAllUsers = () => {
+            fetch(`${process.env.REACT_APP_ENDPOINT_URL}/users`, {
+                method: 'GET',
+                headers: {
+                    'x-access-token': localStorage.getItem('token')
+                },
+            })
+                .then(res => res.json())
+                .then(data => {
+                    setAllUsers(data.data);
+                    setIsLoading(false);
+                })
+                .catch(err => console.log(err));
+        }
+
+        const updateRegistered = () => {
+            fetch(`${process.env.REACT_APP_ENDPOINT_URL}/operations/${id}`, {
+                method: 'GET',
+                headers: {
+                    'x-access-token': localStorage.getItem('token')
+                },
+            })
+                .then(res => res.json())
+                .then(data => {
+                    setGroups(data.data.roles);
+                })
+                .catch(err => console.log(err));
+        }
+
         fetchOperation();
         const interval = setInterval(() => { updateRegistered(); }, 2000);
         return () => clearInterval(interval);
-    }, []);
+    }, [id]);
 
     const unregisterPlayer = () => {
         showNotification({
@@ -143,7 +186,7 @@ function SingleOperation() {
                     icon: <Check />,
                     autoClose: 5000,
                 });
-                fetchOperation();
+                fetchUpdate();
             })
             .catch(err => {
                 console.log(err);
@@ -197,7 +240,7 @@ function SingleOperation() {
                     icon: <Check />,
                     autoClose: 5000,
                 });
-                fetchOperation();
+                fetchUpdate();
             })
             .catch(err => {
                 console.log(err);

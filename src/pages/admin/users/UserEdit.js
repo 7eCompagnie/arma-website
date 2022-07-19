@@ -12,26 +12,6 @@ function UserEdit() {
     const [newRoles, setNewRoles] = useState([]);
     const navigate = useNavigate();
 
-    const fetchUser = () => {
-        fetch(`${process.env.REACT_APP_ENDPOINT_URL}/users/${identifier}`, {
-            method: 'GET',
-            headers: {
-                'x-access-token': localStorage.getItem('token')
-            },
-        })
-            .then(res => res.json())
-            .then(data => {
-                setUser(data.data);
-                setNewRoles(data.data.roles)
-                document.title = `Utilisateur ${data.data.username} - La 7ème Compagnie`;
-                setIsLoading(false);
-            })
-            .catch(err => {
-                console.log(err);
-                setNotFound(true);
-            });
-    }
-
     const updateUser = () => {
         if (newRoles !== user.roles)
             return;
@@ -73,8 +53,28 @@ function UserEdit() {
     }
 
     useEffect(() => {
+        const fetchUser = () => {
+            fetch(`${process.env.REACT_APP_ENDPOINT_URL}/users/${identifier}`, {
+                method: 'GET',
+                headers: {
+                    'x-access-token': localStorage.getItem('token')
+                },
+            })
+                .then(res => res.json())
+                .then(data => {
+                    setUser(data.data);
+                    setNewRoles(data.data.roles)
+                    document.title = `Utilisateur ${data.data.username} - La 7ème Compagnie`;
+                    setIsLoading(false);
+                })
+                .catch(err => {
+                    console.log(err);
+                    setNotFound(true);
+                });
+        }
+
         fetchUser();
-    }, []);
+    }, [identifier]);
 
     const roles = [
         { value: 'USER_ROLE', label: 'Utilisateur' },

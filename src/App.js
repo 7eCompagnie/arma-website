@@ -11,7 +11,7 @@ import {AppShell, Center, Container, Header, MantineProvider, Navbar} from "@man
 import DashboardNavbar from "./components/DashboardNavbar";
 import DashboardHeader from "./components/DashboardHeader";
 import Settings from "./pages/Settings";
-import {useEffect, useState} from "react";
+import {useEffect, useMemo, useState} from "react";
 import UserEdit from "./pages/admin/users/UserEdit";
 import FormersTrainings from "./pages/formers/trainings/FormersTrainings";
 import FormersTrainingEdit from "./pages/formers/trainings/FormersTrainingEdit";
@@ -27,55 +27,55 @@ function App() {
     const { pathname } = useLocation();
     const [user, setUser] = useState([]);
     const queryString = window.location.search;
-    const urlParams = new URLSearchParams(queryString);
+    const urlParams = useMemo(() => new URLSearchParams(queryString), [queryString]);
     const [isLoading, setLoading] = useState(true);
     const navigate = useNavigate();
 
-    const fetchData = () => {
-        const token = localStorage.getItem('token');
-
-        fetch(`${process.env.REACT_APP_ENDPOINT_URL}/users/token/${token}`, {
-            method: 'GET',
-            headers: {
-                'x-access-token': token
-            }
-        })
-            .then(res => res.json())
-            .then(data => {
-                setUser(data.data);
-                setLoading(false);
-            })
-            .catch(err => console.log(err));
-    }
-
-    const fetchToken = () => {
-        const body = new URLSearchParams();
-        body.append('code', urlParams.get('code'));
-
-        fetch(`${process.env.REACT_APP_ENDPOINT_URL}/login`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'x-access-token': localStorage.getItem('token')
-            },
-            body: body
-        })
-            .then(res => res.json())
-            .then(data => {
-                localStorage.setItem('token', data.data);
-                fetchData();
-                navigate('/dashboard');
-            }).catch(err => console.log(err));
-    }
-
     useEffect(() => {
+        const fetchData = () => {
+            const token = localStorage.getItem('token');
+
+            fetch(`${process.env.REACT_APP_ENDPOINT_URL}/users/token/${token}`, {
+                method: 'GET',
+                headers: {
+                    'x-access-token': token
+                }
+            })
+                .then(res => res.json())
+                .then(data => {
+                    setUser(data.data);
+                    setLoading(false);
+                })
+                .catch(err => console.log(err));
+        }
+
+        const fetchToken = () => {
+            const body = new URLSearchParams();
+            body.append('code', urlParams.get('code'));
+
+            fetch(`${process.env.REACT_APP_ENDPOINT_URL}/login`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'x-access-token': localStorage.getItem('token')
+                },
+                body: body
+            })
+                .then(res => res.json())
+                .then(data => {
+                    localStorage.setItem('token', data.data);
+                    fetchData();
+                    navigate('/dashboard');
+                }).catch(err => console.log(err));
+        }
+
         if (urlParams.get('code') !== null)
             fetchToken();
         if (localStorage.getItem('token') === null && urlParams.get('code') === null)
             navigate('/');
         if (localStorage.getItem('token') !== null)
             fetchData();
-    }, [])
+    }, [navigate, urlParams]);
 
 
     if (pathname === '/')

@@ -13,7 +13,12 @@ function ZeusOperations() {
     const [isLoading, setIsLoading] = useState(true);
     const navigate = useNavigate();
 
-    const fetchOperations = (page) => {
+    const updateModal = (currOperation) => {
+        setCurrOperationModal(currOperation)
+        setOpened(true)
+    }
+
+    const fetchUpdate = (page) => {
         const currPage = page || 1;
 
         fetch(`${process.env.REACT_APP_ENDPOINT_URL}/operations?page=${currPage}`, {
@@ -26,32 +31,23 @@ function ZeusOperations() {
             .then(data => {
                 setOperations(data.data);
                 setCurrOperationModal(data.data[0]);
-                fetchMaxPages();
+
+                fetch(`${process.env.REACT_APP_ENDPOINT_URL}/operations/maxPages`, {
+                    method: 'GET',
+                    headers: {
+                        'x-access-token': localStorage.getItem('token')
+                    },
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.data === 0)
+                            setMaxPages(1);
+                        else
+                            setMaxPages(data.data);
+                    })
+                    .catch(err => console.log(err));
             })
             .catch(err => console.log(err));
-    }
-
-    const fetchMaxPages = () => {
-        fetch(`${process.env.REACT_APP_ENDPOINT_URL}/operations/maxPages`, {
-            method: 'GET',
-            headers: {
-                'x-access-token': localStorage.getItem('token')
-            },
-        })
-            .then(res => res.json())
-            .then(data => {
-                if (data.data === 0)
-                    setMaxPages(1);
-                else
-                    setMaxPages(data.data);
-                setIsLoading(false);
-            })
-            .catch(err => console.log(err));
-    }
-
-    const updateModal = (currOperation) => {
-        setCurrOperationModal(currOperation)
-        setOpened(true)
     }
 
     const deleteOperation = (operation) => {
@@ -82,16 +78,52 @@ function ZeusOperations() {
                     icon: <Check />,
                     autoClose: 5000,
                 });
-                fetchOperations(activePage)
+                fetchUpdate(activePage)
                 setCurrOperationModal(null)
             })
             .catch(err => console.log(err));
     }
 
     useEffect(() => {
+        const fetchOperations = (page) => {
+            const currPage = page || 1;
+
+            fetch(`${process.env.REACT_APP_ENDPOINT_URL}/operations?page=${currPage}`, {
+                method: 'GET',
+                headers: {
+                    'x-access-token': localStorage.getItem('token')
+                },
+            })
+                .then(res => res.json())
+                .then(data => {
+                    setOperations(data.data);
+                    setCurrOperationModal(data.data[0]);
+                    fetchMaxPages();
+                })
+                .catch(err => console.log(err));
+        }
+
+        const fetchMaxPages = () => {
+            fetch(`${process.env.REACT_APP_ENDPOINT_URL}/operations/maxPages`, {
+                method: 'GET',
+                headers: {
+                    'x-access-token': localStorage.getItem('token')
+                },
+            })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.data === 0)
+                        setMaxPages(1);
+                    else
+                        setMaxPages(data.data);
+                    setIsLoading(false);
+                })
+                .catch(err => console.log(err));
+        }
+
         fetchOperations(activePage);
         document.title = "Opérations - La 7ème Compagnie";
-    }, []);
+    }, [activePage]);
 
     const rows = (operations.map((operation, i) => (
         <tr key={i}>

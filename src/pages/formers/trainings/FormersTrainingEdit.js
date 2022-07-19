@@ -66,33 +66,9 @@ function FormersTrainingEdit() {
     const openRef = useRef();
     const switchRef = useRef();
 
-    const fetchTraining = () => {
-        fetch(`${process.env.REACT_APP_ENDPOINT_URL}/trainings/${id}`, {
-            method: 'GET',
-            headers: {
-                'x-access-token': localStorage.getItem('token')
-            },
-        })
-            .then(res => res.json())
-            .then(data => {
-                setTraining(data.data);
-                fetchTrainers(data.data.trainers);
-                document.title = `${data.data.title} - La 7ème Compagnie`;
-                setTrainingTitle(data.data.title);
-                setTrainingDescription(data.data.description);
-                setTrainingPicture(data.data.picture);
-            })
-            .catch(err => {
-                console.log(err);
-                setNotFound(true);
-            });
-    }
-
-    const fetchTrainers = (t) => {
-        if (t.length === 0)
-            fetchAllTrainers();
-        t.forEach((trainer) => {
-            fetch(`${process.env.REACT_APP_ENDPOINT_URL}/users/${trainer}`, {
+    useEffect(() => {
+        const fetchTraining = () => {
+            fetch(`${process.env.REACT_APP_ENDPOINT_URL}/trainings/${id}`, {
                 method: 'GET',
                 headers: {
                     'x-access-token': localStorage.getItem('token')
@@ -100,32 +76,56 @@ function FormersTrainingEdit() {
             })
                 .then(res => res.json())
                 .then(data => {
-                    setTrainers(trainers => trainers.concat(data.data));
-                    setNewTrainers(trainers => trainers.concat(data.data.identifier));
-                    fetchAllTrainers();
+                    setTraining(data.data);
+                    fetchTrainers(data.data.trainers);
+                    document.title = `${data.data.title} - La 7ème Compagnie`;
+                    setTrainingTitle(data.data.title);
+                    setTrainingDescription(data.data.description);
+                    setTrainingPicture(data.data.picture);
+                })
+                .catch(err => {
+                    console.log(err);
+                    setNotFound(true);
+                });
+        }
+
+        const fetchTrainers = (t) => {
+            if (t.length === 0)
+                fetchAllTrainers();
+            t.forEach((trainer) => {
+                fetch(`${process.env.REACT_APP_ENDPOINT_URL}/users/${trainer}`, {
+                    method: 'GET',
+                    headers: {
+                        'x-access-token': localStorage.getItem('token')
+                    },
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        setTrainers(trainers => trainers.concat(data.data));
+                        setNewTrainers(trainers => trainers.concat(data.data.identifier));
+                        fetchAllTrainers();
+                    })
+                    .catch(err => console.log(err));
+            })
+        }
+
+        const fetchAllTrainers = () => {
+            fetch(`${process.env.REACT_APP_ENDPOINT_URL}/users/trainers`, {
+                method: 'GET',
+                headers: {
+                    'x-access-token': localStorage.getItem('token')
+                },
+            })
+                .then(res => res.json())
+                .then(data => {
+                    setAllTrainers(data.data);
+                    setIsLoading(false);
                 })
                 .catch(err => console.log(err));
-        })
-    }
+        }
 
-    const fetchAllTrainers = () => {
-        fetch(`${process.env.REACT_APP_ENDPOINT_URL}/users/trainers`, {
-            method: 'GET',
-            headers: {
-                'x-access-token': localStorage.getItem('token')
-            },
-        })
-            .then(res => res.json())
-            .then(data => {
-                setAllTrainers(data.data);
-                setIsLoading(false);
-            })
-            .catch(err => console.log(err));
-    }
-
-    useEffect(() => {
         fetchTraining();
-    }, []);
+    }, [id]);
 
     const trainersName = trainers.map((trainer, i) => {
         if (isLoading === true) {

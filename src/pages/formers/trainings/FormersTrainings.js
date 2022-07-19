@@ -13,7 +13,7 @@ function FormersTrainings() {
     const [isLoading, setIsLoading] = useState(true);
     const navigate = useNavigate();
 
-    const fetchTrainings = (page) => {
+    const fetchUpdate = (page) => {
         const currPage = page || 1;
 
         fetch(`${process.env.REACT_APP_ENDPOINT_URL}/trainings?page=${currPage}`, {
@@ -26,33 +26,65 @@ function FormersTrainings() {
             .then(data => {
                 setTrainings(data.data);
                 setCurrTrainingModal(data.data[0]);
-                fetchMaxPages();
-            })
-            .catch(err => console.log(err));
-    }
 
-    const fetchMaxPages = () => {
-        fetch(`${process.env.REACT_APP_ENDPOINT_URL}/trainings/maxPages`, {
-            method: 'GET',
-            headers: {
-                'x-access-token': localStorage.getItem('token')
-            },
-        })
-            .then(res => res.json())
-            .then(data => {
-                if (data.data === 0)
-                    setMaxPages(1);
-                else
-                    setMaxPages(data.data);
-                setIsLoading(false);
+                fetch(`${process.env.REACT_APP_ENDPOINT_URL}/trainings/maxPages`, {
+                    method: 'GET',
+                    headers: {
+                        'x-access-token': localStorage.getItem('token')
+                    },
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.data === 0)
+                            setMaxPages(1);
+                        else
+                            setMaxPages(data.data);
+                    })
+                    .catch(err => console.log(err));
             })
             .catch(err => console.log(err));
     }
 
     useEffect(() => {
+        const fetchTrainings = (page) => {
+            const currPage = page || 1;
+
+            fetch(`${process.env.REACT_APP_ENDPOINT_URL}/trainings?page=${currPage}`, {
+                method: 'GET',
+                headers: {
+                    'x-access-token': localStorage.getItem('token')
+                },
+            })
+                .then(res => res.json())
+                .then(data => {
+                    setTrainings(data.data);
+                    setCurrTrainingModal(data.data[0]);
+                    fetchMaxPages();
+                })
+                .catch(err => console.log(err));
+        }
+
+        const fetchMaxPages = () => {
+            fetch(`${process.env.REACT_APP_ENDPOINT_URL}/trainings/maxPages`, {
+                method: 'GET',
+                headers: {
+                    'x-access-token': localStorage.getItem('token')
+                },
+            })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.data === 0)
+                        setMaxPages(1);
+                    else
+                        setMaxPages(data.data);
+                    setIsLoading(false);
+                })
+                .catch(err => console.log(err));
+        }
+
         fetchTrainings(activePage);
         document.title = "Formations - La 7ème Compagnie";
-    }, []);
+    }, [activePage]);
 
     const updateModal = (currTraining) => {
         setCurrTrainingModal(currTraining)
@@ -87,7 +119,7 @@ function FormersTrainings() {
                     icon: <Check />,
                     autoClose: 5000,
                 });
-                fetchTrainings(activePage)
+                fetchUpdate(activePage);
                 setCurrTrainingModal(null)
             })
             .catch(err => console.log(err));

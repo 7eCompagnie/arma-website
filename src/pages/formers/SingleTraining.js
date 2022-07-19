@@ -10,25 +10,9 @@ function SingleTraining() {
     const [isLoading, setIsLoading] = useState(true);
     const navigate = useNavigate();
 
-    const fetchTraining = () => {
-        fetch(`${process.env.REACT_APP_ENDPOINT_URL}/trainings/${id}`, {
-            method: 'GET',
-            headers: {
-                'x-access-token': localStorage.getItem('token')
-            },
-        })
-            .then(res => res.json())
-            .then(data => {
-                setTraining(data.data);
-                fetchTrainers(data.data.trainers);
-                document.title = `${data.data.title} - La 7ème Compagnie`;
-            })
-            .catch(err => console.log(err));
-    }
-
-    const fetchTrainers = (t) => {
-        t.forEach((trainer) => {
-            fetch(`${process.env.REACT_APP_ENDPOINT_URL}/users/${trainer}`, {
+    useEffect(() => {
+        const fetchTraining = () => {
+            fetch(`${process.env.REACT_APP_ENDPOINT_URL}/trainings/${id}`, {
                 method: 'GET',
                 headers: {
                     'x-access-token': localStorage.getItem('token')
@@ -36,16 +20,32 @@ function SingleTraining() {
             })
                 .then(res => res.json())
                 .then(data => {
-                    setTrainers(trainers => trainers.concat(data.data));
-                    setIsLoading(false);
+                    setTraining(data.data);
+                    fetchTrainers(data.data.trainers);
+                    document.title = `${data.data.title} - La 7ème Compagnie`;
                 })
                 .catch(err => console.log(err));
-        })
-    }
+        }
 
-    useEffect(() => {
+        const fetchTrainers = (t) => {
+            t.forEach((trainer) => {
+                fetch(`${process.env.REACT_APP_ENDPOINT_URL}/users/${trainer}`, {
+                    method: 'GET',
+                    headers: {
+                        'x-access-token': localStorage.getItem('token')
+                    },
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        setTrainers(trainers => trainers.concat(data.data));
+                        setIsLoading(false);
+                    })
+                    .catch(err => console.log(err));
+            })
+        }
+
         fetchTraining();
-    }, []);
+    }, [id]);
 
     const trainersToDisplay = trainers.map((trainer, i) => {
         if (isLoading === true) {
