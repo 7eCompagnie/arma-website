@@ -18,8 +18,8 @@ function RolesCreation({callback, data, buttonText}) {
     const [tabs, setTabs] = useState(data || [{
         title: "Zeus",
         group: [
-            { role: 'Zeus', team: "Zeus", player: null, isEditing: false },
-            { role: 'Co-Zeus', team: "Zeus", player: null, isEditing: false },
+            { role: 'Zeus', team: "Zeus", player: null, isEditing: false, shortName: "Zeus"},
+            { role: 'Co-Zeus', team: "Zeus", player: null, isEditing: false, shortName: "Co-Zeus"},
         ],
         teams: [
             { name: "Zeus", isEditing: false },
@@ -80,6 +80,7 @@ function RolesCreation({callback, data, buttonText}) {
 
     const addRole = (tab) => {
         const input = document.getElementById('role-name');
+        const inputShortName = document.getElementById('role-shortname');
 
         if (input.value === '' || input.value === null || currentTeam === null || currentTraining === null) {
             showNotification({
@@ -111,7 +112,8 @@ function RolesCreation({callback, data, buttonText}) {
             training: currentTraining,
             team: currentTeam,
             player: null,
-            isEditing: false
+            isEditing: false,
+            shortName: inputShortName.value ? inputShortName.value : input.value
         });
         setTabs([...tabs.slice(0, tab), newArray, ...tabs.slice(tab + 1)]);
     }
@@ -315,6 +317,7 @@ function RolesCreation({callback, data, buttonText}) {
                                     <thead>
                                     <tr>
                                         <th>Rôle</th>
+                                        <th>Diminutif</th>
                                         <th>Actions</th>
                                     </tr>
                                     </thead>
@@ -326,7 +329,9 @@ function RolesCreation({callback, data, buttonText}) {
                                                     <td>{role.isEditing ?
                                                         <Input id={tab.title + "-" + team.name + "-" + role.role}
                                                                placeholder="Ex: Fusillier" defaultValue={role.role}
-                                                               required/> : role.role}</td>
+                                                               required/> : role.role}
+                                                    </td>
+                                                    <td>{role.shortName}</td>
                                                     <td>
                                                         {role.isEditing ? <Button color={"green"} mr={10}
                                                                                   leftIcon={<CircleCheck size={16}/>}
@@ -374,6 +379,15 @@ function RolesCreation({callback, data, buttonText}) {
                                 }}
                                 required
                             />
+
+                            <InputWrapper
+                                label="Diminutif du rôle (vide pour le nom du rôle)"
+                            >
+                                <Input
+                                    id={'role-shortname'}
+                                    placeholder="Ex: TP"
+                                />
+                            </InputWrapper>
                         </SimpleGrid>
                         <Button mt={20} onClick={() => addRole(activeTab)} disabled>Ajouter</Button>
                         <div>
@@ -434,6 +448,7 @@ function RolesCreation({callback, data, buttonText}) {
                                 <thead>
                                 <tr>
                                     <th>Rôle</th>
+                                    <th>Diminutif</th>
                                     <th>Actions</th>
                                 </tr>
                                 </thead>
@@ -443,6 +458,7 @@ function RolesCreation({callback, data, buttonText}) {
                                         return (
                                             <tr key={uuidv4()}>
                                                 <td>{role.isEditing ? <Input id={tab.title + "-" + team.name + "-" + role.role} placeholder="Ex: Fusillier" defaultValue={role.role} required/> : role.role}</td>
+                                                <td>{role.shortName}</td>
                                                 <td>
                                                     {role.isEditing ? <Button color={"green"} mr={10} leftIcon={<CircleCheck size={16}/>} compact onClick={() => {confirmEdit(role, tab.title + "-" + team.name + "-" + role.role)}}>Valider</Button> : <Button mr={10} leftIcon={<Pencil size={16}/>} compact onClick={() => editRole(role)}>Editer</Button>}
                                                     <Button ml={10} leftIcon={<Trash size={16}/>} compact color={"red"} onClick={() => removeRole(role)}>Supprimer</Button>
@@ -485,6 +501,15 @@ function RolesCreation({callback, data, buttonText}) {
                             onChange={(e) => { setCurrentTeam(e) }}
                             required
                         />
+
+                        <InputWrapper
+                            label="Diminutif du rôle (vide pour le nom du rôle)"
+                        >
+                            <Input
+                                id={'role-shortname'}
+                                placeholder="Ex: TP"
+                            />
+                        </InputWrapper>
                     </SimpleGrid>
                     <Button mt={20} onClick={() => addRole(activeTab)}>Ajouter</Button>
                     <div>

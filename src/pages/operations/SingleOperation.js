@@ -310,7 +310,7 @@ function SingleOperation() {
                                                 <Button ml={10} color={"red"} onClick={() => unregisterPlayer()} compact>Se désinscrire</Button>
                                             </div> :
                                             <div style={{marginBottom: "10px", color: theme.colors.gray[5], display: 'flex', alignItems: 'center'}}>
-                                                <Badge color={"blue"} mr={10}>{role.role}</Badge>
+                                                <Badge color={"blue"} mr={10}>{role.shortName}</Badge>
                                                 Disponible
                                                 { !isUserRegistered() ? (updatedUser.trained.includes(role.training) || (role.training === undefined && updatedUser.roles.includes('ADMIN_ROLE')) ?
                                                         <Button ml={10} color={"green"} compact onClick={() => registerPlayer(group, role)}>S'inscrire</Button> :
