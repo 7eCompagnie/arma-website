@@ -30,14 +30,6 @@ jobs:
         uses: actions/setup-node@v2.1.5
         with:
           node-version: 16.x
-          
-      - name: Install dependencies
-        run: npm install --production
-        
-      - name: Run build
-        env:
-          CI: false
-        run: npm run build
         
       - name: Copy dist to VPS
         uses: appleboy/scp-action@master
@@ -53,6 +45,8 @@ jobs:
           
       - name: Instal dependencies on VPS, run migrations on VPS and restart Node server
         uses: appleboy/ssh-action@master
+        env:
+          CI: false
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
@@ -61,4 +55,5 @@ jobs:
           script: |
             cd ~/7eCompagnie/orbat
             npm install --production
+            npm run build
             pm2 restart orbat
