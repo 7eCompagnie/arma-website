@@ -72,7 +72,7 @@ function Users() {
     useEffect(() => {
         fetchUsers(activePage);
         document.title = "Utilisateurs - La 7ème Compagnie";
-    }, [activePage]);
+    });
 
     const rows = users.map((user, i) => (
         <tr key={i}>

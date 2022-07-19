@@ -1,6 +1,6 @@
 import {Link, useNavigate, useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
-import {Button, Input, InputWrapper, MultiSelect, Notification, SimpleGrid, Skeleton} from "@mantine/core";
+import {Button, Input, InputWrapper, MultiSelect, SimpleGrid, Skeleton} from "@mantine/core";
 import {At, Check, ChevronLeft, Id, LetterCase, Numbers} from "tabler-icons-react";
 import {showNotification, updateNotification} from "@mantine/notifications";
 
@@ -74,7 +74,7 @@ function UserEdit() {
 
     useEffect(() => {
         fetchUser();
-    }, []);
+    });
 
     const roles = [
         { value: 'USER_ROLE', label: 'Utilisateur' },

@@ -91,7 +91,7 @@ function ZeusOperations() {
     useEffect(() => {
         fetchOperations(activePage);
         document.title = "Opérations - La 7ème Compagnie";
-    }, [activePage]);
+    });
 
     const rows = (operations.map((operation, i) => (
         <tr key={i}>

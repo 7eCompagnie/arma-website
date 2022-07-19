@@ -1,15 +1,13 @@
 import {
-    Badge,
     Button, Checkbox, Group,
     Input,
     InputWrapper,
     MultiSelect,
-    Notification,
     SimpleGrid,
     Skeleton, Switch, Text,
     Textarea, useMantineTheme
 } from "@mantine/core";
-import {AlignJustified, At, Check, ChevronLeft, Id, LetterCase, Numbers, Photo, X} from "tabler-icons-react";
+import {Check, ChevronLeft, LetterCase, Photo, X} from "tabler-icons-react";
 import {useEffect, useRef, useState} from "react";
 import {Link, useNavigate, useParams} from "react-router-dom";
 import {Dropzone, IMAGE_MIME_TYPE} from "@mantine/dropzone";
@@ -127,7 +125,7 @@ function FormersTrainingEdit() {
 
     useEffect(() => {
         fetchTraining();
-    }, []);
+    });
 
     const trainersName = trainers.map((trainer, i) => {
         if (isLoading === true) {

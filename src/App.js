@@ -4,7 +4,6 @@ import Dashboard from "./pages/Dashboard";
 import Operations from "./pages/operations/Operations";
 import Trainings from "./pages/formers/Trainings";
 import SingleOperation from "./pages/operations/SingleOperation";
-import SingleFormation from "./pages/formers/SingleTraining";
 import ZeusOperationCreate from "./pages/operations/zeus/ZeusOperationCreate";
 import NotFound from "./pages/NotFound";
 import Users from "./pages/admin/users/Users";
@@ -76,7 +75,7 @@ function App() {
             navigate('/');
         if (localStorage.getItem('token') !== null)
             fetchData();
-    }, [])
+    })
 
 
     if (pathname === '/')
@@ -123,7 +122,7 @@ function App() {
                     </Container>
                     <Center mt={40}>
                         <p>
-                            Développé avec <Heart style={{marginBottom: "-4px"}} color={"red"} size={20}/> par <a style={{color: 'teal', textDecoration: 'none', fontWeight: 'bold'}} href="https://sn00ww.github.io/portfolio/" target={"_blank"}>Sn0w</a>, le meilleur soldat de la 7ème Compagnie.
+                            Développé avec <Heart style={{marginBottom: "-4px"}} color={"red"} size={20}/> par <a style={{color: 'teal', textDecoration: 'none', fontWeight: 'bold'}} href="https://sn00ww.github.io/portfolio/" target={"_blank"} rel="noreferrer">Sn0w</a>, le meilleur soldat de la 7ème Compagnie.
                         </p>
                     </Center>
                 </AppShell>

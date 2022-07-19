@@ -1,12 +1,11 @@
 import {useEffect, useState} from "react";
 import {
-    Alert,
     Badge,
     Button,
-    Image, Input, InputWrapper, Notification, SimpleGrid, Skeleton,
-    Table, Text, useMantineTheme,
+    Image, Input, InputWrapper, SimpleGrid, Skeleton,
+    Text, useMantineTheme,
 } from "@mantine/core";
-import {AlertCircle, Ban, Check, ChevronLeft, X} from "tabler-icons-react";
+import {Check, ChevronLeft, X} from "tabler-icons-react";
 import {useNavigate, useParams} from "react-router-dom";
 import Moment from "moment";
 import 'moment/locale/fr';
@@ -100,7 +99,7 @@ function SingleOperation() {
         fetchOperation();
         const interval = setInterval(() => { updateRegistered(); }, 2000);
         return () => clearInterval(interval);
-    }, []);
+    }, );
 
     const unregisterPlayer = () => {
         showNotification({
@@ -319,6 +318,7 @@ function SingleOperation() {
                                         }
                                     </li>)
                                 }
+                                return null
                             })}
                         </ul>
                     </div>))}

@@ -3,17 +3,14 @@ import {
     Alert,
     Avatar,
     Badge,
-    Button,
     Center,
-    Divider,
-    Menu,
     Modal,
     Skeleton,
     Text,
     Tooltip
 } from "@mantine/core";
 import '../css/dashboard.css';
-import {AlertCircle, Bell, BellRinging, Logout, Settings, Tools} from "tabler-icons-react";
+import {AlertCircle, Bell, Logout, Settings, Tools} from "tabler-icons-react";
 import {useNavigate} from "react-router-dom";
 import {useState} from "react";
 

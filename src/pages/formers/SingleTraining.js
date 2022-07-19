@@ -45,7 +45,7 @@ function SingleTraining() {
 
     useEffect(() => {
         fetchTraining();
-    }, []);
+    });
 
     const trainersToDisplay = trainers.map((trainer, i) => {
         if (isLoading === true) {
@@ -73,7 +73,7 @@ function SingleTraining() {
             <h2>Formateurs</h2>
             <Skeleton height={8} width={75} />
             <Alert mt={64} icon={<InfoCircle size={16} />} title="Demande de formation" variant="filled">
-                Pour suivre une formation, veuillez contacter un des formateurs sur le channel <a style={{color: "#fff", textDecoration: "non", fontWeight: "bold"}} href={"https://discord.com/channels/864865934233960448/889940051016962118"} target={"_blank"}>#formations</a>.
+                Pour suivre une formation, veuillez contacter un des formateurs sur le channel <a style={{color: "#fff", textDecoration: "non", fontWeight: "bold"}} href={"https://discord.com/channels/864865934233960448/889940051016962118"} target={"_blank"} rel="noreferrer">#formations</a>.
             </Alert>
         </>)
     }
@@ -108,7 +108,7 @@ function SingleTraining() {
         </div>
 
         <Alert icon={<InfoCircle size={16} />} title="Demande de formation" variant="filled">
-            Pour suivre une formation, veuillez contacter un des formateurs sur le channel <a style={{color: "#fff", textDecoration: "non", fontWeight: "bold"}} href={"https://discord.com/channels/864865934233960448/889940051016962118"} target={"_blank"}>#formations</a>.
+            Pour suivre une formation, veuillez contacter un des formateurs sur le channel <a style={{color: "#fff", textDecoration: "non", fontWeight: "bold"}} href={"https://discord.com/channels/864865934233960448/889940051016962118"} target={"_blank"} rel="noreferrer">#formations</a>.
         </Alert>
     </>);
 }

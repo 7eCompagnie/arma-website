@@ -3,9 +3,9 @@ import {
     Alert,
     Badge,
     Button,
-    Card, Center,
+    Card,
     Group,
-    Image, Pagination,
+    Image,
     SimpleGrid, Skeleton,
     Text, useMantineTheme
 } from "@mantine/core";
@@ -24,7 +24,7 @@ function Operations() {
     const [operations, setOperations] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
-    const fetchOperations = () => {
+    useEffect(() => {
         fetch(`${process.env.REACT_APP_ENDPOINT_URL}/operations/`,
             {
                 method: 'GET',
@@ -38,10 +38,6 @@ function Operations() {
                 setIsLoading(false);
             })
             .catch(err => console.log(err));
-    }
-
-    useEffect(() => {
-        fetchOperations();
         document.title = "Nos opérations - La 7ème Compagnie";
     }, []);
 
