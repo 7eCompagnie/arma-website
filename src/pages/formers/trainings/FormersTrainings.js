@@ -52,7 +52,7 @@ function FormersTrainings() {
     useEffect(() => {
         fetchTrainings(activePage);
         document.title = "Formations - La 7ème Compagnie";
-    }, );
+    }, []);
 
     const updateModal = (currTraining) => {
         setCurrTrainingModal(currTraining)

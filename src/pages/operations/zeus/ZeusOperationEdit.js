@@ -98,7 +98,7 @@ function ZeusOperationEdit() {
                 console.log(err);
                 setNotFound(true);
             });
-    }, [id]);
+    }, []);
 
 
     const callback = (data) => {

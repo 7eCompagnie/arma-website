@@ -125,7 +125,7 @@ function FormersTrainingEdit() {
 
     useEffect(() => {
         fetchTraining();
-    });
+    }, []);
 
     const trainersName = trainers.map((trainer, i) => {
         if (isLoading === true) {

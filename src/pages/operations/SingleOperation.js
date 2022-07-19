@@ -99,7 +99,7 @@ function SingleOperation() {
         fetchOperation();
         const interval = setInterval(() => { updateRegistered(); }, 2000);
         return () => clearInterval(interval);
-    }, );
+    }, []);
 
     const unregisterPlayer = () => {
         showNotification({

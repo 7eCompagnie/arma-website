@@ -74,7 +74,7 @@ function UserEdit() {
 
     useEffect(() => {
         fetchUser();
-    });
+    }, []);
 
     const roles = [
         { value: 'USER_ROLE', label: 'Utilisateur' },

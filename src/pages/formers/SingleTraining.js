@@ -45,7 +45,7 @@ function SingleTraining() {
 
     useEffect(() => {
         fetchTraining();
-    });
+    }, []);
 
     const trainersToDisplay = trainers.map((trainer, i) => {
         if (isLoading === true) {

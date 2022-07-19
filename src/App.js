@@ -75,7 +75,7 @@ function App() {
             navigate('/');
         if (localStorage.getItem('token') !== null)
             fetchData();
-    })
+    }, [])
 
 
     if (pathname === '/')
