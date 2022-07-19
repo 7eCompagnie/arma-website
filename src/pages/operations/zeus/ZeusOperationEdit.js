@@ -1,24 +1,16 @@
 import {
-    Badge,
-    Button, Checkbox, Container, Group,
+    Button, Checkbox, Group,
     Input,
     InputWrapper,
-    MultiSelect,
-    Notification,
     SimpleGrid,
-    Skeleton, Switch, Table, Tabs, Text,
+    Skeleton, Text,
     Textarea, useMantineTheme
 } from "@mantine/core";
-import {
-    AlignJustified,
-    At, Calendar,
+import {Calendar,
     Check,
     ChevronLeft,
-    Id,
-    LetterCase,
     LetterCaseToggle,
-    Numbers, Pencil,
-    Photo, SquarePlus, Trash,
+    Photo,
     X
 } from "tabler-icons-react";
 import {useEffect, useRef, useState} from "react";
@@ -82,7 +74,7 @@ function ZeusOperationEdit() {
     const openRef = useRef();
     const theme = useMantineTheme();
 
-    const fetchOperation = () => {
+    useEffect(() => {
         fetch(`${process.env.REACT_APP_ENDPOINT_URL}/operations/${id}`, {
             method: 'GET',
             headers: {
@@ -106,11 +98,7 @@ function ZeusOperationEdit() {
                 console.log(err);
                 setNotFound(true);
             });
-    }
-
-    useEffect(() => {
-        fetchOperation();
-    }, []);
+    }, [id]);
 
 
     const callback = (data) => {
