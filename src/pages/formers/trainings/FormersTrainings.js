@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
-import {Button, Center, Modal, Pagination, Skeleton, Table, Text} from "@mantine/core";
-import {Plus} from "tabler-icons-react";
+import {Alert, Button, Center, Modal, Pagination, Skeleton, Table, Text} from "@mantine/core";
+import {AlertCircle, Plus} from "tabler-icons-react";
 
 function FormersTrainings() {
     const [trainings, setTrainings] = useState([]);
@@ -39,7 +39,10 @@ function FormersTrainings() {
         })
             .then(res => res.json())
             .then(data => {
-                setMaxPages(data.data);
+                if (data.data === 0)
+                    setMaxPages(1);
+                else
+                    setMaxPages(data.data);
                 setIsLoading(false);
             })
             .catch(err => console.log(err));
@@ -96,7 +99,7 @@ function FormersTrainings() {
         return (<>
             <h1>Gérer les formations</h1>
             <Button leftIcon={<Plus size={22}/>} onClick={() => navigate('/formers/trainings/new')}>Créer une formation</Button>
-            <Center mb={"1rem"}>
+            <Center my={"1rem"}>
                 <Pagination page={activePage} onChange={setPage} total={maxPages} withEdges />
             </Center>
             <Table striped highlightOnHover>
@@ -118,7 +121,7 @@ function FormersTrainings() {
     return (<>
         <h1>Gérer les formations</h1>
         <Button leftIcon={<Plus size={22}/>} onClick={() => navigate('/formers/trainings/new')}>Créer une formation</Button>
-        <Center mb={"1rem"}>
+        <Center my={"1rem"}>
             <Pagination page={activePage} onChange={setPage} total={maxPages} withEdges />
         </Center>
         <Table striped highlightOnHover>
@@ -133,6 +136,9 @@ function FormersTrainings() {
                 {rows}
             </tbody>
         </Table>
+        {!trainings.length ? <Alert icon={<AlertCircle size={16} />} title="Pas de données" mt={10} color={"red"}>
+            <Text>Aucunes formations trouvées.</Text>
+        </Alert> : ""}
         <Center mt={"1rem"}>
             <Pagination page={activePage} onChange={setPage} total={maxPages} withEdges />
         </Center>

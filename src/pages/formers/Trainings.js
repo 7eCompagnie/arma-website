@@ -1,5 +1,6 @@
 import {useEffect, useState} from "react";
 import {
+    Alert,
     Badge,
     Button,
     Card,
@@ -8,6 +9,7 @@ import {
     SimpleGrid, Skeleton, Text, useMantineTheme
 } from "@mantine/core";
 import {useNavigate} from "react-router-dom";
+import {AlertCircle} from "tabler-icons-react";
 
 function Trainings() {
     const navigate = useNavigate();
@@ -73,9 +75,13 @@ function Trainings() {
 
     return(<>
         <h1>Les formations disponibles</h1>
-        <SimpleGrid cols={3}>
+
+        {!trainingsToDisplay.length ? <Alert icon={<AlertCircle size={16} />} title="Désolé soldat, aucune formation n'est disponible..." mt={10} color={"red"}>
+            <Text>Pour l'instant, tu vas devoir rester avec ton vieux F1. Alors reviens plus tard si tu veux pas tombé avant d'avoir pû tirer.
+            </Text>
+        </Alert> : <SimpleGrid cols={2}>
             {trainingsToDisplay}
-        </SimpleGrid>
+        </SimpleGrid>}
     </>);
 }
 

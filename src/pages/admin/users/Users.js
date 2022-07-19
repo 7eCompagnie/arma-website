@@ -1,6 +1,7 @@
-import {Button, Center, Modal, Pagination, Skeleton, Table, Text} from "@mantine/core";
+import {Alert, Button, Center, Modal, Pagination, Skeleton, Table, Text} from "@mantine/core";
 import {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
+import {AlertCircle} from "tabler-icons-react";
 
 function Users() {
     const [users, setUsers] = useState([]);
@@ -38,7 +39,10 @@ function Users() {
         })
             .then(res => res.json())
             .then(data => {
-                setMaxPages(data.data);
+                if (data.data === 0)
+                    setMaxPages(1);
+                else
+                    setMaxPages(data.data);
                 setIsLoading(false);
             })
             .catch(err => console.log(err));
@@ -104,7 +108,7 @@ function Users() {
     if (isLoading) {
         return (<>
             <h1>Gérer les utilisateurs</h1>
-            <Center mb={"1rem"}>
+            <Center my={"1rem"}>
                 <Pagination page={activePage} onChange={setPage} total={maxPages} withEdges />
             </Center>
             <Table striped highlightOnHover>
@@ -126,24 +130,25 @@ function Users() {
 
     return (<>
         <h1>Gérer les utilisateurs</h1>
-        <Center mb={"1rem"}>
+        <Center my={"1rem"}>
             <Pagination page={activePage} onChange={setPage} total={maxPages} withEdges />
         </Center>
-        <Skeleton visible={isLoading}>
-            <Table striped highlightOnHover>
-                <thead>
-                    <tr>
-                        <th>Pseudo</th>
-                        <th>Adresse email</th>
-                        <th>Roles</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {rows}
-                </tbody>
-            </Table>
-        </Skeleton>
+        <Table striped highlightOnHover>
+            <thead>
+            <tr>
+                <th>Pseudo</th>
+                <th>Adresse email</th>
+                <th>Roles</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+                {rows}
+            </tbody>
+        </Table>
+        {!users.length ? <Alert icon={<AlertCircle size={16} />} title="Pas de données" mt={10} color={"red"}>
+            <Text>Aucuns utilisateurs trouvés.</Text>
+        </Alert> : ""}
         <Center mt={"1rem"}>
             <Pagination page={activePage} onChange={setPage} total={maxPages} withEdges />
         </Center>
