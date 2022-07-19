@@ -266,17 +266,17 @@ function SingleOperation() {
             <Text>
                 <strong>Date:</strong>
                 <span style={{textTransform: "capitalize", marginLeft: '4px'}}>
-                    {Moment(operation.date).format('dddd')}
-                </span> {Moment(operation.date).format('D MMMM YYYY')}
+                    {Moment(new Date(operation.date)).format('dddd')}
+                </span> {Moment(new Date(operation.date)).format('D MMMM YYYY')}
             </Text>
             <Text>
                 <strong style={{marginRight: '4px'}}>Durée:</strong>
-                {Moment(operation.duration[0]).format('HH[h]mm')}
+                {Moment(new Date(operation.duration[0])).format('HH[h]mm')}
                 <span style={{margin: '0 4px'}}>-</span>
-                {Moment(operation.duration[1]).format('HH[h]mm')}
+                {Moment(new Date(operation.duration[1])).format('HH[h]mm')}
             </Text>
             <Text>
-                <strong>Début des connexions:</strong> {Moment(operation.connectionStartTime).format('HH[h]mm')}
+                <strong>Début des connexions:</strong> {Moment(new Date(operation.connectionStartTime)).format('HH[h]mm')}
             </Text>
         </SimpleGrid>
 

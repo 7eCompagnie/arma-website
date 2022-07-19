@@ -79,7 +79,7 @@ function Operations() {
                     <span style={{
                         textTransform: "capitalize",
                         marginRight: '4px'
-                    }}>{Moment(operation.date).format('dddd')}</span> {Moment(operation.date).format('D MMMM YYYY')}
+                    }}>{Moment(new Date(operation.date)).format('dddd')}</span> {Moment(new Date(operation.date)).format('D MMMM YYYY')}
                 </Text>
 
                 <Text size="sm" style={{color: secondaryColor, lineHeight: 1.5}}>
