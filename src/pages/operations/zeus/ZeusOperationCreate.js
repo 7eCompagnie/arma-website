@@ -24,7 +24,7 @@ import 'dayjs/locale/fr';
 import dayjs from "dayjs";
 import {Dropzone, IMAGE_MIME_TYPE} from "@mantine/dropzone";
 import {useNavigate} from "react-router-dom";
-import RolesCreation from "../../components/RolesCreation";
+import RolesCreation from "../../../components/RolesCreation";
 
 function getIconColor(status, theme) {
     return status.accepted
@@ -63,7 +63,7 @@ const dropzoneChildren = (status, theme) => (
     </Group>
 )
 
-function CreateOperation() {
+function ZeusOperationCreate() {
     const titleInput = useRef();
     const descriptionInput = useRef();
     const openRef = useRef();
@@ -204,4 +204,4 @@ function CreateOperation() {
     </>)
 }
 
-export default CreateOperation;
+export default ZeusOperationCreate;

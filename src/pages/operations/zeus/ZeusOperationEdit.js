@@ -26,7 +26,7 @@ import {Link, useNavigate, useParams} from "react-router-dom";
 import {Dropzone, IMAGE_MIME_TYPE} from "@mantine/dropzone";
 import {DatePicker, TimeInput, TimeRangeInput} from "@mantine/dates";
 import dayjs from "dayjs";
-import RolesCreation from "../../components/RolesCreation";
+import RolesCreation from "../../../components/RolesCreation";
 import {showNotification, updateNotification} from "@mantine/notifications";
 
 function getIconColor(status, theme) {
