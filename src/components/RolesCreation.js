@@ -93,14 +93,16 @@ function RolesCreation({callback, data, buttonText}) {
             return;
         }
 
-        showNotification({
-            id: "confirm-delete-warning",
-            title: 'Ajout du rôle',
-            message: 'Pensez à bien sauvegarder les modifications, en cliquant sur le bouton "Sauvegarder" en bas de la page.',
-            icon: <AlertTriangle/>,
-            autoClose: 5000,
-            color: "orange"
-        });
+        if (buttonText === "Sauvegarder") {
+            showNotification({
+                id: "confirm-delete-warning",
+                title: 'Ajout du rôle',
+                message: 'Pensez à bien sauvegarder les modifications, en cliquant sur le bouton "Sauvegarder" en bas de la page.',
+                icon: <AlertTriangle/>,
+                autoClose: 5000,
+                color: "orange"
+            });
+        }
 
         let newArray = tabs[tab];
 
@@ -129,14 +131,16 @@ function RolesCreation({callback, data, buttonText}) {
             return;
         }
 
-        showNotification({
-            id: "add-team-warning",
-            title: 'Création de l\'équipe',
-            message: 'Pensez à bien sauvegarder les modifications, en cliquant sur le bouton "Sauvegarder" en bas de la page.',
-            icon: <AlertTriangle/>,
-            autoClose: 5000,
-            color: "orange"
-        });
+        if (buttonText === "Sauvegarder") {
+            showNotification({
+                id: "add-team-warning",
+                title: 'Création de l\'équipe',
+                message: 'Pensez à bien sauvegarder les modifications, en cliquant sur le bouton "Sauvegarder" en bas de la page.',
+                icon: <AlertTriangle/>,
+                autoClose: 5000,
+                color: "orange"
+            });
+        }
 
         let newArray = tabs[tab];
 
@@ -162,14 +166,16 @@ function RolesCreation({callback, data, buttonText}) {
         if (!tabs[activeTab])
             return {};
 
-        showNotification({
-            id: "delete-warning",
-            title: 'Suppression du rôle',
-            message: 'Pensez à bien sauvegarder les modifications, en cliquant sur le bouton "Sauvegarder" en bas de la page.',
-            icon: <AlertTriangle/>,
-            autoClose: 5000,
-            color: "yellow"
-        });
+        if (buttonText === "Sauvegarder") {
+            showNotification({
+                id: "delete-warning",
+                title: 'Suppression du rôle',
+                message: 'Pensez à bien sauvegarder les modifications, en cliquant sur le bouton "Sauvegarder" en bas de la page.',
+                icon: <AlertTriangle/>,
+                autoClose: 5000,
+                color: "yellow"
+            });
+        }
 
         let newArray = tabs[activeTab];
         let toRemove = newArray.group.find(role => role.role === currentRole.role);
@@ -216,14 +222,16 @@ function RolesCreation({callback, data, buttonText}) {
         if (!tabs[activeTab])
             return {};
 
-        showNotification({
-            id: "delete-team-warning",
-            title: 'Suppression de l\'équipe',
-            message: 'Pensez à bien sauvegarder les modifications, en cliquant sur le bouton "Sauvegarder" en bas de la page.',
-            icon: <AlertTriangle/>,
-            autoClose: 5000,
-            color: "yellow"
-        });
+        if (buttonText === "Sauvegarder") {
+            showNotification({
+                id: "delete-team-warning",
+                title: 'Suppression de l\'équipe',
+                message: 'Pensez à bien sauvegarder les modifications, en cliquant sur le bouton "Sauvegarder" en bas de la page.',
+                icon: <AlertTriangle/>,
+                autoClose: 5000,
+                color: "yellow"
+            });
+        }
 
         let newArray = tabs[activeTab];
         let toRemove = newArray.teams.find(team => team.name === currentTeam.name);
