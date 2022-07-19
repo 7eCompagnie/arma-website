@@ -1,7 +1,8 @@
 import {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {Alert, Button, Center, Modal, Pagination, Skeleton, Table, Text} from "@mantine/core";
-import {AlertCircle, Plus} from "tabler-icons-react";
+import {AlertCircle, Check, Plus} from "tabler-icons-react";
+import {showNotification, updateNotification} from "@mantine/notifications";
 
 function FormersTrainings() {
     const [trainings, setTrainings] = useState([]);
@@ -60,6 +61,16 @@ function FormersTrainings() {
 
     const deleteTraining = (training) => {
         setOpened(false);
+
+        showNotification({
+            id: `delete-training-${training._id}`,
+            loading: true,
+            title: 'Suppression de la formation en cours...',
+            message: 'Veuillez patienter... Cette opération peut prendre quelques secondes.',
+            autoClose: false,
+            disallowClose: true,
+        });
+
         fetch(`${process.env.REACT_APP_ENDPOINT_URL}/trainings/${training._id}`, {
             method: 'DELETE',
             headers: {
@@ -68,6 +79,14 @@ function FormersTrainings() {
         })
             .then(res => res.json())
             .then(data => {
+                updateNotification({
+                    id: `delete-training-${training._id}`,
+                    color: 'teal',
+                    title: 'Suppression terminée',
+                    message: `Vous avez correctement supprimer la formation ${training.title}`,
+                    icon: <Check />,
+                    autoClose: 5000,
+                });
                 fetchTrainings(activePage)
                 setCurrTrainingModal(null)
             })
