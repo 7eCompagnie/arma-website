@@ -5,7 +5,7 @@ import Operations from "./pages/operations/Operations";
 import Trainings from "./pages/formers/Trainings";
 import SingleOperation from "./pages/operations/SingleOperation";
 import SingleFormation from "./pages/formers/SingleTraining";
-import CreateOperation from "./pages/operations/CreateOperation";
+import ZeusOperationCreate from "./pages/operations/zeus/ZeusOperationCreate";
 import NotFound from "./pages/NotFound";
 import Users from "./pages/admin/users/Users";
 import {AppShell, Center, Container, Header, MantineProvider, Navbar} from "@mantine/core";
@@ -18,8 +18,8 @@ import FormersTrainings from "./pages/formers/trainings/FormersTrainings";
 import FormersTrainingEdit from "./pages/formers/trainings/FormersTrainingEdit";
 import FormersTrainingCreate from "./pages/formers/trainings/FormersTrainingCreate";
 import SingleTraining from "./pages/formers/SingleTraining";
-import ZeusOperations from "./pages/operations/ZeusOperations";
-import ZeusOperationEdit from "./pages/operations/ZeusOperationEdit";
+import ZeusOperations from "./pages/operations/zeus/ZeusOperations";
+import ZeusOperationEdit from "./pages/operations/zeus/ZeusOperationEdit";
 import FormersTrainingsPass from "./pages/formers/trainings/FormersTrainingsPass";
 import {Heart} from "tabler-icons-react";
 import {NotificationsProvider} from "@mantine/notifications";
@@ -115,7 +115,7 @@ function App() {
                             <Route path="/zeus/users" element={<Users isLoading={isLoading}/>}/>
                             <Route path="/zeus/users/:identifier" element={<UserEdit/>}/>
                             <Route path="/zeus/operations" element={<ZeusOperations />}/>
-                            <Route path="/zeus/operations/new" element={<CreateOperation />}/>
+                            <Route path="/zeus/operations/new" element={<ZeusOperationCreate />}/>
                             <Route path="/zeus/operations/:id" element={<ZeusOperationEdit />}/>
 
                             <Route path="*" element={<NotFound />}/>
