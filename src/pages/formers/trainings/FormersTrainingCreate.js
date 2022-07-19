@@ -4,13 +4,13 @@ import {
     Group,
     Input,
     InputWrapper,
-    MultiSelect, Notification,
+    MultiSelect,
     SimpleGrid, Skeleton, Switch,
     Text,
     Textarea,
     useMantineTheme
 } from "@mantine/core";
-import {AlertCircle, AlertTriangle, Check, Cross, LetterCase, Photo, Upload, X} from "tabler-icons-react";
+import {Check, LetterCase, Photo, X} from "tabler-icons-react";
 import {Dropzone, IMAGE_MIME_TYPE} from "@mantine/dropzone";
 import {useEffect, useRef, useState} from "react";
 import {useNavigate} from "react-router-dom";

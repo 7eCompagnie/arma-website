@@ -5,7 +5,7 @@ import {showNotification} from "@mantine/notifications";
 
 function uuidv4() {
     return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
-        (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+        ((((c ^ crypto.getRandomValues(new Uint8Array(1))[0]) & 15) >> c) / 4).toString(16)
     );
 }
 
@@ -49,12 +49,10 @@ function RolesCreation({callback, data, buttonText}) {
         setActiveTab(active);
     };
 
-    const trainingsData = trainings.map(training => {
-        return {
-            value: training._id,
-            label: training.title
-        }
-    });
+    const trainingsData = trainings.map(training => ({
+        value: training._id,
+        label: training.title
+    }));
 
     const addTab = () => {
         const input = document.getElementById('group-name');
@@ -167,12 +165,10 @@ function RolesCreation({callback, data, buttonText}) {
     const teamsData = (tab) => {
         if (!tabs[tab])
             return {};
-        return tabs[tab].teams.map(team => {
-            return {
-                value: team.name,
-                label: team.name
-            }
-        });
+        return tabs[tab].teams.map(team => ({
+            value: team.name,
+            label: team.name
+        }));
     }
 
     const removeRole = (currentRole) => {
@@ -358,6 +354,7 @@ function RolesCreation({callback, data, buttonText}) {
                                                 </tr>
                                             )
                                         }
+                                        return null;
                                     })}
                                     </tbody>
                                 </Table>
@@ -477,6 +474,7 @@ function RolesCreation({callback, data, buttonText}) {
                                             </tr>
                                         )
                                     }
+                                    return null;
                                 })}
                                 </tbody>
                             </Table>

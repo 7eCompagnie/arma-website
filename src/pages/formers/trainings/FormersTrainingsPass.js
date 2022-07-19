@@ -2,11 +2,9 @@ import {
     Avatar,
     Badge,
     Button,
-    Center,
     Group,
     InputWrapper,
     MultiSelect,
-    Notification,
     Select,
     Skeleton,
     Text
@@ -21,21 +19,6 @@ function FormersTrainingsPass({user}) {
     const [newTrained, setNewTrained] = useState([]);
     const [trainings, setTrainings] = useState([]);
     const [selectedUser, setSelectedUser] = useState(null);
-
-    const fetchAllUsers = () => {
-        fetch(`${process.env.REACT_APP_ENDPOINT_URL}/users/all`, {
-            method: 'GET',
-            headers: {
-                'x-access-token': localStorage.getItem('token')
-            },
-        })
-            .then(res => res.json())
-            .then(data => {
-                setUsers(data.data);
-                fetchAllTrainings();
-            })
-            .catch(err => console.log(err));
-    }
 
     const fetchAllTrainings = () => {
         fetch(`${process.env.REACT_APP_ENDPOINT_URL}/trainings`, {
@@ -53,7 +36,18 @@ function FormersTrainingsPass({user}) {
     }
 
     useEffect(() => {
-        fetchAllUsers();
+        fetch(`${process.env.REACT_APP_ENDPOINT_URL}/users/all`, {
+            method: 'GET',
+            headers: {
+                'x-access-token': localStorage.getItem('token')
+            },
+        })
+            .then(res => res.json())
+            .then(data => {
+                setUsers(data.data);
+                fetchAllTrainings();
+            })
+            .catch(err => console.log(err));
         document.title = "Faire passer une formation - La 7ème Compagnie";
     }, []);
 

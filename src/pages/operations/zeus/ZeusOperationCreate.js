@@ -1,23 +1,17 @@
 import {useEffect, useRef, useState} from "react";
 import {
-    Button, Center, Checkbox, Group,
+    Button, Checkbox, Group,
     Input,
-    InputWrapper, Notification, Select,
-    SimpleGrid,
-    Table,
-    Tabs, Text,
+    InputWrapper,
+    SimpleGrid, Text,
     Textarea, useMantineTheme
 } from "@mantine/core";
 import {
     LetterCaseToggle,
     Calendar,
-    SquarePlus,
-    Pencil,
-    Trash,
     X,
     Photo,
-    AlertTriangle,
-    CircleCheck, Check
+    Check
 } from "tabler-icons-react";
 import {DatePicker, TimeInput, TimeRangeInput} from "@mantine/dates";
 import 'dayjs/locale/fr';

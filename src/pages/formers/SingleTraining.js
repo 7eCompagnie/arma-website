@@ -10,25 +10,9 @@ function SingleTraining() {
     const [isLoading, setIsLoading] = useState(true);
     const navigate = useNavigate();
 
-    const fetchTraining = () => {
-        fetch(`${process.env.REACT_APP_ENDPOINT_URL}/trainings/${id}`, {
-            method: 'GET',
-            headers: {
-                'x-access-token': localStorage.getItem('token')
-            },
-        })
-            .then(res => res.json())
-            .then(data => {
-                setTraining(data.data);
-                fetchTrainers(data.data.trainers);
-                document.title = `${data.data.title} - La 7ème Compagnie`;
-            })
-            .catch(err => console.log(err));
-    }
-
-    const fetchTrainers = (t) => {
-        t.forEach((trainer) => {
-            fetch(`${process.env.REACT_APP_ENDPOINT_URL}/users/${trainer}`, {
+    useEffect(() => {
+        const fetchTraining = () => {
+            fetch(`${process.env.REACT_APP_ENDPOINT_URL}/trainings/${id}`, {
                 method: 'GET',
                 headers: {
                     'x-access-token': localStorage.getItem('token')
@@ -36,16 +20,32 @@ function SingleTraining() {
             })
                 .then(res => res.json())
                 .then(data => {
-                    setTrainers(trainers => trainers.concat(data.data));
-                    setIsLoading(false);
+                    setTraining(data.data);
+                    fetchTrainers(data.data.trainers);
+                    document.title = `${data.data.title} - La 7ème Compagnie`;
                 })
                 .catch(err => console.log(err));
-        })
-    }
+        }
 
-    useEffect(() => {
+        const fetchTrainers = (t) => {
+            t.forEach((trainer) => {
+                fetch(`${process.env.REACT_APP_ENDPOINT_URL}/users/${trainer}`, {
+                    method: 'GET',
+                    headers: {
+                        'x-access-token': localStorage.getItem('token')
+                    },
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        setTrainers(trainers => trainers.concat(data.data));
+                        setIsLoading(false);
+                    })
+                    .catch(err => console.log(err));
+            })
+        }
+
         fetchTraining();
-    }, []);
+    }, [id]);
 
     const trainersToDisplay = trainers.map((trainer, i) => {
         if (isLoading === true) {
@@ -73,7 +73,7 @@ function SingleTraining() {
             <h2>Formateurs</h2>
             <Skeleton height={8} width={75} />
             <Alert mt={64} icon={<InfoCircle size={16} />} title="Demande de formation" variant="filled">
-                Pour suivre une formation, veuillez contacter un des formateurs sur le channel <a style={{color: "#fff", textDecoration: "non", fontWeight: "bold"}} href={"https://discord.com/channels/864865934233960448/889940051016962118"} target={"_blank"}>#formations</a>.
+                Pour suivre une formation, veuillez contacter un des formateurs sur le channel <a style={{color: "#fff", textDecoration: "non", fontWeight: "bold"}} href={"https://discord.com/channels/864865934233960448/889940051016962118"} target={"_blank"} rel="noreferrer">#formations</a>.
             </Alert>
         </>)
     }
@@ -108,7 +108,7 @@ function SingleTraining() {
         </div>
 
         <Alert icon={<InfoCircle size={16} />} title="Demande de formation" variant="filled">
-            Pour suivre une formation, veuillez contacter un des formateurs sur le channel <a style={{color: "#fff", textDecoration: "non", fontWeight: "bold"}} href={"https://discord.com/channels/864865934233960448/889940051016962118"} target={"_blank"}>#formations</a>.
+            Pour suivre une formation, veuillez contacter un des formateurs sur le channel <a style={{color: "#fff", textDecoration: "non", fontWeight: "bold"}} href={"https://discord.com/channels/864865934233960448/889940051016962118"} target={"_blank"} rel="noreferrer">#formations</a>.
         </Alert>
     </>);
 }

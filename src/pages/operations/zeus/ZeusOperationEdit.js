@@ -1,24 +1,16 @@
 import {
-    Badge,
-    Button, Checkbox, Container, Group,
+    Button, Checkbox, Group,
     Input,
     InputWrapper,
-    MultiSelect,
-    Notification,
     SimpleGrid,
-    Skeleton, Switch, Table, Tabs, Text,
+    Skeleton, Text,
     Textarea, useMantineTheme
 } from "@mantine/core";
-import {
-    AlignJustified,
-    At, Calendar,
+import {Calendar,
     Check,
     ChevronLeft,
-    Id,
-    LetterCase,
     LetterCaseToggle,
-    Numbers, Pencil,
-    Photo, SquarePlus, Trash,
+    Photo,
     X
 } from "tabler-icons-react";
 import {useEffect, useRef, useState} from "react";
@@ -82,35 +74,35 @@ function ZeusOperationEdit() {
     const openRef = useRef();
     const theme = useMantineTheme();
 
-    const fetchOperation = () => {
-        fetch(`${process.env.REACT_APP_ENDPOINT_URL}/operations/${id}`, {
-            method: 'GET',
-            headers: {
-                'x-access-token': localStorage.getItem('token')
-            },
-        })
-            .then(res => res.json())
-            .then(data => {
-                setOperation(data.data);
-                document.title = `${data.data.title} - La 7ème Compagnie`;
-                setOperationTitle(data.data.title);
-                setOperationDate(new Date(data.data.date));
-                setOperationDescription(data.data.description);
-                setOperationPicture(data.data.picture);
-                setStartTime(new Date(data.data.connectionStartTime));
-                setDuration([new Date(data.data.duration[0]), new Date(data.data.duration[1])]);
-                setRoles(data.data.roles);
-                setIsLoading(false);
-            })
-            .catch(err => {
-                console.log(err);
-                setNotFound(true);
-            });
-    }
-
     useEffect(() => {
+        const fetchOperation = () => {
+            fetch(`${process.env.REACT_APP_ENDPOINT_URL}/operations/${id}`, {
+                method: 'GET',
+                headers: {
+                    'x-access-token': localStorage.getItem('token')
+                },
+            })
+                .then(res => res.json())
+                .then(data => {
+                    setOperation(data.data);
+                    document.title = `${data.data.title} - La 7ème Compagnie`;
+                    setOperationTitle(data.data.title);
+                    setOperationDate(new Date(data.data.date));
+                    setOperationDescription(data.data.description);
+                    setOperationPicture(data.data.picture);
+                    setStartTime(new Date(data.data.connectionStartTime));
+                    setDuration([new Date(data.data.duration[0]), new Date(data.data.duration[1])]);
+                    setRoles(data.data.roles);
+                    setIsLoading(false);
+                })
+                .catch(err => {
+                    console.log(err);
+                    setNotFound(true);
+                });
+        }
+
         fetchOperation();
-    }, []);
+    }, [id]);
 
 
     const callback = (data) => {

@@ -45,7 +45,7 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           port: ${{ secrets.SSH_PORT }}
-          key: ${{ secrets.SSH_PASS }}
+          password: ${{ secrets.SSH_PASS }}
           # Selecting all folders except "node_modules"
           source: ".,!node_modules"
           # The path is based on the directory where the user logged into the server starts
@@ -57,7 +57,7 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           port: ${{ secrets.SSH_PORT }}
-          key: ${{ secrets.SSH_KEY }}
+          password: ${{ secrets.SSH_PASS }}
           script: |
             cd ~/7eCompagnie/orbat
             npm i

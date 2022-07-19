@@ -1,10 +1,9 @@
 import '../css/style.css';
 import {
     Alert,
-    SimpleGrid,
 } from '@mantine/core';
 import {useEffect} from "react";
-import {DeviceGamepad, InfoCircle, Stars, Sword} from "tabler-icons-react";
+import {InfoCircle} from "tabler-icons-react";
 
 function Dashboard() {
     useEffect(() => {

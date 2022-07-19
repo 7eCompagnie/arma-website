@@ -12,7 +12,7 @@ function Users() {
     const [isLoading, setIsLoading] = useState(true);
     const navigate = useNavigate();
 
-    const fetchUsers = (page) => {
+    const fetchUpdate = (page) => {
         const currPage = page || 1;
 
         fetch(`${process.env.REACT_APP_ENDPOINT_URL}/users?page=${currPage}`, {
@@ -25,25 +25,21 @@ function Users() {
             .then(data => {
                 setUsers(data.data);
                 setCurrUserModal(data.data[0]);
-                fetchMaxPages();
-            })
-            .catch(err => console.log(err));
-    }
 
-    const fetchMaxPages = () => {
-        fetch(`${process.env.REACT_APP_ENDPOINT_URL}/users/maxPages`, {
-            method: 'GET',
-            headers: {
-                'x-access-token': localStorage.getItem('token')
-            },
-        })
-            .then(res => res.json())
-            .then(data => {
-                if (data.data === 0)
-                    setMaxPages(1);
-                else
-                    setMaxPages(data.data);
-                setIsLoading(false);
+                fetch(`${process.env.REACT_APP_ENDPOINT_URL}/users/maxPages`, {
+                    method: 'GET',
+                    headers: {
+                        'x-access-token': localStorage.getItem('token')
+                    },
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.data === 0)
+                            setMaxPages(1);
+                        else
+                            setMaxPages(data.data);
+                    })
+                    .catch(err => console.log(err));
             })
             .catch(err => console.log(err));
     }
@@ -63,13 +59,49 @@ function Users() {
         })
             .then(res => res.json())
             .then(data => {
-                fetchUsers(activePage)
-                setCurrUserModal(null)
+                fetchUpdate(activePage);
+                setCurrUserModal(null);
             })
             .catch(err => console.log(err));
     }
 
     useEffect(() => {
+        const fetchMaxPages = () => {
+            fetch(`${process.env.REACT_APP_ENDPOINT_URL}/users/maxPages`, {
+                method: 'GET',
+                headers: {
+                    'x-access-token': localStorage.getItem('token')
+                },
+            })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.data === 0)
+                        setMaxPages(1);
+                    else
+                        setMaxPages(data.data);
+                    setIsLoading(false);
+                })
+                .catch(err => console.log(err));
+        }
+
+        const fetchUsers = (page) => {
+            const currPage = page || 1;
+
+            fetch(`${process.env.REACT_APP_ENDPOINT_URL}/users?page=${currPage}`, {
+                method: 'GET',
+                headers: {
+                    'x-access-token': localStorage.getItem('token')
+                },
+            })
+                .then(res => res.json())
+                .then(data => {
+                    setUsers(data.data);
+                    setCurrUserModal(data.data[0]);
+                    fetchMaxPages();
+                })
+                .catch(err => console.log(err));
+        }
+
         fetchUsers(activePage);
         document.title = "Utilisateurs - La 7ème Compagnie";
     }, [activePage]);
