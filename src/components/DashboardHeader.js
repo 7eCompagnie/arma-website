@@ -1,6 +1,19 @@
-import {Alert, Avatar, Badge, Button, Center, Divider, Menu, Modal, Skeleton, Text} from "@mantine/core";
+import {
+    ActionIcon,
+    Alert,
+    Avatar,
+    Badge,
+    Button,
+    Center,
+    Divider,
+    Menu,
+    Modal,
+    Skeleton,
+    Text,
+    Tooltip
+} from "@mantine/core";
 import '../css/dashboard.css';
-import {AlertCircle, BellRinging, Logout, Settings, Tools} from "tabler-icons-react";
+import {AlertCircle, Bell, BellRinging, Logout, Settings, Tools} from "tabler-icons-react";
 import {useNavigate} from "react-router-dom";
 import {useState} from "react";
 
@@ -38,21 +51,28 @@ function DashboardHeader({isLoading, user}) {
                     </Center>
                 </Badge>
             </Center>
-            <div>
-                <Menu control={
-                    <Button color="gray">
-                        <Skeleton height=".5rem" width="6rem" mr=".75rem"/>
-                        <Skeleton height="1.5rem" width=".5rem" circle/>
-                    </Button>
-                }>
-                    <Menu.Label>Mon compte</Menu.Label>
-                    {/*<Menu.Item onClick={() => setOpened(true)} icon={<BellRinging size={14} />} rightSection={<Badge color="green" variant="light">1</Badge>}>Notifications</Menu.Item>*/}
-                    <Menu.Item disabled onClick={() => setOpened(true)} icon={<BellRinging size={14} />}>Notifications</Menu.Item>
-                    <Menu.Item onClick={() => navigate('/settings')} icon={<Settings size={14} />}>Paramètres</Menu.Item>
-                    <Divider />
-                    <Menu.Item color="red" icon={<Logout size={14} />} onClick={() => { revokeToken().then(r => navigate('/')) }}>Se déconnecter</Menu.Item>
-                </Menu>
-            </div>
+            <Center>
+                <ActionIcon title="Bientôt disponible." disabled size="lg" radius="xl" variant={"transparent"}>
+                    <Skeleton height={26} width={26} circle/>
+                </ActionIcon>
+                <ActionIcon title="Bientôt disponible." disabled ml={20} size="lg" radius="xl" onClick={() => navigate('/settings')}>
+                    <Bell />
+                </ActionIcon>
+
+                <Tooltip
+                    label="Paramètres"
+                    position="bottom"
+                    withArrow
+                >
+                    <ActionIcon ml={20} size="lg" radius="xl" onClick={() => navigate('/settings')}>
+                        <Settings />
+                    </ActionIcon>
+                </Tooltip>
+
+                <ActionIcon color={"red"} ml={20} size="lg" radius="xl" onClick={() => { revokeToken() }}>
+                    <Logout />
+                </ActionIcon>
+            </Center>
         </div>);
     }
     return (<div style={{height: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0 1rem'}}>
@@ -65,21 +85,51 @@ function DashboardHeader({isLoading, user}) {
                 </Center>
             </Badge>
         </Center>
-        <div>
-            <Menu control={
-                <Button color="gray">
-                    <Text size="md" style={{marginLeft: '.45rem', marginRight: '.75rem', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>{user.username}</Text>
+        <Center>
+            <Tooltip
+                label="Mon profil"
+                position="bottom"
+                withArrow
+            >
+                <ActionIcon title="Bientôt disponible." disabled size="lg" radius="xl" variant={"transparent"}>
                     <Avatar radius="xl" size="sm" src={`https://cdn.discordapp.com/avatars/${user.identifier}/${user.avatar}.png`} />
-                </Button>
-            }>
-                <Menu.Label>Mon compte</Menu.Label>
-                {/*<Menu.Item onClick={() => setOpened(true)} icon={<BellRinging size={14} />} rightSection={<Badge color="green" variant="light">1</Badge>}>Notifications</Menu.Item>*/}
-                <Menu.Item disabled onClick={() => setOpened(true)} icon={<BellRinging size={14} />}>Notifications</Menu.Item>
-                <Menu.Item onClick={() => navigate('/settings')} icon={<Settings size={14} />}>Paramètres</Menu.Item>
-                <Divider />
-                <Menu.Item color="red" icon={<Logout size={14} />} onClick={() => { revokeToken() }}>Se déconnecter</Menu.Item>
-            </Menu>
-        </div>
+                </ActionIcon>
+            </Tooltip>
+
+            <Tooltip
+                label="Notifications"
+                position="bottom"
+                withArrow
+                ml={20}
+            >
+                <ActionIcon title="Bientôt disponible." disabled size="lg" radius="xl" onClick={() => navigate('/settings')}>
+                    <Bell />
+                </ActionIcon>
+            </Tooltip>
+
+            <Tooltip
+                label="Paramètres"
+                position="bottom"
+                withArrow
+                ml={20}
+            >
+                <ActionIcon size="lg" radius="xl" onClick={() => navigate('/settings')}>
+                    <Settings />
+                </ActionIcon>
+            </Tooltip>
+
+            <Tooltip
+                label="Se déconnecter"
+                position="bottom"
+                placement="end"
+                withArrow
+                ml={20}
+            >
+                <ActionIcon color={"red"} size="lg" radius="xl" onClick={() => { revokeToken() }}>
+                    <Logout />
+                </ActionIcon>
+            </Tooltip>
+        </Center>
 
         <Modal
             opened={opened}
