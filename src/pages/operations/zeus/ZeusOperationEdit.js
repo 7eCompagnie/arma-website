@@ -237,7 +237,7 @@ function ZeusOperationEdit() {
             Retour
         </Button>
         <h1>{operation.title}</h1>
-        <form>
+        <form action="#">
             <SimpleGrid cols={2}>
                 <InputWrapper
                     label={"Nom de l'opération"}

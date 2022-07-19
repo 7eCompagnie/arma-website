@@ -33,8 +33,10 @@ function UserEdit() {
     }
 
     const updateUser = () => {
-        let body = {};
+        if (newRoles !== user.roles)
+            return;
 
+        let body = {};
         body.roles = newRoles;
 
         showNotification({
@@ -98,7 +100,7 @@ function UserEdit() {
 
             <Skeleton my={38} height={16} width={200} />
             <h2>Général</h2>
-            <form>
+            <form action="#">
                 <SimpleGrid cols={2}>
                     <InputWrapper
                         label={"Nom d'utilisateur"}
@@ -130,7 +132,7 @@ function UserEdit() {
                         <Skeleton height={36} width={"100%"}/>
                     </InputWrapper>
                 </SimpleGrid>
-                <Button mt={"2rem"} onClick={updateUser} disabled>Sauvegarder</Button>
+                <Button type="submit" mt={"2rem"} onClick={updateUser} disabled>Sauvegarder</Button>
             </form>
         </>)
     }

@@ -71,6 +71,17 @@ function RolesCreation({callback, data, buttonText}) {
             return;
         }
 
+        if (buttonText === "Sauvegarder") {
+            showNotification({
+                id: "confirm-delete-warning",
+                title: 'Ajout du groupe',
+                message: 'Pensez à bien sauvegarder les modifications, en cliquant sur le bouton "Sauvegarder" en bas de la page.',
+                icon: <AlertTriangle/>,
+                autoClose: 5000,
+                color: "orange"
+            });
+        }
+
         setTabs([...tabs, {
             title: input.value,
             group: [],
@@ -544,7 +555,7 @@ function RolesCreation({callback, data, buttonText}) {
                 </div>
             </Tabs.Tab>
         </Tabs>
-        <Button mt={30} onClick={(e) => {
+        <Button type="submit" mt={30} onClick={(e) => {
             callback(tabs);
             e.preventDefault();
         }}>{buttonText}</Button>

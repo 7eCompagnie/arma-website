@@ -259,7 +259,7 @@ function FormersTrainingEdit() {
             Retour
         </Button>
         <h1>Formation {training.title}</h1>
-        <form>
+        <form action="#">
             <SimpleGrid cols={2}>
                 <InputWrapper
                     label={"Nom de la formation"}
@@ -315,7 +315,7 @@ function FormersTrainingEdit() {
                 </Group>
             </SimpleGrid>
 
-            <Button mt={"lg"} onClick={handleOnClick}>
+            <Button type="submit" mt={"lg"} onClick={handleOnClick}>
                 Sauvegarder
             </Button>
         </form>
