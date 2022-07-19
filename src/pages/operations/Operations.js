@@ -66,7 +66,7 @@ function Operations() {
 
             <Group position="apart" style={{marginBottom: 5, marginTop: theme.spacing.sm}}>
                 <Text weight={900} size={"xl"}>{operation.title}</Text>
-                <Badge color="pink" variant="light">{getRemainingSeats(operation)} place(s) restante(s)</Badge>
+                {getRemainingSeats(operation) > 0 ? <Badge color="teal" variant="light">{getRemainingSeats(operation)} places restantes</Badge> : <Badge color="pink" variant="light">Aucunes places</Badge>}
             </Group>
 
             <Text lineClamp={4} mb={20} style={{display: 'flex', alignItems: 'center'}}><Calendar size={20} style={{marginRight: '4px'}}/>
