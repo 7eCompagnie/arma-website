@@ -115,13 +115,17 @@ function ZeusOperationCreate() {
             });
         });
 
+        duration[0].setDate(date.getDate());
+        duration[1].setDate(date.getDate());
+        startTime.setDate(date.getDate());
+
         let body = new FormData();
         body.append('title', titleInput.current.value);
         body.append('description', descriptionInput.current.value);
-        body.append('date', date.toString());
-        body.append('duration', duration[0].toString());
-        body.append('duration', duration[1].toString());
-        body.append('connectionStartTime', startTime.toString());
+        body.append('date', date.toUTCString());
+        body.append('duration', duration[0].toUTCString());
+        body.append('duration', duration[1].toUTCString());
+        body.append('connectionStartTime', startTime.toUTCString());
         body.append('picture', operationPicture);
         body.append('roles', JSON.stringify(data));
 
