@@ -302,14 +302,14 @@ function SingleOperation() {
                                 if (role.team === team.name) {
                                     return (<li key={j}>
                                         { role.player !== null ?
-                                            <div style={{display: 'flex', alignItems: 'center'}}>
+                                            <div style={{marginBottom: "10px", display: 'flex', alignItems: 'center'}}>
                                                 <Badge color={"blue"} mr={10}>{role.role}</Badge>
                                                 <span>
                                                     <strong>{ role.playerRPName ? role.playerRPName : playerRPName }</strong> ({ allUsers.find(user => user.identifier === role.player).username })
                                                 </span>
                                                 <Button ml={10} color={"red"} onClick={() => unregisterPlayer()} compact>Se désinscrire</Button>
                                             </div> :
-                                            <div style={{color: theme.colors.gray[5], display: 'flex', alignItems: 'center'}}>
+                                            <div style={{marginBottom: "10px", color: theme.colors.gray[5], display: 'flex', alignItems: 'center'}}>
                                                 <Badge color={"blue"} mr={10}>{role.role}</Badge>
                                                 Disponible
                                                 { !isUserRegistered() ? (updatedUser.trained.includes(role.training) || (role.training === undefined && updatedUser.roles.includes('ADMIN_ROLE')) ?
