@@ -17,7 +17,7 @@ import {
     X,
     Photo,
     AlertTriangle,
-    CircleCheck
+    CircleCheck, Check
 } from "tabler-icons-react";
 import {DatePicker, TimeInput, TimeRangeInput} from "@mantine/dates";
 import 'dayjs/locale/fr';
@@ -25,6 +25,7 @@ import dayjs from "dayjs";
 import {Dropzone, IMAGE_MIME_TYPE} from "@mantine/dropzone";
 import {useNavigate} from "react-router-dom";
 import RolesCreation from "../../../components/RolesCreation";
+import {showNotification, updateNotification} from "@mantine/notifications";
 
 function getIconColor(status, theme) {
     return status.accepted
@@ -71,7 +72,6 @@ function ZeusOperationCreate() {
     const [duration, setDuration] = useState([new Date(new Date().setHours(21, 0, 0, 0)), new Date(new Date().setHours(23, 0, 0, 0))]);
     const [startTime, setStartTime] = useState(new Date(new Date().setHours(20, 0, 0, 0)));
     const [operationPicture, setOperationPicture] = useState(null);
-    const [notificationError, setNotificationError] = useState(false);
     const theme = useMantineTheme();
     const navigate = useNavigate();
 
@@ -86,9 +86,25 @@ function ZeusOperationCreate() {
     const handleSubmit = (data) => {
         if (titleInput.current.value == null || titleInput.current.value === "" || descriptionInput.current.value == null || descriptionInput.current.value === "" ||
             date === null || operationPicture == null) {
-            setNotificationError(true);
+            showNotification({
+                id: "operation-creation-error",
+                title: 'Erreur lors de la création de l\'opération',
+                message: 'Veuillez renseigner les champs obligatoires.',
+                icon: <X/>,
+                autoClose: 5000,
+                color: "red"
+            });
             return;
         }
+
+        showNotification({
+            id: `create-operation-${titleInput.current.value}`,
+            loading: true,
+            title: 'Création de l\'opération en cours...',
+            message: 'Veuillez patienter... Cette opération peut prendre quelques secondes.',
+            autoClose: false,
+            disallowClose: true,
+        });
 
         data.forEach(group => {
             group.group.forEach(item => {
@@ -118,15 +134,20 @@ function ZeusOperationCreate() {
         })
             .then(res => res.json())
             .then(data => {
+                updateNotification({
+                    id: `create-operation-${data.data.title}`,
+                    color: 'teal',
+                    title: 'Edition terminée',
+                    message: `Vous avez correctement créer l'opération ${data.data.title}`,
+                    icon: <Check />,
+                    autoClose: 5000,
+                });
                 navigate('/zeus/operations');
             })
             .catch(err => console.log(err));
     }
 
     return (<>
-        {notificationError ? <Notification mb={20} onClose={() => setNotificationError(false)} icon={<AlertTriangle size={18} />} color="red" title="Erreur lors de la création de la formation">
-            Veuillez remplir tous les champs !
-        </Notification> : null}
         <h1>Créer une opération</h1>
         <form>
             <SimpleGrid cols={2}>
