@@ -134,11 +134,17 @@ function ZeusOperationEdit() {
         if (operationDescription !== operation.description)
             body.description = operationDescription;
         if (operationDate !== operation.date)
-            body.date = operationDate;
-        if (startTime !== operation.connectionStartTime)
-            body.connectionStartTime = startTime;
-        if (duration !== operation.duration)
-            body.duration = duration;
+            body.date = operationDate.toUTCString();
+
+        duration[0].setDate(operationDate.getDate());
+        duration[1].setDate(operationDate.getDate());
+        startTime.setDate(operationDate.getDate());
+
+        body.duration = [
+            duration[0].toUTCString(),
+            duration[1].toUTCString()
+        ];
+        body.connectionStartTime = startTime.toUTCString();
         body.roles = data;
 
         fetch(`${process.env.REACT_APP_ENDPOINT_URL}/operations/${operation._id}`, {
