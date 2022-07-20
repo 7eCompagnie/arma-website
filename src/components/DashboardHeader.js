@@ -10,7 +10,7 @@ import {
     Tooltip
 } from "@mantine/core";
 import '../css/dashboard.css';
-import {AlertCircle, Bell, Logout, Settings, Tools} from "tabler-icons-react";
+import {AlertCircle, Bell, Logout, MoonStars, Settings, Tools} from "tabler-icons-react";
 import {useNavigate} from "react-router-dom";
 import {useState} from "react";
 
@@ -52,7 +52,12 @@ function DashboardHeader({isLoading, user}) {
                 <ActionIcon title="Bientôt disponible." disabled size="lg" radius="xl" variant={"transparent"}>
                     <Skeleton height={26} width={26} circle/>
                 </ActionIcon>
-                <ActionIcon title="Bientôt disponible." disabled ml={20} size="lg" radius="xl" onClick={() => navigate('/settings')}>
+
+                <ActionIcon title="Bientôt disponible." disabled ml={20} size="lg" radius="xl">
+                    <MoonStars />
+                </ActionIcon>
+
+                <ActionIcon title="Bientôt disponible." disabled ml={20} size="lg" radius="xl">
                     <Bell />
                 </ActionIcon>
 
@@ -90,6 +95,17 @@ function DashboardHeader({isLoading, user}) {
             >
                 <ActionIcon title="Bientôt disponible." disabled size="lg" radius="xl" variant={"transparent"}>
                     <Avatar radius="xl" size="sm" src={`https://cdn.discordapp.com/avatars/${user.identifier}/${user.avatar}.png`} />
+                </ActionIcon>
+            </Tooltip>
+
+            <Tooltip
+                label="Mode sombre"
+                position="bottom"
+                withArrow
+                ml={20}
+            >
+                <ActionIcon title="Bientôt disponible." disabled size="lg" radius="xl">
+                    <MoonStars />
                 </ActionIcon>
             </Tooltip>
 
