@@ -38,6 +38,22 @@ function UserEdit() {
         })
             .then(res => res.json())
             .then((data) => {
+                fetch(`${process.env.REACT_APP_ENDPOINT_URL}/users/${identifier}`, {
+                    method: 'GET',
+                    headers: {
+                        'x-access-token': localStorage.getItem('token')
+                    },
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        setUser(data.data);
+                        setNewRoles(data.data.roles)
+                    })
+                    .catch(err => {
+                        console.log(err);
+                        setNotFound(true);
+                    });
+
                 updateNotification({
                     id: `edit-user-${data.data.identifier}`,
                     color: 'teal',
