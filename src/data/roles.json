@@ -1,0 +1,16 @@
+{
+  "roles": [
+    {
+      "value": "USER_ROLE",
+      "label": "Utilisateur"
+    },
+    {
+      "value": "TRAINER_ROLE",
+      "label": "Formateur"
+    },
+    {
+      "value": "ADMIN_ROLE",
+      "label": "Zeus"
+    }
+  ]
+}

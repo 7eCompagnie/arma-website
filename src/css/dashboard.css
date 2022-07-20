@@ -1,9 +1,0 @@
-.user-container {
-    background: rgb(241, 243, 245);
-    transition: .3s;
-}
-
-.user-container:hover {
-    background: rgb(233, 236, 239);
-    transition: background .3s;
-}

@@ -363,12 +363,11 @@ function RolesCreation({callback, data, buttonText}) {
                         <SimpleGrid cols={2}>
                             <InputWrapper
                                 label="Nom du rôle"
-                                required
                             >
                                 <Input
                                     id={'role-name'}
                                     placeholder="Ex: Fusillier"
-                                    required/>
+                                />
                             </InputWrapper>
                             <InputWrapper
                                 label={"Choisir une formation"}
@@ -385,7 +384,6 @@ function RolesCreation({callback, data, buttonText}) {
                                 onChange={(e) => {
                                     setCurrentTeam(e)
                                 }}
-                                required
                             />
 
                             <InputWrapper
@@ -403,12 +401,11 @@ function RolesCreation({callback, data, buttonText}) {
                             <div style={{display: 'flex', alignItems: 'end'}}>
                                 <InputWrapper
                                     label="Nom de l'équipe"
-                                    required
                                 >
                                     <Input
                                         id={'team-name'}
                                         placeholder="Ex: 300"
-                                        required/>
+                                    />
                                 </InputWrapper>
                                 <Button ml={20} onClick={() => addTeam(activeTab)}>Créer</Button>
                             </div>
@@ -419,12 +416,11 @@ function RolesCreation({callback, data, buttonText}) {
                     <div style={{display: 'flex', alignItems: 'end'}}>
                         <InputWrapper
                             label="Nom de l'équipe"
-                            required
                         >
                             <Input
                                 id={'group-name'}
                                 placeholder="Ex: India 2"
-                                required/>
+                            />
                         </InputWrapper>
                         <Button ml={20} onClick={addTab}>Créer</Button>
                     </div>
@@ -483,12 +479,11 @@ function RolesCreation({callback, data, buttonText}) {
                     <SimpleGrid cols={2}>
                         <InputWrapper
                             label="Nom du rôle"
-                            required
                         >
                             <Input
                                 id={'role-name'}
                                 placeholder="Ex: Fusillier"
-                                required/>
+                            />
                         </InputWrapper>
                         <Select
                             label="Choisir une formation"
@@ -498,7 +493,6 @@ function RolesCreation({callback, data, buttonText}) {
                             maxDropdownHeight={400}
                             nothingFound="Aucune formation trouvée."
                             onChange={(e) => { setCurrentTraining(e) }}
-                            required
                         />
                         <Select
                             label="Choisir une équipe"
@@ -508,7 +502,6 @@ function RolesCreation({callback, data, buttonText}) {
                             maxDropdownHeight={400}
                             nothingFound="Aucune équipe trouvée."
                             onChange={(e) => { setCurrentTeam(e) }}
-                            required
                         />
 
                         <InputWrapper
@@ -526,12 +519,11 @@ function RolesCreation({callback, data, buttonText}) {
                         <div style={{display: 'flex', alignItems: 'end'}}>
                             <InputWrapper
                                 label="Nom de l'équipe"
-                                required
                             >
                                 <Input
                                     id={'team-name'}
                                     placeholder="Ex: 300"
-                                    required/>
+                                />
                             </InputWrapper>
                             <Button ml={20} onClick={() => addTeam(activeTab)}>Créer</Button>
                         </div>
@@ -542,12 +534,11 @@ function RolesCreation({callback, data, buttonText}) {
                 <div style={{display: 'flex', alignItems: 'end'}}>
                     <InputWrapper
                         label="Nom de l'équipe"
-                        required
                     >
                         <Input
                             id={'group-name'}
                             placeholder="Ex: India 2"
-                            required/>
+                        />
                     </InputWrapper>
                     <Button ml={20} onClick={addTab}>Créer</Button>
                 </div>
