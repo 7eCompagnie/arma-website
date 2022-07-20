@@ -13,7 +13,7 @@ function UserEdit() {
     const navigate = useNavigate();
 
     const updateUser = () => {
-        if (newRoles !== user.roles)
+        if (newRoles === user.roles)
             return;
 
         let body = {};
@@ -143,7 +143,7 @@ function UserEdit() {
         </Button>
         <h1>Utilisateur {user.username}</h1>
         <h2>Général</h2>
-        <form>
+        <form action="#">
             <SimpleGrid cols={2}>
                 <InputWrapper
                     label={"Nom d'utilisateur"}
@@ -200,7 +200,7 @@ function UserEdit() {
                 />
             </SimpleGrid>
 
-            <Button mt={"2rem"} onClick={updateUser}>Sauvegarder</Button>
+            <Button type="submit" mt={"2rem"} onClick={() => updateUser()}>Sauvegarder</Button>
         </form>
     </>)
 }
