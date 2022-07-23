@@ -1,7 +1,8 @@
 import {Button, Center, Input, InputWrapper, Select, SimpleGrid, Skeleton, Table, Tabs} from "@mantine/core";
-import {AlertTriangle, CircleCheck, Pencil, SquarePlus, Trash, X} from "tabler-icons-react";
+import {AlertTriangle, CircleCheck, Pencil, SquarePlus, Trash, TrashX, X} from "tabler-icons-react";
 import {useEffect, useState} from "react";
 import {showNotification} from "@mantine/notifications";
+import {getTrainings} from "../services/trainings";
 
 function uuidv4() {
     return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
@@ -26,24 +27,12 @@ function RolesCreation({callback, data, buttonText}) {
         ]
     }]);
 
-    const fetchTrainings = () => {
-        fetch(`${process.env.REACT_APP_ENDPOINT_URL}/trainings`, {
-            method: 'GET',
-            headers: {
-                'x-access-token': localStorage.getItem('token')
-            },
-        })
-            .then(res => res.json())
-            .then(data => {
-                setTrainings(data.data);
-                setIsLoading(false);
-            })
-            .catch(err => console.log(err));
-    }
-
     useEffect(() => {
-        fetchTrainings();
-    }, []);
+        getTrainings(-1).then(data => {
+            setTrainings(data.data);
+            setIsLoading(false);
+        }).catch(err => console.log(err));
+    }, [trainings]);
 
     const changeTab = (active, tabKey) => {
         setActiveTab(active);
@@ -296,6 +285,28 @@ function RolesCreation({callback, data, buttonText}) {
         setTabs([...tabs.slice(0, activeTab), newArray, ...tabs.slice(activeTab + 1)]);
     }
 
+    const removeGroup = (group) => {
+        if (!tabs[activeTab])
+            return {};
+
+        if (buttonText === "Sauvegarder") {
+            showNotification({
+                id: "delete-group-warning",
+                title: 'Suppression du groupe',
+                message: 'Pensez à bien sauvegarder les modifications, en cliquant sur le bouton "Sauvegarder" en bas de la page.',
+                icon: <AlertTriangle/>,
+                autoClose: 5000,
+                color: "yellow"
+            });
+        }
+
+        let newArray = tabs;
+        let toRemove = newArray.find(currGroup => currGroup.title === group);
+
+        newArray.splice(newArray.indexOf(toRemove), 1);
+        setTabs(newArray);
+    }
+
     if (isLoading) {
         return (<>
             <Tabs active={activeTab} onTabChange={changeTab}>
@@ -359,6 +370,7 @@ function RolesCreation({callback, data, buttonText}) {
                                     </tbody>
                                 </Table>
                             </div>))}
+                        <Button leftIcon={<Trash size={16}/>} color={"red"} onClick={() => removeGroup(tab.title)} disabled>Supprimer le groupe {tab.title}</Button>
                         <h3>Ajouter un rôle</h3>
                         <SimpleGrid cols={2}>
                             <InputWrapper
@@ -412,6 +424,7 @@ function RolesCreation({callback, data, buttonText}) {
                         </div>
                     </Tabs.Tab>
                 ))}
+
                 <Tabs.Tab icon={<SquarePlus size={16}/>} label="Créer un groupe" tabKey="createGroup">
                     <div style={{display: 'flex', alignItems: 'end'}}>
                         <InputWrapper
@@ -475,6 +488,8 @@ function RolesCreation({callback, data, buttonText}) {
                                 </tbody>
                             </Table>
                         </div>))}
+                    <Button mt={20} leftIcon={<Trash size={16}/>} color={"red"} onClick={() => removeGroup(tab.title)}>Supprimer le groupe {tab.title}</Button>
+
                     <h3>Ajouter un rôle</h3>
                     <SimpleGrid cols={2}>
                         <InputWrapper
