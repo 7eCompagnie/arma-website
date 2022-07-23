@@ -27,16 +27,6 @@ function FormContent({user, onRolesChange}) {
                     title={"Vous ne pouvez pas changer le discriminateur Discord d'un utilisateur."}
                 />
             </InputWrapper>
-            <InputWrapper
-                label={"Email"}
-            >
-                <Input
-                    icon={<At/>}
-                    value={user.email}
-                    disabled
-                    title={"Vous ne pouvez pas changer l'email d'un utilisateur."}
-                />
-            </InputWrapper>
 
             <InputWrapper
                 label={"Identifiant"}

@@ -17,9 +17,6 @@ function Row({user, onDelete}) {
                 {user.username}#{user.discriminator}
             </td>
             <td>
-                {user.email}
-            </td>
-            <td>
                 { displayRoles }
             </td>
             <td>

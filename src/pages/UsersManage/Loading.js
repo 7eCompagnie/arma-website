@@ -11,7 +11,6 @@ function Loading() {
                 <thead>
                 <tr>
                     <th>Pseudo</th>
-                    <th>Adresse email</th>
                     <th>Roles</th>
                     <th>Actions</th>
                 </tr>

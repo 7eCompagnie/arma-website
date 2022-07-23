@@ -28,12 +28,6 @@ function Loading() {
                     </InputWrapper>
 
                     <InputWrapper
-                        label={"Email"}
-                    >
-                        <Skeleton height={36} width={"100%"}/>
-                    </InputWrapper>
-
-                    <InputWrapper
                         label={"Identifiant"}
                     >
                         <Skeleton height={36} width={"100%"}/>

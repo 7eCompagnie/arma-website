@@ -28,17 +28,6 @@ function AccountSettings({user}) {
             </InputWrapper>
 
             <InputWrapper
-                label={"Email"}
-            >
-                <Input
-                    icon={<At/>}
-                    value={user.email}
-                    disabled
-                    title={"Veuillez changer votre email Discord pour changer votre email sur le site."}
-                />
-            </InputWrapper>
-
-            <InputWrapper
                 label={"Identifiant"}
             >
                 <Input
