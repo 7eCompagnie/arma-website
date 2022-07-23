@@ -1,3 +1,4 @@
+import React from 'react';
 import {Routes, Route, useLocation, useNavigate} from "react-router-dom";
 import Home from "./pages/Home";
 import Dashboard from "./pages/Users/Dashboard";
@@ -66,49 +67,51 @@ function App() {
         return <Home />;
 
     return (
-        <MantineProvider>
-            <NotificationsProvider limit={5}>
-                <AppShell
-                    padding="md"
-                    navbar={<Navbar width={{ base: 300 }} p="xs">
-                        <AppNavbar active={pathname} isLoading={isLoading} user={user}/>
-                    </Navbar>}
-                    header={<Header height={60} p="xs">
-                        <AppHeader isLoading={isLoading} user={user}/>
-                    </Header>}
-                    footer={<AppFooter />}
-                    styles={(theme) => ({
-                        main: { backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.colors.gray[0] },
-                    })}
-                >
-                    <Container>
-                        <Routes>
-                            <Route path="/settings" element={<Settings isLoading={isLoading} user={user}/>}/>
-                            <Route path="/dashboard" element={<Dashboard />}/>
+        <React.StrictMode>
+            <MantineProvider>
+                <NotificationsProvider limit={5}>
+                    <AppShell
+                        padding="md"
+                        navbar={<Navbar width={{ base: 300 }} p="xs">
+                            <AppNavbar active={pathname} isLoading={isLoading} user={user}/>
+                        </Navbar>}
+                        header={<Header height={60} p="xs">
+                            <AppHeader isLoading={isLoading} user={user}/>
+                        </Header>}
+                        footer={<AppFooter />}
+                        styles={(theme) => ({
+                            main: { backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.colors.gray[0] },
+                        })}
+                    >
+                        <Container>
+                            <Routes>
+                                <Route path="/settings" element={<Settings isLoading={isLoading} user={user}/>}/>
+                                <Route path="/dashboard" element={<Dashboard />}/>
 
-                            <Route path="/operations" element={<OperationsList />}/>
-                            <Route path="/operations/:id" element={<OperationSingle />}/>
+                                <Route path="/operations" element={<OperationsList />}/>
+                                <Route path="/operations/:id" element={<OperationSingle />}/>
 
-                            <Route path="/trainings" element={<TrainingsList />}/>
-                            <Route path="/trainings/:id" element={<TrainingSingle />}/>
+                                <Route path="/trainings" element={<TrainingsList />}/>
+                                <Route path="/trainings/:id" element={<TrainingSingle />}/>
 
-                            <Route path="/trainers/trainings" element={<TrainingsManage />}/>
-                            <Route path="/trainers/trainings/new" element={<TrainingCreate />}/>
-                            <Route path="/trainers/trainings/pass" element={<TrainingsPass user={user} />}/>
-                            <Route path="/trainers/trainings/:id" element={<TrainingEdit />}/>
+                                <Route path="/trainers/trainings" element={<TrainingsManage />}/>
+                                <Route path="/trainers/trainings/new" element={<TrainingCreate />}/>
+                                <Route path="/trainers/trainings/pass" element={<TrainingsPass user={user} />}/>
+                                <Route path="/trainers/trainings/:id" element={<TrainingEdit />}/>
 
-                            <Route path="/zeus/users" element={<Users isLoading={isLoading}/>}/>
-                            <Route path="/zeus/users/:identifier" element={<UserEdit/>}/>
-                            <Route path="/zeus/operations" element={<OperationsManage />}/>
-                            <Route path="/zeus/operations/new" element={<OperationCreate />}/>
-                            <Route path="/zeus/operations/:id" element={<OperationEdit />}/>
+                                <Route path="/zeus/users" element={<Users isLoading={isLoading}/>}/>
+                                <Route path="/zeus/users/:identifier" element={<UserEdit/>}/>
+                                <Route path="/zeus/operations" element={<OperationsManage />}/>
+                                <Route path="/zeus/operations/new" element={<OperationCreate />}/>
+                                <Route path="/zeus/operations/:id" element={<OperationEdit />}/>
 
-                            <Route path="*" element={<NotFound />}/>
-                        </Routes>
-                    </Container>
-                </AppShell>
-            </NotificationsProvider>
-        </MantineProvider>);
+                                <Route path="*" element={<NotFound />}/>
+                            </Routes>
+                        </Container>
+                    </AppShell>
+                </NotificationsProvider>
+            </MantineProvider>
+        </React.StrictMode>);
 }
 
 export default App;

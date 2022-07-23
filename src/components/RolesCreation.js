@@ -3,12 +3,8 @@ import {AlertTriangle, CircleCheck, Pencil, SquarePlus, Trash, TrashX, X} from "
 import {useEffect, useState} from "react";
 import {showNotification} from "@mantine/notifications";
 import {getTrainings} from "../services/trainings";
-
-function uuidv4() {
-    return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
-        ((((c ^ crypto.getRandomValues(new Uint8Array(1))[0]) & 15) >> c) / 4).toString(16)
-    );
-}
+import {useForceUpdate} from "../hooks/forceUpdate";
+import generateUuid from "../utils/generateUuid";
 
 function RolesCreation({callback, data, buttonText}) {
     const [activeTab, setActiveTab] = useState(0);
@@ -26,13 +22,14 @@ function RolesCreation({callback, data, buttonText}) {
             { name: "Zeus", isEditing: false },
         ]
     }]);
+    const forceUpdate = useForceUpdate();
 
     useEffect(() => {
         getTrainings(-1).then(data => {
             setTrainings(data.data);
             setIsLoading(false);
         }).catch(err => console.log(err));
-    }, [trainings]);
+    }, []);
 
     const changeTab = (active, tabKey) => {
         setActiveTab(active);
@@ -212,6 +209,7 @@ function RolesCreation({callback, data, buttonText}) {
         let toEdit = newArray.group.find(role => role.role === currentRole.role);
 
         toEdit.role = document.getElementById(elId).value;
+        toEdit.shortName = document.getElementById(elId + "-shortname").value;
         toEdit.isEditing = false;
         setTabs([...tabs.slice(0, activeTab), newArray, ...tabs.slice(activeTab + 1)]);
     }
@@ -305,6 +303,7 @@ function RolesCreation({callback, data, buttonText}) {
 
         newArray.splice(newArray.indexOf(toRemove), 1);
         setTabs(newArray);
+        forceUpdate();
     }
 
     if (isLoading) {
@@ -316,19 +315,13 @@ function RolesCreation({callback, data, buttonText}) {
                             <div key={index}>
                                 <SimpleGrid cols={2}>
                                     <h4>
-                                        {team.isEditing ? <Input id={tab.title + "-" + team.name} placeholder="Ex: 300"
-                                                                 defaultValue={team.name} required/> : team.name}
+                                        {team.isEditing ? <Input id={tab.title + "-" + team.name} placeholder="Ex: 300" defaultValue={team.name} required/> : team.name}
                                     </h4>
                                     <Center>
                                         {team.isEditing ?
-                                            <Button color={"green"} mr={10} leftIcon={<CircleCheck size={16}/>} compact
-                                                    onClick={() => {
-                                                        confirmEditTeam(team, tab.title + "-" + team.name)
-                                                    }}>Valider</Button> :
-                                            <Button mr={10} leftIcon={<Pencil size={16}/>} compact
-                                                    onClick={() => editTeam(team)}>Editer</Button>}
-                                        <Button ml={10} leftIcon={<Trash size={16}/>} compact color={"red"}
-                                                onClick={() => removeTeam(team)}>Supprimer</Button>
+                                            <Button color={"green"} mr={10} leftIcon={<CircleCheck size={16}/>} compact onClick={() => {confirmEditTeam(team, tab.title + "-" + team.name)}}>Valider</Button> :
+                                            <Button mr={10} leftIcon={<Pencil size={16}/>} compact onClick={() => editTeam(team)}>Editer</Button>}
+                                        <Button ml={10} leftIcon={<Trash size={16}/>} compact color={"red"} onClick={() => removeTeam(team)}>Supprimer</Button>
                                     </Center>
                                 </SimpleGrid>
                                 <Table>
@@ -343,7 +336,7 @@ function RolesCreation({callback, data, buttonText}) {
                                     {tab.group.map((role, i) => {
                                         if (role.team === team.name) {
                                             return (
-                                                <tr key={uuidv4()}>
+                                                <tr key={generateUuid()}>
                                                     <td>{role.isEditing ?
                                                         <Input id={tab.title + "-" + team.name + "-" + role.role}
                                                                placeholder="Ex: Fusillier" defaultValue={role.role}
@@ -457,7 +450,10 @@ function RolesCreation({callback, data, buttonText}) {
                                     {team.isEditing ? <Input id={tab.title + "-" + team.name} placeholder="Ex: 300" defaultValue={team.name} required/> : team.name}
                                 </h4>
                                 <Center>
-                                    {team.isEditing ? <Button color={"green"} mr={10} leftIcon={<CircleCheck size={16}/>} compact onClick={() => {confirmEditTeam(team, tab.title + "-" + team.name)}}>Valider</Button> : <Button mr={10} leftIcon={<Pencil size={16}/>} compact onClick={() => editTeam(team)}>Editer</Button>}
+                                    {team.isEditing ?
+                                        <Button color={"green"} mr={10} leftIcon={<CircleCheck size={16}/>} compact onClick={() => {confirmEditTeam(team, tab.title + "-" + team.name)}}>Valider</Button> :
+                                        <Button mr={10} leftIcon={<Pencil size={16}/>} compact onClick={() => editTeam(team)}>Editer</Button>
+                                    }
                                     <Button ml={10} leftIcon={<Trash size={16}/>} compact color={"red"} onClick={() => removeTeam(team)}>Supprimer</Button>
                                 </Center>
                             </SimpleGrid>
@@ -473,9 +469,9 @@ function RolesCreation({callback, data, buttonText}) {
                                 {tab.group.map((role, i) => {
                                     if (role.team === team.name) {
                                         return (
-                                            <tr key={uuidv4()}>
+                                            <tr key={generateUuid()}>
                                                 <td>{role.isEditing ? <Input id={tab.title + "-" + team.name + "-" + role.role} placeholder="Ex: Fusillier" defaultValue={role.role} required/> : role.role}</td>
-                                                <td>{role.shortName}</td>
+                                                <td>{role.isEditing ? <Input id={tab.title + "-" + team.name + "-" + role.role + "-shortname"} placeholder="Ex: TP" defaultValue={role.shortName} required/> : role.shortName}</td>
                                                 <td>
                                                     {role.isEditing ? <Button color={"green"} mr={10} leftIcon={<CircleCheck size={16}/>} compact onClick={() => {confirmEdit(role, tab.title + "-" + team.name + "-" + role.role)}}>Valider</Button> : <Button mr={10} leftIcon={<Pencil size={16}/>} compact onClick={() => editRole(role)}>Editer</Button>}
                                                     <Button ml={10} leftIcon={<Trash size={16}/>} compact color={"red"} onClick={() => removeRole(role)}>Supprimer</Button>
@@ -529,6 +525,7 @@ function RolesCreation({callback, data, buttonText}) {
                         </InputWrapper>
                     </SimpleGrid>
                     <Button mt={20} onClick={() => addRole(activeTab)}>Ajouter</Button>
+
                     <div>
                         <h3>Créer une équipe</h3>
                         <div style={{display: 'flex', alignItems: 'end'}}>
