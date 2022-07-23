@@ -89,7 +89,7 @@ function TrainingEdit() {
         const fetchTrainers = (t) => {
             if (t.length === 0) {
                 getTrainers().then(data => {
-                    setAllTrainers(data.data);
+                    setAllTrainers(data);
                     setIsLoading(false);
                 }).catch(err => console.log(err));
             }
@@ -101,7 +101,7 @@ function TrainingEdit() {
                     setNewTrainers(trainers => trainers.concat(data.data.identifier));
 
                     getTrainers().then(data => {
-                        setAllTrainers(data.data);
+                        setAllTrainers(data);
                         setIsLoading(false);
                     }).catch(err => console.log(err));
                 }).catch(err => console.log(err));

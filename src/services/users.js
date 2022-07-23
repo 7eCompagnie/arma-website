@@ -33,5 +33,5 @@ export const updateUser = (identifier, body) => {
 }
 
 export const getTrainers = () => {
-    return getFetch(`${process.env.REACT_APP_ENDPOINT_URL}/users/trainers`);
+    return getUsers().then(data => data.data.filter(user => user.roles.includes('TRAINER_ROLE'))).catch(err => console.log(err));
 }

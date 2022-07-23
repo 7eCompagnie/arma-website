@@ -115,10 +115,10 @@ function TrainingCreate() {
     }
 
     useEffect(() => {
-        getTrainers(-1).then(data => {
-            setAllTrainers(data.data);
+        getTrainers().then((data) => {
+            setAllTrainers(data);
             setIsLoading(false);
-        }).catch(err => console.log(err));
+        });
 
         document.title = "Créer une formation - La 7ème Compagnie"
     }, []);
