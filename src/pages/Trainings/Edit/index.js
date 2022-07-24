@@ -186,7 +186,7 @@ function TrainingEdit() {
             Retour
         </Button>
         <h1>Formation {training.title}</h1>
-        <form action="src/pages/Trainings/Edit/index#">
+        <form action="#">
             <SimpleGrid cols={2}>
                 <InputWrapper
                     label={"Nom de la formation"}
@@ -231,7 +231,7 @@ function TrainingEdit() {
                     </Dropzone>
 
                     <Group>
-                        <Button color={"green"} onClick={() => openRef.current()} id="btn-select-files" disabled title={"Désactiver momentanément. Veuillez supprimer, puis recréer la formation."}>{trainingPicture}</Button>
+                        <Button color={"teal"} onClick={() => openRef.current()} id="btn-select-files" disabled title={"Désactiver momentanément. Veuillez supprimer, puis recréer la formation."}>{trainingPicture}</Button>
                     </Group>
                 </InputWrapper>
 

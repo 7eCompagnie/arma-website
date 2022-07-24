@@ -13,7 +13,7 @@ function Loading() {
 
             <Skeleton my={38} height={16} width={200} />
             <h2>Général</h2>
-            <form action="src/pages/Users/Edit/Loading#">
+            <form action="#">
                 <SimpleGrid cols={2}>
                     <InputWrapper
                         label={"Nom d'utilisateur"}

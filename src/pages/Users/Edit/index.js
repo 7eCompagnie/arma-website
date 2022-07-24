@@ -82,7 +82,7 @@ function UserEdit() {
         </Button>
         <h1>Utilisateur {user.username}</h1>
         <h2>Général</h2>
-        <form action="src/pages/Users/Edit/index#">
+        <form action="#">
             <FormContent user={user} onRolesChange={setNewRoles}/>
 
             <Button color={"teal"} type="submit" mt={"2rem"} onClick={(e) => patchUser(e)}>Sauvegarder</Button>

@@ -36,7 +36,7 @@ function Loading() {
                         required
                     >
                         <Group>
-                            <Button color={"green"} id="btn-select-files">Sélectionner une image</Button>
+                            <Button color={"teal"} id="btn-select-files">Sélectionner une image</Button>
                         </Group>
                     </InputWrapper>
 

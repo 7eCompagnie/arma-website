@@ -1,5 +1,16 @@
-import {Button, Checkbox, Group, Input, InputWrapper, SimpleGrid, Text, Textarea, useMantineTheme} from "@mantine/core";
-import {Calendar, Check, LetterCaseToggle, Photo, X} from "tabler-icons-react";
+import {
+    Button,
+    Checkbox,
+    Group,
+    Input,
+    InputWrapper,
+    NumberInput,
+    SimpleGrid,
+    Text,
+    Textarea,
+    useMantineTheme
+} from "@mantine/core";
+import {Calendar, Check, LetterCaseToggle, Numbers, Photo, Server, ShieldLock, X} from "tabler-icons-react";
 import {DatePicker, TimeInput, TimeRangeInput} from "@mantine/dates";
 import dayjs from "dayjs";
 import {Dropzone, IMAGE_MIME_TYPE} from "@mantine/dropzone";
@@ -58,11 +69,13 @@ function FormContent({operation}) {
         connectionStartTime: new Date(operation.connectionStartTime),
     });
 
-    const callback = (data) => {
-        handleSubmit(data);
+    const callback = (e, data) => {
+        handleSubmit(e, data);
     }
 
-    const handleSubmit = (data) => {
+    const handleSubmit = (e, data) => {
+        e.preventDefault();
+
         showNotification({
             id: `edit-operation-${operation._id}`,
             loading: true,
@@ -92,6 +105,7 @@ function FormContent({operation}) {
 
         body.connectionStartTime = updatedOperation.connectionStartTime.toUTCString();
         body.roles = data;
+        body.serversInformations = updatedOperation.serversInformations;
 
         updateOperation(operation._id, body).then((data) => {
             updateNotification({
@@ -106,8 +120,9 @@ function FormContent({operation}) {
     }
 
     return (
-        <form action="src/pages/Operations/Edit/OperationEdit#index.js">
-            <SimpleGrid cols={2}>
+        <form action="#">
+            <h2>Général</h2>
+            <SimpleGrid mb={50} cols={2}>
                 <InputWrapper
                     label={"Nom de l'opération"}
                     required
@@ -173,9 +188,81 @@ function FormContent({operation}) {
                     </Dropzone>
 
                     <Group>
-                        <Button color={"green"} onClick={() => openRef.current()} id="btn-select-files" disabled title={"Désactiver momentanément. Veuillez supprimer, puis recréer la formation."}>{operation.picture}</Button>
+                        <Button color={"teal"} onClick={() => openRef.current()} id="btn-select-files" disabled title={"Désactiver momentanément. Veuillez supprimer, puis recréer la formation."}>{operation.picture}</Button>
                     </Group>
                 </InputWrapper>
+            </SimpleGrid>
+
+            <h2>Serveurs</h2>
+            <SimpleGrid cols={2} mb={50}>
+                <div>
+                    <h3 style={{marginTop: 0}}>Arma</h3>
+                    <InputWrapper
+                        label={"Adresse"}
+                        required
+                    >
+                        <Input
+                            icon={<Server/>}
+                            placeholder="Ex: s1.vxls.net"
+                            required
+                            onChange={(e) => setUpdatedOperation({...updatedOperation, serversInformations: {...updatedOperation.serversInformations, arma: {...updatedOperation.serversInformations.arma, address: e.target.value}}})}
+                            value={updatedOperation.serversInformations.arma.address}
+                        />
+                    </InputWrapper>
+
+                    <InputWrapper
+                        label={"Port"}
+                        required
+                        mt={16}
+                    >
+                        <NumberInput
+                            icon={<Numbers />}
+                            placeholder="Ex: 2302"
+                            required
+                            onChange={(e) => setUpdatedOperation({...updatedOperation, serversInformations: {...updatedOperation.serversInformations, arma: {...updatedOperation.serversInformations.arma, port: e.target.value}}})}
+                            value={parseInt(updatedOperation.serversInformations.arma.port)}
+                        />
+                    </InputWrapper>
+
+                    <InputWrapper
+                        label={"Mot de passe (vide si pas de mot de passe)"}
+                        mt={16}
+                    >
+                        <Input
+                            icon={<ShieldLock />}
+                            placeholder="Ex: 456"
+                            onChange={(e) => setUpdatedOperation({...updatedOperation, serversInformations: {...updatedOperation.serversInformations, arma: {...updatedOperation.serversInformations.arma, password: e.target.value}}})}
+                            value={updatedOperation.serversInformations.arma.password}
+                        />
+                    </InputWrapper>
+                </div>
+                <div>
+                    <h3 style={{marginTop: 0}}>TeamSpeak</h3>
+                    <InputWrapper
+                        label={"Adresse"}
+                        required
+                    >
+                        <Input
+                            icon={<Server/>}
+                            placeholder="Ex: TAF1"
+                            required
+                            onChange={(e) => setUpdatedOperation({...updatedOperation, serversInformations: {...updatedOperation.serversInformations, teamspeak: {...updatedOperation.serversInformations.teamspeak, address: e.target.value}}})}
+                            value={updatedOperation.serversInformations.teamspeak.address}
+                        />
+                    </InputWrapper>
+
+                    <InputWrapper
+                        label={"Mot de passe (vide si pas de mot de passe)"}
+                        mt={16}
+                    >
+                        <Input
+                            icon={<ShieldLock />}
+                            placeholder="Ex: 456"
+                            onChange={(e) => setUpdatedOperation({...updatedOperation, serversInformations: {...updatedOperation.serversInformations, teamspeak: {...updatedOperation.serversInformations.teamspeak, password: e.target.value}}})}
+                            value={updatedOperation.serversInformations.teamspeak.password}
+                        />
+                    </InputWrapper>
+                </div>
             </SimpleGrid>
 
             <h2>Configuration des groupes et des équipes</h2>

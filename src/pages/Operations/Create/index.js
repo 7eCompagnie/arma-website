@@ -2,7 +2,7 @@ import {useEffect, useRef, useState} from "react";
 import {
     Button, Checkbox, Group,
     Input,
-    InputWrapper,
+    InputWrapper, NumberInput,
     SimpleGrid, Text,
     Textarea, useMantineTheme
 } from "@mantine/core";
@@ -11,7 +11,7 @@ import {
     Calendar,
     X,
     Photo,
-    Check
+    Check, Server, Numbers, ShieldLock
 } from "tabler-icons-react";
 import {DatePicker, TimeInput, TimeRangeInput} from "@mantine/dates";
 import 'dayjs/locale/fr';
@@ -64,6 +64,11 @@ function OperationCreate() {
     const titleInput = useRef();
     const descriptionInput = useRef();
     const openRef = useRef();
+    const armaAddress = useRef('s1.vxls.net');
+    const armaPort = useRef(2302);
+    const armaPassword = useRef('456');
+    const teamspeakAddress = useRef('TAF1');
+    const teamspeakPassword = useRef('');
     const [date, setDate] = useState(null);
     const [duration, setDuration] = useState([new Date(new Date().setHours(21, 0, 0, 0)), new Date(new Date().setHours(23, 0, 0, 0))]);
     const [startTime, setStartTime] = useState(new Date(new Date().setHours(20, 0, 0, 0)));
@@ -75,11 +80,13 @@ function OperationCreate() {
         document.title = "Création d'une opération - La 7ème Compagnie";
     }, []);
 
-    const callback = (data) => {
-        handleSubmit(data);
+    const callback = (e, data) => {
+        handleSubmit(e, data);
     }
 
-    const handleSubmit = (data) => {
+    const handleSubmit = (e, data) => {
+        e.preventDefault();
+
         if (isOneOfValuesNull([
             titleInput.current.value,
             descriptionInput.current.value,
@@ -108,7 +115,7 @@ function OperationCreate() {
 
         data.forEach(group => {
             group.group.forEach(item => {
-               delete item.isEditing;
+                delete item.isEditing;
             });
             group.teams.forEach(item => {
                 delete item.isEditing;
@@ -128,13 +135,24 @@ function OperationCreate() {
         body.append('connectionStartTime', startTime.toUTCString());
         body.append('picture', operationPicture);
         body.append('roles', JSON.stringify(data));
+        body.append('serversInformations', JSON.stringify({
+            arma: {
+                address: armaAddress.current.value,
+                port: armaPort.current.value,
+                password: armaPassword.current.value
+            },
+            teamspeak: {
+                address: teamspeakAddress.current.value,
+                password: teamspeakPassword.current.value
+            }
+        }));
 
         createOperation(body).then((data) => {
             if (data.success === true) {
                 updateNotification({
                     id: `create-operation-${data.data.title}`,
                     color: 'teal',
-                    title: 'Edition terminée',
+                    title: 'Création terminée',
                     message: `Vous avez correctement créer l'opération ${data.data.title}`,
                     icon: <Check/>,
                     autoClose: 5000,
@@ -157,7 +175,8 @@ function OperationCreate() {
         <h1>Créer une opération</h1>
 
         <form>
-            <SimpleGrid cols={2}>
+            <h2>Général</h2>
+            <SimpleGrid cols={2} mb={50}>
                 <InputWrapper
                     label={"Nom de l'opération"}
                     required
@@ -166,6 +185,7 @@ function OperationCreate() {
                         ref={titleInput}
                         icon={<LetterCaseToggle/>}
                         placeholder="Ex: Opération Bosso"
+                        required
                     />
                 </InputWrapper>
 
@@ -222,9 +242,80 @@ function OperationCreate() {
                     </Dropzone>
 
                     <Group>
-                        <Button color={"green"} onClick={() => openRef.current()} id="btn-select-files">Sélectionner une image</Button>
+                        <Button color={"teal"} onClick={() => openRef.current()} id="btn-select-files">Sélectionner une image</Button>
                     </Group>
                 </InputWrapper>
+            </SimpleGrid>
+
+            <h2>Serveurs</h2>
+            <SimpleGrid cols={2} mb={50}>
+                <div>
+                    <h3 style={{marginTop: 0}}>Arma</h3>
+                    <InputWrapper
+                        label={"Adresse"}
+                        required
+                    >
+                        <Input
+                            ref={armaAddress}
+                            icon={<Server/>}
+                            placeholder="Ex: s1.vxls.net"
+                            defaultValue="s1.vxls.net"
+                            required
+                        />
+                    </InputWrapper>
+
+                    <InputWrapper
+                        label={"Port"}
+                        required
+                        mt={16}
+                    >
+                        <NumberInput
+                            ref={armaPort}
+                            icon={<Numbers />}
+                            placeholder="Ex: 2302"
+                            defaultValue={2302}
+                        required/>
+                    </InputWrapper>
+
+                    <InputWrapper
+                        label={"Mot de passe (vide si pas de mot de passe)"}
+                        mt={16}
+                    >
+                        <Input
+                            ref={armaPassword}
+                            icon={<ShieldLock />}
+                            placeholder="Ex: 456"
+                            defaultValue="456"
+                        />
+                    </InputWrapper>
+                </div>
+                <div>
+                    <h3 style={{marginTop: 0}}>TeamSpeak</h3>
+                    <InputWrapper
+                        label={"Adresse"}
+                        required
+                    >
+                        <Input
+                            ref={teamspeakAddress}
+                            icon={<Server/>}
+                            placeholder="Ex: TAF1"
+                            defaultValue="TAF1"
+                            required
+                        />
+                    </InputWrapper>
+
+                    <InputWrapper
+                        label={"Mot de passe (vide si pas de mot de passe)"}
+                        mt={16}
+                    >
+                        <Input
+                            ref={teamspeakPassword}
+                            icon={<ShieldLock />}
+                            placeholder="Ex: 456"
+                            defaultValue=""
+                        />
+                    </InputWrapper>
+                </div>
             </SimpleGrid>
 
             <h2>Configuration des groupes et des équipes</h2>

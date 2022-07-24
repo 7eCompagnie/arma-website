@@ -67,7 +67,7 @@ function OperationSingle() {
             height={250}
         /> }
 
-        <h2>Informations générales</h2>
+        <h2>Informations</h2>
         <Informations operation={operation} />
 
         <h2>Inscription</h2>
