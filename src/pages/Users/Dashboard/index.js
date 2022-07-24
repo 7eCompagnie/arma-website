@@ -4,6 +4,10 @@ import {InfoCircle} from "tabler-icons-react";
 
 function Dashboard({user, isLoading}) {
     useEffect(() => {
+        if (window.opener && window.opener !== window) {
+            window.opener.location.reload();
+            window.close();
+        }
         document.title = "Dashboard - La 7ème Compagnie";
     }, [user]);
 
