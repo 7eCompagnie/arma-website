@@ -67,7 +67,7 @@ function TrainingsPass({user}) {
     }
 
     const trainingsData = trainings.map((training, i) => {
-        if (user.roles.includes('ADMIN_ROLE')) {
+        if (user.roles.includes('HEAD_QUARTER_ROLE')) {
             return ({
                 value: training._id,
                 label: training.title,

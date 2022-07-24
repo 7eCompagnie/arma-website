@@ -9,8 +9,12 @@
       "label": "Formateur"
     },
     {
-      "value": "ADMIN_ROLE",
+      "value": "ZEUS_ROLE",
       "label": "Zeus"
+    },
+    {
+      "value": "HEAD_QUARTER_ROLE",
+      "label": "État-Major"
     }
   ]
 }

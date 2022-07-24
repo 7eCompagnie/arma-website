@@ -32,7 +32,7 @@ function AppNavbar({active, isLoading, user}) {
         return <AppNavbarLink key={i} link={link.to} isActive={link.isActive} icon={link.icon} color={link.color} label={link.label} />
     })
 
-    const adminLinks = [
+    const zeusLinks = [
         {
             icon: <CalendarStats size={16}/>,
             color: "orange",
@@ -44,16 +44,10 @@ function AppNavbar({active, isLoading, user}) {
             color: "cyan",
             label: "Créer une opération",
             to: "/zeus/operations/new"
-        },
-        {
-            icon: <Users size={16}/>,
-            color: "lime",
-            label: "Gérer les utilisateurs",
-            to: "/zeus/users"
         }
     ]
 
-    const adminLinksToDisplay = adminLinks.map((link, i) => {
+    const zeusLinksToDisplay = zeusLinks.map((link, i) => {
         if (link.to === active)
             link.isActive = true;
         return <AppNavbarLink key={i} link={link.to} isActive={link.isActive} icon={link.icon} color={link.color} label={link.label} />
@@ -86,9 +80,24 @@ function AppNavbar({active, isLoading, user}) {
         return <AppNavbarLink key={i} link={link.to} isActive={link.isActive} icon={link.icon} color={link.color} label={link.label} />
     })
 
+    const headQuartersLinks = [
+        {
+            icon: <Users size={16}/>,
+            color: "lime",
+            label: "Gérer les utilisateurs",
+            to: "/zeus/users"
+        }
+    ]
+
+    const headQuartersLinksToDisplay = headQuartersLinks.map((link, i) => {
+        if (link.to === active)
+            link.isActive = true;
+        return <AppNavbarLink key={i} link={link.to} isActive={link.isActive} icon={link.icon} color={link.color} label={link.label} />
+    });
+
     let skeletons = [];
 
-    for (let i = 0; i < links.length + adminLinks.length; i++) {
+    for (let i = 0; i < links.length + zeusLinks.length; i++) {
         skeletons.push(<div key={i} style={{display: "flex", alignItems: "center", marginLeft: "10px"}}>
             <Skeleton height={26} width={26} my={10}/>
             <Skeleton height={10} width={"70%"} ml={20}/>
@@ -106,10 +115,14 @@ function AppNavbar({active, isLoading, user}) {
     return (<>
         <Navbar.Section grow mt="md">
             {linksToDisplay}
-            {user.roles.includes('TRAINER_ROLE') || user.roles.includes('ADMIN_ROLE') ? <h3 style={{fontSize: "1rem", margin: "1rem 0 0 .75rem", textTransform: "uppercase", color: "#b2bec3"}}>Formateurs</h3> : null}
-            {user.roles.includes('TRAINER_ROLE') || user.roles.includes('ADMIN_ROLE') ? trainersLinksToDisplay : null}
-            {user.roles.includes('ADMIN_ROLE') ? <h3 style={{fontSize: "1rem", margin: "1rem 0 0 .75rem", textTransform: "uppercase", color: "#b2bec3"}}>Zeus</h3> : null}
-            {user.roles.includes('ADMIN_ROLE') ? adminLinksToDisplay : null}
+            {user.roles.includes('TRAINER_ROLE') || user.roles.includes('HEAD_QUARTER_ROLE') ? <h3 style={{fontSize: "1rem", margin: "1rem 0 0 .75rem", textTransform: "uppercase", color: "#b2bec3"}}>Formateurs</h3> : null}
+            {user.roles.includes('TRAINER_ROLE') || user.roles.includes('HEAD_QUARTER_ROLE') ? trainersLinksToDisplay : null}
+
+            {user.roles.includes('ZEUS_ROLE') || user.roles.includes('HEAD_QUARTER_ROLE')? <h3 style={{fontSize: "1rem", margin: "1rem 0 0 .75rem", textTransform: "uppercase", color: "#b2bec3"}}>Zeus</h3> : null}
+            {user.roles.includes('ZEUS_ROLE') || user.roles.includes('HEAD_QUARTER_ROLE')? zeusLinksToDisplay : null}
+
+            {user.roles.includes('HEAD_QUARTER_ROLE') ? <h3 style={{fontSize: "1rem", margin: "1rem 0 0 .75rem", textTransform: "uppercase", color: "#b2bec3"}}>États-Major</h3> : null}
+            {user.roles.includes('HEAD_QUARTER_ROLE') ? headQuartersLinksToDisplay : null}
         </Navbar.Section>
     </>);
 }
