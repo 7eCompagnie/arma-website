@@ -77,7 +77,7 @@ function UserEdit() {
     }
 
     return (<>
-        <Button variant="outline" compact leftIcon={<ChevronLeft/>} onClick={() => navigate('/zeus/users')}>
+        <Button variant="outline" compact leftIcon={<ChevronLeft/>} onClick={() => navigate('/head-quarters/users')}>
             Retour
         </Button>
         <h1>Utilisateur {user.username}</h1>

@@ -85,7 +85,7 @@ function AppNavbar({active, isLoading, user}) {
             icon: <Users size={16}/>,
             color: "lime",
             label: "Gérer les utilisateurs",
-            to: "/zeus/users"
+            to: "/head-quarters/users"
         }
     ]
 

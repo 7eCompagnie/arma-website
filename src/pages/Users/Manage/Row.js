@@ -21,7 +21,7 @@ function Row({user, onDelete}) {
             </td>
             <td>
                 <Center>
-                    <Button color="yellow" size="md" compact onClick={() => navigate(`/zeus/users/${user.identifier}`)}>
+                    <Button color="yellow" size="md" compact onClick={() => navigate(`/head-quarters/users/${user.identifier}`)}>
                         Editer
                     </Button>
                     <Button onClick={onDelete} color="red" size="md" ml={".5rem"} compact>

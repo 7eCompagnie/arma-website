@@ -2,7 +2,7 @@
   "roles": [
     {
       "value": "USER_ROLE",
-      "label": "Utilisateur"
+      "label": "Joueur"
     },
     {
       "value": "TRAINER_ROLE",

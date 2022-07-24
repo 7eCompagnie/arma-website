@@ -99,11 +99,12 @@ function App() {
                                 <Route path="/trainers/trainings/pass" element={<TrainingsPass user={user} />}/>
                                 <Route path="/trainers/trainings/:id" element={<TrainingEdit />}/>
 
-                                <Route path="/zeus/users" element={<Users isLoading={isLoading}/>}/>
-                                <Route path="/zeus/users/:identifier" element={<UserEdit/>}/>
                                 <Route path="/zeus/operations" element={<OperationsManage />}/>
                                 <Route path="/zeus/operations/new" element={<OperationCreate />}/>
                                 <Route path="/zeus/operations/:id" element={<OperationEdit />}/>
+
+                                <Route path="/head-quarters/users" element={<Users isLoading={isLoading}/>}/>
+                                <Route path="/head-quarters/users/:identifier" element={<UserEdit/>}/>
 
                                 <Route path="*" element={<NotFound />}/>
                             </Routes>
