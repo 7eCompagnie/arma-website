@@ -14,7 +14,7 @@ import {useNavigate} from "react-router-dom";
 import {useState} from "react";
 import logo from "../assets/images/logo.webp";
 
-function AppHeader({isLoading, user}) {
+function AppHeader({isLoading, user, setUser}) {
     const navigate = useNavigate();
     const [opened, setOpened] = useState(false);
 
@@ -30,9 +30,9 @@ function AppHeader({isLoading, user}) {
             body: body
         })
             .then(res => res.json())
-            .then(data => {
+            .then(() => {
                 localStorage.removeItem('token');
-                navigate('/');
+                setUser(null);
             })
             .catch(err => console.log(err));
     }

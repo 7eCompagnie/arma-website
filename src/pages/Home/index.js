@@ -9,9 +9,6 @@ function Home() {
 
     useEffect(() => {
         document.title = "Connexion - La 7ème Compagnie";
-
-        if (localStorage.getItem('token') !== null)
-            navigate('/dashboard');
     }, [navigate]);
 
     return (
