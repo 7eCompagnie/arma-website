@@ -24,7 +24,7 @@ import {getUserByToken, getUserToken} from "./services/users";
 import AppFooter from "./layouts/AppFooter";
 import "./assets/css/style.css";
 import Whitelist from "./pages/Users/Whitelist";
-import Protected from "./pages/Protected/Protected";
+import Protected from "./context/Protected";
 
 function App() {
     const { pathname } = useLocation();

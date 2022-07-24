@@ -5,19 +5,26 @@ import {ChevronLeft, InfoCircle} from "tabler-icons-react";
 import {getTraining} from "../../../services/trainings";
 import {getUser, getUsers} from "../../../services/users";
 import Loading from "./Loading";
+import NotFound from "../../Operations/Single/NotFound";
 
 function TrainingSingle() {
     const {id} = useParams();
     const [training, setTraining] = useState(null);
     const [trainers, setTrainers] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [notFound, setNotFound] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
         getTraining(id).then(data => {
+            if (!data.success) {
+                setNotFound(true);
+                setIsLoading(false);
+                return;
+            }
+
             setTraining(data.data);
             document.title = `${data.data.title} - La 7ème Compagnie`;
-
             fetchTrainers(data.data.trainers);
         }).catch(err => console.log(err));
 
@@ -51,7 +58,11 @@ function TrainingSingle() {
         )
     }
 
-    // TODO: Add not found
+    if (notFound) {
+        return (
+            <NotFound />
+        )
+    }
 
     return (<>
         <Button variant="outline" compact leftIcon={<ChevronLeft/>} onClick={() => navigate('/trainings')}>
