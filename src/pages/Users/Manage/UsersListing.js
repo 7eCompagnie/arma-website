@@ -3,9 +3,10 @@ import {AlertCircle} from "tabler-icons-react";
 import Row from "./Row";
 
 function UsersListing({users, onDelete}) {
-    const rows = users.map((user, index) => (
-        <Row user={user} key={index} onDelete={onDelete}/>
-    ));
+    const rows = users.map((user, index) => {
+        if (!user.roles.includes('VISITOR_ROLE'))
+            return <Row user={user} key={index} onDelete={onDelete}/>
+    });
 
     return (
         <>

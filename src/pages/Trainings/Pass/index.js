@@ -146,7 +146,7 @@ function TrainingsPass({user}) {
                 onChange={setNewTrained}
                 itemComponent={SelectItemTraining}
             />
-            <Button color={"green"} mt={20} onClick={handleClick}>Sauvegarder</Button>
+            <Button color={"teal"} mt={20} onClick={handleClick}>Sauvegarder</Button>
         </> : null}
     </>);
 }

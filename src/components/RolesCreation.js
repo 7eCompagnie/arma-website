@@ -320,7 +320,7 @@ function RolesCreation({callback, data, buttonText}) {
                                     <Center>
                                         {team.isEditing ?
                                             <Button color={"green"} mr={10} leftIcon={<CircleCheck size={16}/>} compact onClick={() => {confirmEditTeam(team, tab.title + "-" + team.name)}}>Valider</Button> :
-                                            <Button mr={10} leftIcon={<Pencil size={16}/>} compact onClick={() => editTeam(team)}>Editer</Button>}
+                                            <Button color={"yellow"} mr={10} leftIcon={<Pencil size={16}/>} compact onClick={() => editTeam(team)}>Éditer</Button>}
                                         <Button ml={10} leftIcon={<Trash size={16}/>} compact color={"red"} onClick={() => removeTeam(team)}>Supprimer</Button>
                                     </Center>
                                 </SimpleGrid>
@@ -349,8 +349,8 @@ function RolesCreation({callback, data, buttonText}) {
                                                                                   compact onClick={() => {
                                                                 confirmEdit(role, tab.title + "-" + team.name + "-" + role.role)
                                                             }}>Valider</Button> :
-                                                            <Button mr={10} leftIcon={<Pencil size={16}/>} compact
-                                                                    onClick={() => editRole(role)}>Editer</Button>}
+                                                            <Button color={"yellow"} mr={10} leftIcon={<Pencil size={16}/>} compact
+                                                                    onClick={() => editRole(role)}>Éditer</Button>}
                                                         <Button ml={10} leftIcon={<Trash size={16}/>} compact
                                                                 color={"red"}
                                                                 onClick={() => removeRole(role)}>Supprimer</Button>
@@ -452,7 +452,7 @@ function RolesCreation({callback, data, buttonText}) {
                                 <Center>
                                     {team.isEditing ?
                                         <Button color={"green"} mr={10} leftIcon={<CircleCheck size={16}/>} compact onClick={() => {confirmEditTeam(team, tab.title + "-" + team.name)}}>Valider</Button> :
-                                        <Button mr={10} leftIcon={<Pencil size={16}/>} compact onClick={() => editTeam(team)}>Editer</Button>
+                                        <Button color={"yellow"} mr={10} leftIcon={<Pencil size={16}/>} compact onClick={() => editTeam(team)}>Éditer</Button>
                                     }
                                     <Button ml={10} leftIcon={<Trash size={16}/>} compact color={"red"} onClick={() => removeTeam(team)}>Supprimer</Button>
                                 </Center>
@@ -473,7 +473,7 @@ function RolesCreation({callback, data, buttonText}) {
                                                 <td>{role.isEditing ? <Input id={tab.title + "-" + team.name + "-" + role.role} placeholder="Ex: Fusillier" defaultValue={role.role} required/> : role.role}</td>
                                                 <td>{role.isEditing ? <Input id={tab.title + "-" + team.name + "-" + role.role + "-shortname"} placeholder="Ex: TP" defaultValue={role.shortName} required/> : role.shortName}</td>
                                                 <td>
-                                                    {role.isEditing ? <Button color={"green"} mr={10} leftIcon={<CircleCheck size={16}/>} compact onClick={() => {confirmEdit(role, tab.title + "-" + team.name + "-" + role.role)}}>Valider</Button> : <Button mr={10} leftIcon={<Pencil size={16}/>} compact onClick={() => editRole(role)}>Editer</Button>}
+                                                    {role.isEditing ? <Button color={"green"} mr={10} leftIcon={<CircleCheck size={16}/>} compact onClick={() => {confirmEdit(role, tab.title + "-" + team.name + "-" + role.role)}}>Valider</Button> : <Button color={"yellow"} mr={10} leftIcon={<Pencil size={16}/>} compact onClick={() => editRole(role)}>Éditer</Button>}
                                                     <Button ml={10} leftIcon={<Trash size={16}/>} compact color={"red"} onClick={() => removeRole(role)}>Supprimer</Button>
                                                 </td>
                                             </tr>
@@ -556,7 +556,7 @@ function RolesCreation({callback, data, buttonText}) {
                 </div>
             </Tabs.Tab>
         </Tabs>
-        <Button type="submit" mt={30} onClick={(e) => {
+        <Button color={"teal"} type="submit" mt={30} onClick={(e) => {
             callback(tabs);
             e.preventDefault();
         }}>{buttonText}</Button>

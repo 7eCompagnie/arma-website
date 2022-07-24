@@ -188,7 +188,7 @@ function TrainingCreate() {
                         </Dropzone>
 
                         <Group>
-                            <Button color={"green"} onClick={() => openRef.current()} id="btn-select-files">Sélectionner une image</Button>
+                            <Button onClick={() => openRef.current()} id="btn-select-files">Sélectionner une image</Button>
                         </Group>
                     </InputWrapper>
 
@@ -200,7 +200,7 @@ function TrainingCreate() {
                 </SimpleGrid>
             </form>
 
-            <Button mt={"lg"} onClick={handleOnClick}>
+            <Button mt={"lg"} color={"teal"} onClick={handleOnClick}>
                 Créer la formation
             </Button>
         </div>

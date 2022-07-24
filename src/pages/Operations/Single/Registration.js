@@ -230,8 +230,8 @@ function Registration({operation, setOperation}) {
                                                     <Badge color={"blue"} mr={10}>{role.shortName}</Badge>
                                                     Disponible
                                                     { !isUserRegisteredToOperation(groups, updatedUser) ? (updatedUser.trained.includes(role.training) || updatedUser.roles.includes('HEAD_QUARTER_ROLE') ?
-                                                        <Button ml={10} color={"green"} compact onClick={() => registerPlayer(group, role)}>S'inscrire</Button> :
-                                                        <Button ml={10} color={"green"} compact disabled title={"Vous n'avez pas la formation requise"}>S'inscrire</Button>) : ""}
+                                                        <Button ml={10} color={"teal"} compact onClick={() => registerPlayer(group, role)}>S'inscrire</Button> :
+                                                        <Button ml={10} color={"teal"} compact disabled title={"Vous n'avez pas la formation requise"}>S'inscrire</Button>) : ""}
                                                 </div>
                                             }
                                         </li>)

@@ -242,7 +242,7 @@ function TrainingEdit() {
                 </Group>
             </SimpleGrid>
 
-            <Button type="submit" mt={"lg"} onClick={e => handleOnClick(e)}>
+            <Button color={"teal"} type="submit" mt={"lg"} onClick={e => handleOnClick(e)}>
                 Sauvegarder
             </Button>
         </form>
