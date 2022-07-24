@@ -242,7 +242,7 @@ function OperationCreate() {
                     </Dropzone>
 
                     <Group>
-                        <Button color={"teal"} onClick={() => openRef.current()} id="btn-select-files">Sélectionner une image</Button>
+                        <Button onClick={() => openRef.current()} id="btn-select-files">Sélectionner une image</Button>
                     </Group>
                 </InputWrapper>
             </SimpleGrid>
