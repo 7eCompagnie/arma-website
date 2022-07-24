@@ -5,31 +5,36 @@ import {Dashboard} from "tabler-icons-react";
 
 function AppNavbar({active, isLoading, user}) {
 
-    const links = [
+    const userLinks = [
         {
             icon: <Dashboard size={16}/>,
             color: "blue",
             label: "Tableau de bord",
-            to: "/dashboard"
+            to: "/dashboard",
+            disabledIfVisitor: false
         },
         {
             icon: <CalendarEvent size={16}/>,
             color: "teal",
             label: "Prochaines opérations",
-            to: "/operations"
+            to: "/operations",
+            disabledIfVisitor: true
         },
         {
             icon: <Award size={16}/>,
             color: "yellow",
             label: "Suivre une formation",
-            to: "/trainings"
+            to: "/trainings",
+            disabledIfVisitor: true
         }
     ]
 
-    const linksToDisplay = links.map((link, i) => {
+    const userLinksToDisplay = userLinks.map((link, i) => {
+        if (isLoading)
+            return <AppNavbarLink key={i} link={link.to} isActive={link.isActive} icon={link.icon} color={link.color} label={link.label} />
         if (link.to === active)
             link.isActive = true;
-        return <AppNavbarLink key={i} link={link.to} isActive={link.isActive} icon={link.icon} color={link.color} label={link.label} />
+        return <AppNavbarLink key={i} link={link.to} isActive={link.isActive} icon={link.icon} color={link.color} label={link.label} disabled={!!user.roles.includes('VISITOR_ROLE') && link.disabledIfVisitor} />
     })
 
     const zeusLinks = [
@@ -97,7 +102,7 @@ function AppNavbar({active, isLoading, user}) {
 
     let skeletons = [];
 
-    for (let i = 0; i < links.length + zeusLinks.length; i++) {
+    for (let i = 0; i < userLinks.length; i++) {
         skeletons.push(<div key={i} style={{display: "flex", alignItems: "center", marginLeft: "10px"}}>
             <Skeleton height={26} width={26} my={10}/>
             <Skeleton height={10} width={"70%"} ml={20}/>
@@ -114,7 +119,8 @@ function AppNavbar({active, isLoading, user}) {
 
     return (<>
         <Navbar.Section grow mt="md">
-            {linksToDisplay}
+            {user.roles.includes('USER_ROLE') ? userLinksToDisplay : userLinksToDisplay}
+
             {user.roles.includes('TRAINER_ROLE') || user.roles.includes('HEAD_QUARTER_ROLE') ? <h3 style={{fontSize: "1rem", margin: "1rem 0 0 .75rem", textTransform: "uppercase", color: "#b2bec3"}}>Formateurs</h3> : null}
             {user.roles.includes('TRAINER_ROLE') || user.roles.includes('HEAD_QUARTER_ROLE') ? trainersLinksToDisplay : null}
 

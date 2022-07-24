@@ -86,7 +86,7 @@ function App() {
                         <Container>
                             <Routes>
                                 <Route path="/settings" element={<Settings isLoading={isLoading} user={user}/>}/>
-                                <Route path="/dashboard" element={<Dashboard />}/>
+                                <Route path="/dashboard" element={<Dashboard isLoading={isLoading} user={user} />}/>
 
                                 <Route path="/operations" element={<OperationsList />}/>
                                 <Route path="/operations/:id" element={<OperationSingle />}/>

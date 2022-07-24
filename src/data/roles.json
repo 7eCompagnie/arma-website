@@ -1,6 +1,10 @@
 {
   "roles": [
     {
+      "value": "VISITOR_ROLE",
+      "label": "Visiteur"
+    },
+    {
       "value": "USER_ROLE",
       "label": "Joueur"
     },
