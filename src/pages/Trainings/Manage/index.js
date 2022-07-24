@@ -60,7 +60,6 @@ function TrainingsManage() {
         });
 
         deleteTraining(training._id).then(data => {
-            console.log(data);
             updateNotification({
                 id: `delete-training-${training._id}`,
                 color: 'teal',
