@@ -81,51 +81,15 @@ function Registration({operation, setOperation}) {
 
             fetchUpdate();
 
-            if (process.env.NODE_ENV !== 'development')
+            if (process.env.NODE_ENV !== 'development') {
                 sendWebhookMessage(process.env.REACT_APP_AMOUK_WEBHOOK_URL, {
-                embeds: [
-                    {
-                        title: operation.title,
-                        description: "Nouvelle inscription",
-                        color: 16242731,
-                        timestamp: new Date(),
-                        footer: {
-                            text: `${getOperationRemainingSeats(operation)} place(s) restante(s)`
-                        },
-                        author: {
-                            name: "Panel d'inscription de la 7ème Compagnie",
-                            url: "https://app.arma.la7e.fr/",
-                            icon_url: "https://cdn.discordapp.com/attachments/993251380234031224/999366723121717349/7e_arma.png"
-                        },
-                        fields: [
-                            {
-                                name: "Joueur",
-                                value: `(${playerRPName}) ${updatedUser.username}#${updatedUser.discriminator}`,
-                                inline: true
-                            },
-                            {
-                                name: "Groupe",
-                                value: group.title,
-                                inline: true
-                            },
-                            {
-                                name: "Équipe",
-                                value: role.team,
-                                inline: true
-                            },
-                            {
-                                name: "Rôle",
-                                value: role.role,
-                                inline: true
-                            }
-                        ]
-                    }
-                ],
-            }).catch(err => console.log(err));
+                    content: `:green_square: **[${operation.title}]** Inscription de <@${updatedUser.identifier}> - ${group.title}, ${role.team}, ${role.role}`
+                }).catch(err => console.log(err));
+            }
         }).catch(err => console.log(err));
     }
 
-    const unregisterPlayer = () => {
+    const unregisterPlayer = (group, role) => {
         showNotification({
             id: 'unregister-player',
             loading: true,
@@ -160,32 +124,11 @@ function Registration({operation, setOperation}) {
 
             fetchUpdate();
 
-            if (process.env.NODE_ENV !== 'development')
+            if (process.env.NODE_ENV !== 'development') {
                 sendWebhookMessage(process.env.REACT_APP_AMOUK_WEBHOOK_URL, {
-                embeds: [
-                    {
-                        title: operation.title,
-                        description: "Désinscription",
-                        color: 16242731,
-                        timestamp: new Date(),
-                        footer: {
-                            text: `${getOperationRemainingSeats(operation)} place(s) restante(s)`
-                        },
-                        author: {
-                            name: "Panel d'inscription de la 7ème Compagnie",
-                            url: "https://app.arma.la7e.fr/",
-                            icon_url: "https://cdn.discordapp.com/attachments/993251380234031224/999366723121717349/7e_arma.png"
-                        },
-                        fields: [
-                            {
-                                name: "Joueur",
-                                value: `${updatedUser.username}#${updatedUser.discriminator}`,
-                                inline: true
-                            }
-                        ]
-                    }
-                ],
-            }).catch(err => console.log(err));
+                    content: `:red_square: **[${operation.title}]** Désinscription de <@${updatedUser.identifier}> - ${group.title}, ${role.team}, ${role.role}`
+                }).catch(err => console.log(err));
+            }
         }).catch(err => console.log(err));
     }
 
@@ -224,7 +167,7 @@ function Registration({operation, setOperation}) {
                                                     <span>
                                                         <strong>{ role.playerRPName ? role.playerRPName : playerRPName }</strong> ({ allUsers.find(user => user.identifier === role.player).username })
                                                     </span>
-                                                    <Button ml={10} color={"red"} onClick={() => unregisterPlayer()} compact>Se désinscrire</Button>
+                                                    <Button ml={10} color={"red"} onClick={() => unregisterPlayer(group, role)} compact>Se désinscrire</Button>
                                                 </div> :
                                                 <div style={{marginBottom: "10px", color: theme.colors.gray[5], display: 'flex', alignItems: 'center'}}>
                                                     <Badge color={"blue"} mr={10}>{role.shortName}</Badge>
