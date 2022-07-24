@@ -13,19 +13,19 @@ import {showNotification, updateNotification} from "@mantine/notifications";
 import Loading from "./Loading";
 import Informations from "./Informations";
 import Registration from "./Registration";
-import {getOperation} from "../../../services/operations";
+import {getOperation, getOperationBySlug} from "../../../services/operations";
 import NotFound from "./NotFound";
 Moment.locale('fr');
 
 function OperationSingle() {
-    const {id} = useParams();
+    const {slug} = useParams();
     const [operation, setOperation] = useState({});
     const [isLoading, setIsLoading] = useState(true);
     const [notFound, setNotFound] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
-        getOperation(id).then(data => {
+        getOperationBySlug(slug).then(data => {
             if (!data.success) {
                 setNotFound(true);
                 setIsLoading(false);
@@ -36,7 +36,7 @@ function OperationSingle() {
 
             document.title = `${data.data.title} - La 7ème Compagnie`;
         }).catch(err => console.log(err));
-    }, [id]);
+    }, [slug]);
 
     if (isLoading) {
         return (

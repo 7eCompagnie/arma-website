@@ -97,13 +97,13 @@ function App() {
 
                                     <Route path="/operations" element={
                                         <Protected condition={user && user.roles.includes('USER_ROLE')} path="/dashboard"><OperationsList /></Protected>}/>
-                                    <Route path="/operations/:id" element={
+                                    <Route path="/operations/:slug" element={
                                         <Protected condition={user && user.roles.includes('USER_ROLE')} path="/dashboard"><OperationSingle /></Protected>}/>
 
 
                                     <Route path="/trainings" element={
                                         <Protected condition={user && user.roles.includes('USER_ROLE')} path="/"><TrainingsList /></Protected>}/>
-                                    <Route path="/trainings/:id" element={
+                                    <Route path="/trainings/:slug" element={
                                         <Protected condition={user && user.roles.includes('USER_ROLE')} path="/"><TrainingSingle /></Protected>}/>
 
                                     <Route path="/trainers/trainings" element={

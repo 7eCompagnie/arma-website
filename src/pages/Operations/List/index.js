@@ -64,7 +64,7 @@ function OperationsList() {
                 </Text>
 
                 <Button onClick={() => {
-                    navigate(`/operations/${operation._id}`)
+                    navigate(`/operations/${operation.slug}`)
                 }} variant="light" color="blue" fullWidth style={{marginTop: 14}}>
                     En savoir plus
                 </Button>

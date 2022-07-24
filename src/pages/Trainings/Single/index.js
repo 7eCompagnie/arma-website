@@ -2,13 +2,13 @@ import {useEffect, useState} from "react";
 import {Alert, Badge, Button, Image, Skeleton, Text} from "@mantine/core";
 import {useNavigate, useParams} from "react-router-dom";
 import {ChevronLeft, InfoCircle} from "tabler-icons-react";
-import {getTraining} from "../../../services/trainings";
-import {getUser, getUsers} from "../../../services/users";
+import {getTraining, getTrainingBySlug} from "../../../services/trainings";
+import {getUser} from "../../../services/users";
 import Loading from "./Loading";
 import NotFound from "../../Operations/Single/NotFound";
 
 function TrainingSingle() {
-    const {id} = useParams();
+    const {slug} = useParams();
     const [training, setTraining] = useState(null);
     const [trainers, setTrainers] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -16,7 +16,7 @@ function TrainingSingle() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        getTraining(id).then(data => {
+        getTrainingBySlug(slug).then(data => {
             if (!data.success) {
                 setNotFound(true);
                 setIsLoading(false);
@@ -38,7 +38,7 @@ function TrainingSingle() {
                 }).catch(err => console.log(err));
             })
         }
-    }, [id]);
+    }, [slug]);
 
     const trainersToDisplay = trainers.map((trainer, i) => {
         if (isLoading === true) {

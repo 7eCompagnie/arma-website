@@ -23,3 +23,7 @@ export const getMaxPages = () => {
 export const deleteTraining = (id) => {
     return deleteFetch(`${process.env.REACT_APP_ENDPOINT_URL}/trainings/${id}`);
 }
+
+export const getTrainingBySlug = (slug) => {
+    return getFetch(`${process.env.REACT_APP_ENDPOINT_URL}/trainings/${slug}`);
+}

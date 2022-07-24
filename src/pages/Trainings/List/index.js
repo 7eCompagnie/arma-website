@@ -46,7 +46,7 @@ function TrainingsList() {
                 {training.description}
             </Text>
 
-            <Button onClick={() => { navigate(`/trainings/${training._id}`) }} variant="light" color="blue" fullWidth style={{ marginTop: 14 }}>
+            <Button onClick={() => { navigate(`/trainings/${training.slug}`) }} variant="light" color="blue" fullWidth style={{ marginTop: 14 }}>
                 En savoir plus
             </Button>
         </Card>)
