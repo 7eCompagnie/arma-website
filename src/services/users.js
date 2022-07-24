@@ -33,5 +33,9 @@ export const updateUser = (identifier, body) => {
 }
 
 export const getTrainers = () => {
-    return getUsers().then(data => data.data.filter(user => user.roles.includes('TRAINER_ROLE'))).catch(err => console.log(err));
+    return getUsers(-1).then(data => data.data.filter(user => user.roles.includes('TRAINER_ROLE'))).catch(err => console.log(err));
+}
+
+export const getNotWhitelistedUsers = () => {
+    return getUsers(-1).then(data => data.data.filter(user => user.roles.includes('VISITOR_ROLE'))).catch(err => console.log(err));
 }

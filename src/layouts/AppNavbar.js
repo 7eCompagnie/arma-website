@@ -1,6 +1,16 @@
 import {Navbar, Skeleton} from "@mantine/core";
 import AppNavbarLink from "./AppNavbarLink";
-import {Award, Book, Books, BookUpload, CalendarEvent, CalendarPlus, CalendarStats, Users} from "tabler-icons-react";
+import {
+    Award,
+    Book,
+    Books,
+    BookUpload,
+    CalendarEvent,
+    CalendarPlus,
+    CalendarStats,
+    Checklist,
+    Users
+} from "tabler-icons-react";
 import {Dashboard} from "tabler-icons-react";
 
 function AppNavbar({active, isLoading, user}) {
@@ -91,6 +101,12 @@ function AppNavbar({active, isLoading, user}) {
             color: "lime",
             label: "Gérer les utilisateurs",
             to: "/head-quarters/users"
+        },
+        {
+            icon: <Checklist size={16}/>,
+            color: "blue",
+            label: "Faire passer une whitelist",
+            to: "/head-quarters/users/whitelist"
         }
     ]
 

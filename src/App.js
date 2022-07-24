@@ -25,6 +25,7 @@ import {NotificationsProvider} from "@mantine/notifications";
 import {getUserByToken, getUserToken} from "./services/users";
 import AppFooter from "./layouts/AppFooter";
 import "./assets/css/style.css";
+import Whitelist from "./pages/Users/Whitelist";
 
 function App() {
     const { pathname } = useLocation();
@@ -105,6 +106,7 @@ function App() {
 
                                 <Route path="/head-quarters/users" element={<Users isLoading={isLoading}/>}/>
                                 <Route path="/head-quarters/users/:identifier" element={<UserEdit/>}/>
+                                <Route path="/head-quarters/users/whitelist" element={<Whitelist />}/>
 
                                 <Route path="*" element={<NotFound />}/>
                             </Routes>

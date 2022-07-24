@@ -21,10 +21,7 @@ function Users() {
             setCurrUserModal(data.data[0]);
 
             getMaxPages().then(data => {
-                if (data.data === 0)
-                    setMaxPages(1);
-                else
-                    setMaxPages(data.data);
+                !data.data ? setMaxPages(1) : setMaxPages(data.data);
                 setIsLoading(false);
             }).catch(err => console.log(err));
         }).catch(err => console.log(err));
