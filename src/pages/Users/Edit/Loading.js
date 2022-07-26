@@ -39,7 +39,7 @@ function Loading() {
                         <Skeleton height={36} width={"100%"}/>
                     </InputWrapper>
                 </SimpleGrid>
-                <Button type="submit" mt={"2rem"} disabled>Sauvegarder</Button>
+                <Button mt={"2rem"} disabled>Sauvegarder</Button>
             </form>
         </>
     )

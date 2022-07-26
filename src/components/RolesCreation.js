@@ -367,7 +367,7 @@ function RolesCreation({callback, data, buttonText}) {
                                     </tbody>
                                 </Table>
                             </div>))}
-                        <Button leftIcon={<Trash size={16}/>} color={"red"} onClick={() => removeGroup(tab.title)} disabled>Supprimer le groupe {tab.title}</Button>
+                        <Button leftIcon={<Trash size={16}/>} color={"red"} disabled>Supprimer le groupe {tab.title}</Button>
                         <h3>Ajouter un rôle</h3>
                         <SimpleGrid cols={2}>
                             <InputWrapper
@@ -404,7 +404,7 @@ function RolesCreation({callback, data, buttonText}) {
                                 />
                             </InputWrapper>
                         </SimpleGrid>
-                        <Button mt={20} onClick={() => addRole(activeTab)} disabled>Ajouter</Button>
+                        <Button mt={20} disabled>Ajouter</Button>
                         <div>
                             <h3>Créer une équipe</h3>
                             <div style={{display: 'flex', alignItems: 'end'}}>
@@ -436,9 +436,7 @@ function RolesCreation({callback, data, buttonText}) {
                     </div>
                 </Tabs.Tab>
             </Tabs>
-            <Button disabled mt={30} onClick={(e) => {
-                callback(e, tabs);
-            }}>{buttonText}</Button>
+            <Button disabled mt={30}>{buttonText}</Button>
         </>);
     }
 

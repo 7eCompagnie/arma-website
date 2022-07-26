@@ -236,7 +236,7 @@ function TrainingEdit() {
                     </Dropzone>
 
                     <Group>
-                        <Button color={"teal"} onClick={() => openRef.current()} id="btn-select-files" disabled title={"Désactiver momentanément. Veuillez supprimer, puis recréer la formation."}>{trainingPicture}</Button>
+                        <Button color={"teal"} id="btn-select-files" disabled title={"Désactiver momentanément. Veuillez supprimer, puis recréer la formation."}>{trainingPicture}</Button>
                     </Group>
                 </InputWrapper>
 

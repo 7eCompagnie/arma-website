@@ -188,7 +188,7 @@ function FormContent({operation}) {
                     </Dropzone>
 
                     <Group>
-                        <Button color={"teal"} onClick={() => openRef.current()} id="btn-select-files" disabled title={"Désactiver momentanément. Veuillez supprimer, puis recréer la formation."}>{operation.picture}</Button>
+                        <Button color={"teal"} id="btn-select-files" disabled title={"Désactiver momentanément. Veuillez supprimer, puis recréer la formation."}>{operation.picture}</Button>
                     </Group>
                 </InputWrapper>
             </SimpleGrid>

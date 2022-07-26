@@ -124,7 +124,7 @@ function AppHeader({isLoading, user, setUser}) {
                         withArrow
                         ml={20}
                     >
-                        <ActionIcon title="Bientôt disponible." disabled size="lg" radius="xl" onClick={() => navigate('/settings')}>
+                        <ActionIcon title="Bientôt disponible." disabled size="lg" radius="xl">
                             <Bell />
                         </ActionIcon>
                     </Tooltip>
