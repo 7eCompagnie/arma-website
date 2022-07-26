@@ -2,13 +2,12 @@ import {useEffect, useState} from "react";
 import {Alert, Badge, Button, Card, Group, Image, SimpleGrid, Text, useMantineTheme} from "@mantine/core";
 import {AlertCircle, Calendar} from "tabler-icons-react";
 import {useNavigate} from "react-router-dom";
-import Moment from "moment";
-import 'moment/locale/fr';
+import Moment from 'moment/min/moment-with-locales';
 import {getOperations} from "../../../services/operations";
 import getOperationRemainingSeats from "../../../utils/getOperationRemainingSeats";
 import Loading from "./Loading";
 
-Moment.locale('fr');
+Moment.locale(window.navigator.userLanguage || window.navigator.language);
 
 function OperationsList() {
     const navigate = useNavigate();

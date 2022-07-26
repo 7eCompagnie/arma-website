@@ -1,5 +1,7 @@
 import {SimpleGrid, Text} from "@mantine/core";
-import Moment from "moment";
+import Moment from 'moment/min/moment-with-locales';
+
+Moment.locale(window.navigator.userLanguage || window.navigator.language);
 
 function Informations({operation}) {
     return (

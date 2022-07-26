@@ -2,15 +2,11 @@ import {useEffect, useState} from "react";
 import {Button, Image,} from "@mantine/core";
 import {ChevronLeft} from "tabler-icons-react";
 import {useNavigate, useParams} from "react-router-dom";
-import Moment from "moment";
-import 'moment/locale/fr';
 import Loading from "./Loading";
 import Informations from "./Informations";
 import Registration from "./Registration";
 import {getOperationBySlug} from "../../../services/operations";
 import NotFound from "./NotFound";
-
-Moment.locale('fr');
 
 function OperationSingle() {
     const {slug} = useParams();
