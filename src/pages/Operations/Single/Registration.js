@@ -3,7 +3,7 @@ import {Badge, Button, Input, InputWrapper, SimpleGrid, Text, useMantineTheme} f
 import {showNotification, updateNotification} from "@mantine/notifications";
 import {Check, X} from "tabler-icons-react";
 import {useEffect, useState} from "react";
-import {getUser, getUserByToken, getUsers} from "../../../services/users";
+import {getUser, getUserByToken, getUsers, updateUser} from "../../../services/users";
 import {getOperation, updateOperation} from "../../../services/operations";
 import {sendWebhookMessage} from "../../../services/discord";
 import getOperationRemainingSeats from "../../../utils/getOperationRemainingSeats";
@@ -70,22 +70,38 @@ function Registration({operation, setOperation}) {
         updateOperation(operation._id, {
             roles: newRoles
         }).then(() => {
-            updateNotification({
-                id: 'register-player',
-                color: 'teal',
-                title: 'Inscription validée',
-                message: 'Vous vous êtes correctement inscrit.',
-                icon: <Check />,
-                autoClose: 5000,
+            let newOperations = updatedUser.operations || [];
+
+            newOperations.push({
+                operation: operation._id,
+                role: role.role,
+                team: role.team,
+                group: group.title,
+                playerRPName: playerRPName,
+                played: false,
+                rating: null
             });
 
-            fetchUpdate();
+            updateUser(updatedUser.identifier, {
+                operations: newOperations
+            }).then(() => {
+                updateNotification({
+                    id: 'register-player',
+                    color: 'teal',
+                    title: 'Inscription validée',
+                    message: 'Vous vous êtes correctement inscrit.',
+                    icon: <Check />,
+                    autoClose: 5000,
+                });
 
-            if (process.env.NODE_ENV !== 'development') {
-                sendWebhookMessage(process.env.REACT_APP_AMOUK_WEBHOOK_URL, {
-                    content: `:green_square: **[${operation.title}]** Inscription de <@${updatedUser.identifier}> - ${group.title}, ${role.team}, ${role.role}`
-                }).catch(err => console.log(err));
-            }
+                fetchUpdate();
+
+                if (process.env.NODE_ENV !== 'development') {
+                    sendWebhookMessage(process.env.REACT_APP_AMOUK_WEBHOOK_URL, {
+                        content: `:green_square: **[${operation.title}]** Inscription de <@${updatedUser.identifier}> - ${group.title}, ${role.team}, ${role.role}`
+                    }).catch(err => console.log(err));
+                }
+            }).catch(err => console.log(err));
         }).catch(err => console.log(err));
     }
 
@@ -113,22 +129,30 @@ function Registration({operation, setOperation}) {
         updateOperation(operation._id, {
             roles: newRoles
         }).then(() => {
-            updateNotification({
-                id: 'unregister-player',
-                color: 'teal',
-                title: 'Désincription validée',
-                message: 'Vous vous êtes correctement désinscrit.',
-                icon: <Check />,
-                autoClose: 5000,
-            });
+            let newOperations = updatedUser.operations || [];
 
-            fetchUpdate();
+            newOperations.splice(newOperations.findIndex(o => o.operation === operation._id), 1);
 
-            if (process.env.NODE_ENV !== 'development') {
-                sendWebhookMessage(process.env.REACT_APP_AMOUK_WEBHOOK_URL, {
-                    content: `:red_square: **[${operation.title}]** Désinscription de <@${updatedUser.identifier}> - ${group.title}, ${role.team}, ${role.role}`
-                }).catch(err => console.log(err));
-            }
+            updateUser(updatedUser.identifier, {
+                operations: newOperations
+            }).then(() => {
+                updateNotification({
+                    id: 'unregister-player',
+                    color: 'teal',
+                    title: 'Désincription validée',
+                    message: 'Vous vous êtes correctement désinscrit.',
+                    icon: <Check />,
+                    autoClose: 5000,
+                });
+
+                fetchUpdate();
+
+                if (process.env.NODE_ENV !== 'development') {
+                    sendWebhookMessage(process.env.REACT_APP_AMOUK_WEBHOOK_URL, {
+                        content: `:red_square: **[${operation.title}]** Désinscription de <@${updatedUser.identifier}> - ${group.title}, ${role.team}, ${role.role}`
+                    }).catch(err => console.log(err));
+                }
+            }).catch(err => console.log(err));
         }).catch(err => console.log(err));
     }
 
