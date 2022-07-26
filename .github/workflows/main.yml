@@ -41,7 +41,6 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           password: ${{ secrets.SSH_PASS }}
           script: |
-            rm -rf ~/7eCompagnie/orbat/*
             mkdir ~/7eCompagnie/orbat-deployments/${{ github.sha }}
             cd ~/7eCompagnie/orbat-deployments/${{ github.sha }}
         
@@ -71,7 +70,7 @@ jobs:
             cd ~/7eCompagnie/orbat-deployments/${{ github.sha }}
             npm install --production
             npm run build
-            ln -s ~/7eCompagnie/orbat-deployments/${{ github.sha }}/* ~/7eCompagnie/orbat
+            ln -sf ~/7eCompagnie/orbat-deployments/${{ github.sha }}/* ~/7eCompagnie/orbat
             pm2 restart orbat
             cd ~/7eCompagnie/orbat-deployments
             rm -rf `ls -t | awk 'NR>3'`
