@@ -56,7 +56,7 @@ jobs:
           # The path is based on the directory where the user logged into the server starts
           target: "~/7eCompagnie/orbat"
           
-      - name: Instal dependencies on VPS, run migrations on VPS and restart Node server
+      - name: Install dependencies on VPS, run migrations on VPS and restart Node server
         uses: appleboy/ssh-action@master
         env:
           CI: false
