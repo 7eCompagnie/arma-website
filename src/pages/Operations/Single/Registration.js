@@ -25,12 +25,12 @@ function Registration({operation, setOperation}) {
             }).catch(err => console.log(err));
         }).catch(err => console.log(err));
 
-        // const interval = setInterval(() => {
-        //     getOperation(operation._id).then(data => {
-        //         setGroups(data.data.roles);
-        //     }).catch(err => console.log(err));
-        // }, 1000);
-        // return () => clearInterval(interval);
+        const interval = setInterval(() => {
+            getOperation(operation._id).then(data => {
+                setGroups(data.data.roles);
+            }).catch(err => console.log(err));
+        }, 1000);
+        return () => clearInterval(interval);
     }, [operation._id]);
 
 
