@@ -41,6 +41,7 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           password: ${{ secrets.SSH_PASS }}
           script: |
+            rm -rf ~/7eCompagnie/orbat/*
             mkdir ~/7eCompagnie/orbat-deployments/${{ github.sha }}
             cd ~/7eCompagnie/orbat-deployments/${{ github.sha }}
         
