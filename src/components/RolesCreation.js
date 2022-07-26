@@ -26,7 +26,11 @@ function RolesCreation({callback, data, buttonText}) {
 
     useEffect(() => {
         getTrainings(-1).then(data => {
-            setTrainings(data.data);
+            // add training at beginning of list
+            setTrainings(data.data.concat([{
+                _id: '-1',
+                title: "Aucune formation",
+            }]).reverse());
             setIsLoading(false);
         }).catch(err => console.log(err));
     }, []);
@@ -35,7 +39,7 @@ function RolesCreation({callback, data, buttonText}) {
         setActiveTab(active);
     };
 
-    const trainingsData = trainings.map(training => ({
+    let trainingsData = trainings.map(training => ({
         value: training._id,
         label: training.title
     }));
