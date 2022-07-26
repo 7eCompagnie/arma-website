@@ -8,7 +8,7 @@ import {
     CalendarEvent,
     CalendarPlus,
     CalendarStats,
-    Checklist,
+    Checklist, HourglassLow,
     Users
 } from "tabler-icons-react";
 import {Dashboard} from "tabler-icons-react";
@@ -59,6 +59,12 @@ function AppNavbar({active, isLoading, user}) {
             color: "cyan",
             label: "Créer une opération",
             to: "/zeus/operations/new"
+        },
+        {
+            icon: <HourglassLow size={16}/>,
+            color: "brown",
+            label: "Opérations archivées",
+            to: "/zeus/operations/archives"
         }
     ]
 

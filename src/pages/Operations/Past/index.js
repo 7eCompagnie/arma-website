@@ -6,7 +6,7 @@ import {showNotification, updateNotification} from "@mantine/notifications";
 import {deleteOperation, getMaxPages, getOperations} from "../../../services/operations";
 import Loading from "./Loading";
 
-function OperationsManage() {
+function OperationsPast() {
     const [operations, setOperations] = useState([]);
     const [activePage, setActivePage] = useState(1);
     const [maxPages, setMaxPages] = useState(1);
@@ -75,7 +75,7 @@ function OperationsManage() {
     }, [activePage]);
 
     const rows = (operations.map((operation, i) => {
-        if (new Date(operation.duration[1]) > new Date()) {
+        if (new Date(operation.duration[1]) < new Date()) {
             return (<tr key={i}>
                 <td>{operation.title}</td>
                 <td>
@@ -113,11 +113,11 @@ function OperationsManage() {
         </Center>
         <Table striped highlightOnHover>
             <thead>
-                <tr>
-                    <th>Titre</th>
-                    <th>Description</th>
-                    <th>Actions</th>
-                </tr>
+            <tr>
+                <th>Titre</th>
+                <th>Description</th>
+                <th>Actions</th>
+            </tr>
             </thead>
             <tbody>
                 {rows}
@@ -150,4 +150,4 @@ function OperationsManage() {
     </>);
 }
 
-export default OperationsManage;
+export default OperationsPast;

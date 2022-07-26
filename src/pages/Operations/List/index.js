@@ -69,9 +69,8 @@ function OperationsList() {
                     En savoir plus
                 </Button>
             </Card>)
-        } else {
+        } else
             return null;
-        }
     });
 
     if (isLoading) {
@@ -83,7 +82,7 @@ function OperationsList() {
     return (
         <>
             <h1>Inscription aux opérations</h1>
-            {operationsCards.every(element => element === null) ? <Alert icon={<AlertCircle size={16} />} title="Désolé soldat, aucune opération n'est prévu prochainement..." mt={10} color={"red"}>
+            {!operationsCards.filter(element => element !== null).length ? <Alert icon={<AlertCircle size={16} />} title="Désolé soldat, aucune opération n'est prévu prochainement..." mt={10} color={"red"}>
                 <Text>Reviens plus tard pour t'inscrire et partir au combat. <br/>
                     N'oublie pas de suivre les annonces de notre Discord pour rester informé des prochaines opérations.</Text>
             </Alert> : <SimpleGrid cols={2}>

@@ -25,6 +25,7 @@ import AppFooter from "./layouts/AppFooter";
 import "./assets/css/style.css";
 import Whitelist from "./pages/Users/Whitelist";
 import Protected from "./context/Protected";
+import OperationsPast from "./pages/Operations/Past";
 
 function App() {
     const { pathname } = useLocation();
@@ -121,6 +122,8 @@ function App() {
                                         <Protected condition={user && (user.roles.includes('ZEUS_ROLE') || user.roles.includes('HEAD_QUARTER_ROLE'))} path="/"><OperationCreate /></Protected>}/>
                                     <Route path="/zeus/operations/:id" element={
                                         <Protected condition={user && (user.roles.includes('ZEUS_ROLE') || user.roles.includes('HEAD_QUARTER_ROLE'))} path="/"><OperationEdit /></Protected>}/>
+                                    <Route path="/zeus/operations/archives" element={
+                                        <Protected condition={user && (user.roles.includes('ZEUS_ROLE') || user.roles.includes('HEAD_QUARTER_ROLE'))} path="/"><OperationsPast /></Protected>}/>
 
                                     <Route path="/head-quarters/users" element={
                                         <Protected condition={user && user.roles.includes('HEAD_QUARTER_ROLE')} path="/"><Users isLoading={isLoading}/></Protected>}/>
