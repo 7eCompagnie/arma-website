@@ -6,7 +6,6 @@ import {useEffect, useState} from "react";
 import {getUserByToken, getUsers, updateUser} from "../../../services/users";
 import {getOperation, updateOperation} from "../../../services/operations";
 import {sendWebhookMessage} from "../../../services/discord";
-import isRoleAvailable from "../../../utils/isRoleAvailable";
 
 function Registration({operation, setOperation}) {
     const [playerRPName, setPlayerRPName] = useState('');
