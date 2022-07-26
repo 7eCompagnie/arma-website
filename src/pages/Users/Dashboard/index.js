@@ -39,10 +39,6 @@ function Dashboard({user, isLoading}) {
         </>);
     }
 
-    const getRatedOperations = () => {
-        return 0;
-    }
-
     return(<>
         <h1>Dashboard</h1>
         <Alert color={"yellow"} icon={<InfoCircle size={16} />} title="En cours de développement..." variant="light">
