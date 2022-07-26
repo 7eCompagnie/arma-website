@@ -421,7 +421,7 @@ function RolesCreation({callback, data, buttonText}) {
                 <Tabs.Tab icon={<SquarePlus size={16}/>} label="Créer un groupe" tabKey="createGroup">
                     <div style={{display: 'flex', alignItems: 'end'}}>
                         <InputWrapper
-                            label="Nom de l'équipe"
+                            label="Nom du groupe"
                         >
                             <Input
                                 id={'group-name'}
