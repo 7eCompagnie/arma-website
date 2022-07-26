@@ -72,4 +72,4 @@ jobs:
             ln -s ~/7eCompagnie/orbat-deployments/${{ github.sha }}/* ~/7eCompagnie/orbat
             pm2 restart orbat
             cd ~/7eCompagnie/orbat-deployments
-            rm -r `ls -t | awk 'NR>3'`
+            rm -rf `ls -t | awk 'NR>3'`
