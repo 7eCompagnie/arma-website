@@ -2,7 +2,7 @@ import {useEffect, useState} from "react";
 import {Alert, Badge, Button, Image, Skeleton, Text} from "@mantine/core";
 import {useNavigate, useParams} from "react-router-dom";
 import {ChevronLeft, InfoCircle} from "tabler-icons-react";
-import {getTraining, getTrainingBySlug} from "../../../services/trainings";
+import {getTrainingBySlug} from "../../../services/trainings";
 import {getUser} from "../../../services/users";
 import Loading from "./Loading";
 import NotFound from "../../Operations/Single/NotFound";

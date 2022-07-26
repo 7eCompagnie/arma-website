@@ -5,7 +5,8 @@ import {
     Input,
     InputWrapper,
     MultiSelect,
-    SimpleGrid, Skeleton, Switch,
+    SimpleGrid,
+    Switch,
     Text,
     Textarea,
     useMantineTheme

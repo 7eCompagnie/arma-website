@@ -1,13 +1,5 @@
 import {useEffect, useState} from "react";
-import {
-    Alert,
-    Badge,
-    Button,
-    Card,
-    Group,
-    Image,
-    SimpleGrid, Skeleton, Text, useMantineTheme
-} from "@mantine/core";
+import {Alert, Badge, Button, Card, Group, Image, SimpleGrid, Text, useMantineTheme} from "@mantine/core";
 import {useNavigate} from "react-router-dom";
 import {AlertCircle} from "tabler-icons-react";
 import {getTrainings} from "../../../services/trainings";

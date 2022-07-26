@@ -1,24 +1,8 @@
-import {
-    Button,
-    Checkbox,
-    Group,
-    Input,
-    InputWrapper,
-    SimpleGrid,
-    Skeleton,
-    Text,
-    Textarea,
-    useMantineTheme
-} from "@mantine/core";
-import {Calendar, Check, ChevronLeft, LetterCaseToggle, Photo, X} from "tabler-icons-react";
-import {useEffect, useRef, useState} from "react";
-import {Link, useNavigate, useParams} from "react-router-dom";
-import {Dropzone, IMAGE_MIME_TYPE} from "@mantine/dropzone";
-import {DatePicker, TimeInput, TimeRangeInput} from "@mantine/dates";
-import dayjs from "dayjs";
-import RolesCreation from "../../../components/RolesCreation";
-import {showNotification, updateNotification} from "@mantine/notifications";
-import {getOperation, updateOperation} from "../../../services/operations";
+import {Button} from "@mantine/core";
+import {ChevronLeft} from "tabler-icons-react";
+import {useEffect, useState} from "react";
+import {useNavigate, useParams} from "react-router-dom";
+import {getOperation} from "../../../services/operations";
 import NotFound from "./NotFound";
 import Loading from "./Loading";
 import FormContent from "./FormContent";

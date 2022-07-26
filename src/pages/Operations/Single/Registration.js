@@ -3,10 +3,9 @@ import {Badge, Button, Input, InputWrapper, SimpleGrid, Text, useMantineTheme} f
 import {showNotification, updateNotification} from "@mantine/notifications";
 import {Check, X} from "tabler-icons-react";
 import {useEffect, useState} from "react";
-import {getUser, getUserByToken, getUsers, updateUser} from "../../../services/users";
+import {getUserByToken, getUsers, updateUser} from "../../../services/users";
 import {getOperation, updateOperation} from "../../../services/operations";
 import {sendWebhookMessage} from "../../../services/discord";
-import getOperationRemainingSeats from "../../../utils/getOperationRemainingSeats";
 
 function Registration({operation, setOperation}) {
     const [playerRPName, setPlayerRPName] = useState('');
@@ -32,7 +31,7 @@ function Registration({operation, setOperation}) {
             }).catch(err => console.log(err));
         }, 2000);
         return () => clearInterval(interval);
-    }, []);
+    }, [operation._id]);
 
 
     const fetchUpdate = () => {

@@ -1,8 +1,5 @@
-import {Button, Center} from "@mantine/core";
-import {updateUser} from "../../../services/users";
-import {showNotification, updateNotification} from "@mantine/notifications";
-import {Check, CircleCheck} from "tabler-icons-react";
-import {getFetch} from "../../../lib/fetch";
+import {Button} from "@mantine/core";
+import {CircleCheck} from "tabler-icons-react";
 
 function Row({user, acceptUser}) {
 

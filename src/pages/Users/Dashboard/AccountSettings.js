@@ -1,5 +1,5 @@
 import {Input, InputWrapper, MultiSelect, SimpleGrid} from "@mantine/core";
-import {At, Numbers} from "tabler-icons-react";
+import {Numbers} from "tabler-icons-react";
 import roles from "../../../data/roles.json";
 
 function AccountSettings({user}) {

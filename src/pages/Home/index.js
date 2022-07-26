@@ -1,4 +1,4 @@
-import {Center, Container, Title} from '@mantine/core';
+import {Center} from '@mantine/core';
 import {useNavigate} from "react-router-dom";
 import {useEffect} from "react";
 import background from '../../assets/images/background.jpg'

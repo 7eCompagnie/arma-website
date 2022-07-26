@@ -1,13 +1,5 @@
 import {useEffect, useState} from "react";
-import {
-    Alert,
-    Badge,
-    Button,
-    Card,
-    Group,
-    Image,
-    SimpleGrid, Text, useMantineTheme
-} from "@mantine/core";
+import {Alert, Badge, Button, Card, Group, Image, SimpleGrid, Text, useMantineTheme} from "@mantine/core";
 import {AlertCircle, Calendar} from "tabler-icons-react";
 import {useNavigate} from "react-router-dom";
 import Moment from "moment";
@@ -15,6 +7,7 @@ import 'moment/locale/fr';
 import {getOperations} from "../../../services/operations";
 import getOperationRemainingSeats from "../../../utils/getOperationRemainingSeats";
 import Loading from "./Loading";
+
 Moment.locale('fr');
 
 function OperationsList() {

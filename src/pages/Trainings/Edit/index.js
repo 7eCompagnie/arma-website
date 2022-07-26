@@ -1,15 +1,20 @@
 import {
-    Button, Checkbox, Group,
+    Button,
+    Checkbox,
+    Group,
     Input,
     InputWrapper,
     MultiSelect,
     SimpleGrid,
-    Skeleton, Switch, Text,
-    Textarea, useMantineTheme
+    Skeleton,
+    Switch,
+    Text,
+    Textarea,
+    useMantineTheme
 } from "@mantine/core";
 import {Check, ChevronLeft, LetterCase, Photo, X} from "tabler-icons-react";
 import {useEffect, useRef, useState} from "react";
-import {Link, useNavigate, useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {Dropzone, IMAGE_MIME_TYPE} from "@mantine/dropzone";
 import {showNotification, updateNotification} from "@mantine/notifications";
 import {getTraining, updateTraining} from "../../../services/trainings";

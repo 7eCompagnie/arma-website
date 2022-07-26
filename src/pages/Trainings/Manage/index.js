@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
-import {Alert, Button, Center, Modal, Pagination, Skeleton, Table, Text} from "@mantine/core";
+import {Alert, Button, Center, Modal, Pagination, Table, Text} from "@mantine/core";
 import {AlertCircle, Check, Plus} from "tabler-icons-react";
 import {showNotification, updateNotification} from "@mantine/notifications";
 import {deleteTraining, getMaxPages, getTrainings} from "../../../services/trainings";

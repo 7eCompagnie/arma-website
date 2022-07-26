@@ -1,5 +1,5 @@
 import {Input, InputWrapper, MultiSelect, SimpleGrid} from "@mantine/core";
-import {At, Id, LetterCase, Numbers} from "tabler-icons-react";
+import {Id, LetterCase, Numbers} from "tabler-icons-react";
 import roles from "../../../data/roles.json";
 
 function FormContent({user, onRolesChange}) {

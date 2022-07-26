@@ -1,5 +1,4 @@
-import { Navigate } from 'react-router-dom';
-import {useEffect} from "react";
+import {Navigate} from 'react-router-dom';
 
 function Protected({condition, path, children}) {
     if (!condition)

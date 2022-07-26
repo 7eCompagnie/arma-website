@@ -1,20 +1,15 @@
 import {useEffect, useState} from "react";
-import {
-    Badge,
-    Button,
-    Image, Input, InputWrapper, SimpleGrid, Skeleton,
-    Text, useMantineTheme,
-} from "@mantine/core";
-import {Check, ChevronLeft, X} from "tabler-icons-react";
+import {Button, Image,} from "@mantine/core";
+import {ChevronLeft} from "tabler-icons-react";
 import {useNavigate, useParams} from "react-router-dom";
 import Moment from "moment";
 import 'moment/locale/fr';
-import {showNotification, updateNotification} from "@mantine/notifications";
 import Loading from "./Loading";
 import Informations from "./Informations";
 import Registration from "./Registration";
-import {getOperation, getOperationBySlug} from "../../../services/operations";
+import {getOperationBySlug} from "../../../services/operations";
 import NotFound from "./NotFound";
+
 Moment.locale('fr');
 
 function OperationSingle() {
