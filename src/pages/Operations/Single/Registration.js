@@ -95,8 +95,6 @@ function Registration({operation, setOperation}) {
 
                 fetchUpdate();
 
-                console.log(process.env.NODE_ENV);
-
                 if (process.env.NODE_ENV === 'production') {
                     sendWebhookMessage(process.env.REACT_APP_AMOUK_WEBHOOK_URL, {
                         content: `:green_square: **[${operation.title}]** Inscription de <@${updatedUser.identifier}> - ${group.title}, ${role.team}, ${role.role}`
@@ -146,15 +144,13 @@ function Registration({operation, setOperation}) {
                     autoClose: 5000,
                 });
 
-                fetchUpdate();
-
-                console.log(process.env.NODE_ENV);
-
                 if (process.env.NODE_ENV === 'production') {
                     sendWebhookMessage(process.env.REACT_APP_AMOUK_WEBHOOK_URL, {
                         content: `:red_square: **[${operation.title}]** Désinscription de <@${updatedUser.identifier}> - ${group.title}, ${role.team}, ${role.role}`
                     }).catch(err => console.log(err));
                 }
+
+                fetchUpdate();
             }).catch(err => console.log(err));
         }).catch(err => console.log(err));
     }
