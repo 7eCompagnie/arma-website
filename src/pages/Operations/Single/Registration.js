@@ -6,6 +6,7 @@ import {useEffect, useState} from "react";
 import {getUserByToken, getUsers, updateUser} from "../../../services/users";
 import {getOperation, updateOperation} from "../../../services/operations";
 import {sendWebhookMessage} from "../../../services/discord";
+import isRoleAvailable from "../../../utils/isRoleAvailable";
 
 function Registration({operation, setOperation}) {
     const [playerRPName, setPlayerRPName] = useState('');
@@ -25,12 +26,12 @@ function Registration({operation, setOperation}) {
             }).catch(err => console.log(err));
         }).catch(err => console.log(err));
 
-        const interval = setInterval(() => {
-            getOperation(operation._id).then(data => {
-                setGroups(data.data.roles);
-            }).catch(err => console.log(err));
-        }, 2000);
-        return () => clearInterval(interval);
+        // const interval = setInterval(() => {
+        //     getOperation(operation._id).then(data => {
+        //         setGroups(data.data.roles);
+        //     }).catch(err => console.log(err));
+        // }, 1000);
+        // return () => clearInterval(interval);
     }, [operation._id]);
 
 
@@ -61,46 +62,62 @@ function Registration({operation, setOperation}) {
             autoClose: false,
             disallowClose: true,
         });
-        let newRoles = [...operation.roles];
 
-        newRoles.find(r => r.title === group.title).group.find(r => r.role === role.role && r.team === role.team).player = updatedUser.identifier;
-        newRoles.find(r => r.title === group.title).group.find(r => r.role === role.role && r.team === role.team).playerRPName = playerRPName;
+        getOperation(operation._id).then(data => {
+            setGroups(data.data.roles);
+            let newRoles = [...data.data.roles];
+            const targetRole = newRoles.find(r => r.title === group.title).group.find(r => r.role === role.role && r.team === role.team);
 
-        updateOperation(operation._id, {
-            roles: newRoles
-        }).then(() => {
-            let newOperations = updatedUser.operations || [];
+            if (targetRole.player === null) {
+                targetRole.player = updatedUser.identifier;
+                targetRole.playerRPName = playerRPName;
 
-            newOperations.push({
-                operation: operation._id,
-                role: role.role,
-                team: role.team,
-                group: group.title,
-                playerRPName: playerRPName,
-                played: false,
-                rating: null
-            });
+                updateOperation(operation._id, {
+                    roles: newRoles
+                }).then(() => {
+                    let newOperations = updatedUser.operations || [];
 
-            updateUser(updatedUser.identifier, {
-                operations: newOperations
-            }).then(() => {
+                    newOperations.push({
+                        operation: operation._id,
+                        role: role.role,
+                        team: role.team,
+                        group: group.title,
+                        playerRPName: playerRPName,
+                        played: false,
+                        rating: null
+                    });
+
+                    updateUser(updatedUser.identifier, {
+                        operations: newOperations
+                    }).then(() => {
+                        updateNotification({
+                            id: 'register-player',
+                            color: 'teal',
+                            title: 'Inscription validée',
+                            message: 'Vous vous êtes correctement inscrit.',
+                            icon: <Check/>,
+                            autoClose: 5000,
+                        });
+
+                        fetchUpdate();
+
+                        if (process.env.NODE_ENV === 'production') {
+                            sendWebhookMessage(process.env.REACT_APP_AMOUK_WEBHOOK_URL, {
+                                content: `:green_square: **[${operation.title}]** Inscription de <@${updatedUser.identifier}> - ${group.title}, ${role.team}, ${role.role}`
+                            }).catch(err => console.log(err));
+                        }
+                    }).catch(err => console.log(err));
+                }).catch(err => console.log(err));
+            } else {
                 updateNotification({
                     id: 'register-player',
-                    color: 'teal',
-                    title: 'Inscription validée',
-                    message: 'Vous vous êtes correctement inscrit.',
-                    icon: <Check />,
+                    color: 'red',
+                    title: 'Rôle déjà pris',
+                    message: 'Ce rôle est déjà pris par un autre joueur.',
+                    icon: <X/>,
                     autoClose: 5000,
                 });
-
-                fetchUpdate();
-
-                if (process.env.NODE_ENV === 'production') {
-                    sendWebhookMessage(process.env.REACT_APP_AMOUK_WEBHOOK_URL, {
-                        content: `:green_square: **[${operation.title}]** Inscription de <@${updatedUser.identifier}> - ${group.title}, ${role.team}, ${role.role}`
-                    }).catch(err => console.log(err));
-                }
-            }).catch(err => console.log(err));
+            }
         }).catch(err => console.log(err));
     }
 
@@ -114,44 +131,55 @@ function Registration({operation, setOperation}) {
             disallowClose: true,
         });
 
-        let newRoles = [...operation.roles];
+        getOperation(operation._id).then(data => {
+            setGroups(data.data.roles);
 
-        for (let i = 0; i < newRoles.length; i++) {
-            for (let j = 0; j < newRoles[i].group.length; j++) {
-                if (newRoles[i].group[j].player === updatedUser.identifier) {
-                    newRoles[i].group[j].player = null;
-                    newRoles[i].group[j].playerRPName = null;
-                }
-            }
-        }
+            setGroups(data.data.roles);
+            let newRoles = [...data.data.roles];
+            const targetRole = newRoles.find(r => r.title === group.title).group.find(r => r.role === role.role && r.team === role.team);
 
-        updateOperation(operation._id, {
-            roles: newRoles
-        }).then(() => {
-            let newOperations = updatedUser.operations || [];
+            if (targetRole.player === updatedUser.identifier) {
+                targetRole.player = null;
+                targetRole.playerRPName = null;
 
-            newOperations.splice(newOperations.findIndex(o => o.operation === operation._id), 1);
+                updateOperation(operation._id, {
+                    roles: newRoles
+                }).then(() => {
+                    let newOperations = updatedUser.operations || [];
 
-            updateUser(updatedUser.identifier, {
-                operations: newOperations
-            }).then(() => {
+                    newOperations.splice(newOperations.findIndex(o => o.operation === operation._id), 1);
+
+                    updateUser(updatedUser.identifier, {
+                        operations: newOperations
+                    }).then(() => {
+                        updateNotification({
+                            id: 'unregister-player',
+                            color: 'teal',
+                            title: 'Désincription validée',
+                            message: 'Vous vous êtes correctement désinscrit.',
+                            icon: <Check/>,
+                            autoClose: 5000,
+                        });
+
+                        if (process.env.NODE_ENV === 'production') {
+                            sendWebhookMessage(process.env.REACT_APP_AMOUK_WEBHOOK_URL, {
+                                content: `:red_square: **[${operation.title}]** Désinscription de <@${updatedUser.identifier}> - ${group.title}, ${role.team}, ${role.role}`
+                            }).catch(err => console.log(err));
+                        }
+
+                        fetchUpdate();
+                    }).catch(err => console.log(err));
+                }).catch(err => console.log(err));
+            } else {
                 updateNotification({
                     id: 'unregister-player',
-                    color: 'teal',
-                    title: 'Désincription validée',
-                    message: 'Vous vous êtes correctement désinscrit.',
-                    icon: <Check />,
+                    color: 'red',
+                    title: 'Rôle déjà libre',
+                    message: 'Ce rôle est déjà libre.',
+                    icon: <X/>,
                     autoClose: 5000,
                 });
-
-                if (process.env.NODE_ENV === 'production') {
-                    sendWebhookMessage(process.env.REACT_APP_AMOUK_WEBHOOK_URL, {
-                        content: `:red_square: **[${operation.title}]** Désinscription de <@${updatedUser.identifier}> - ${group.title}, ${role.team}, ${role.role}`
-                    }).catch(err => console.log(err));
-                }
-
-                fetchUpdate();
-            }).catch(err => console.log(err));
+            }
         }).catch(err => console.log(err));
     }
 
@@ -190,7 +218,7 @@ function Registration({operation, setOperation}) {
                                                     <span>
                                                         <strong>{ role.playerRPName ? role.playerRPName : playerRPName }</strong> ({ allUsers.find(user => user.identifier === role.player).username })
                                                     </span>
-                                                    <Button ml={10} color={"red"} onClick={() => unregisterPlayer(group, role)} compact>Se désinscrire</Button>
+                                                    { role.player === updatedUser.identifier ? <Button ml={10} color={"red"} onClick={() => unregisterPlayer(group, role)} compact>Se désinscrire</Button> : null }
                                                 </div> :
                                                 <div style={{marginBottom: "10px", color: theme.colors.gray[5], display: 'flex', alignItems: 'center'}}>
                                                     <Badge color={"blue"} mr={10}>{role.shortName}</Badge>
