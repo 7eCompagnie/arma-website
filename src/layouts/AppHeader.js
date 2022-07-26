@@ -18,6 +18,8 @@ function AppHeader({isLoading, user, setUser}) {
     const navigate = useNavigate();
     const [opened, setOpened] = useState(false);
 
+    const appVersion = 'beta-1.1.0';
+
     const revokeToken = async () => {
         const body = new URLSearchParams();
         body.append('token', localStorage.getItem('token'));
@@ -44,7 +46,7 @@ function AppHeader({isLoading, user, setUser}) {
                 <span style={{ marginLeft: '1rem', fontWeight: 900, fontSize: '14pt' }}>La 7ème Compagnie</span>
                 <Badge ml={10} color="yellow" variant="outline">
                     <Center>
-                        <Tools size={14} style={{marginRight: '3px'}}/>{process.env.REACT_APP_VERSION}
+                        <Tools size={14} style={{marginRight: '3px'}}/>{appVersion}
                     </Center>
                 </Badge>
             </Center>
@@ -84,7 +86,7 @@ function AppHeader({isLoading, user, setUser}) {
             <span style={{ marginLeft: '1rem', fontWeight: 900, fontSize: '14pt' }}>La 7ème Compagnie</span>
             <Badge ml={10} color="yellow" variant="outline">
                 <Center>
-                    <Tools size={14} style={{marginRight: '3px'}}/>{process.env.REACT_APP_VERSION}
+                    <Tools size={14} style={{marginRight: '3px'}}/>{appVersion}
                 </Center>
             </Badge>
         </Center>
