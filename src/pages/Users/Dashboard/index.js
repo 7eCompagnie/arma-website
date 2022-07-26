@@ -55,19 +55,19 @@ function Dashboard({user, isLoading}) {
             <div style={{ boxShadow: 'rgba(0, 0, 0, .4) 0 15px 20px', padding: '0 2rem', borderRadius: '.75rem', height: '150px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', color: '#fff', background: 'linear-gradient(140deg, rgba(2,0,36,1) 0%, rgba(8,0,255,1) 100%)' }}>
                 <DeviceGamepad size={60}/>
                 <p style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-                    <span style={{fontSize: '30pt', fontWeight: 900}}>{getPlayedOperationsCount(user.operations)}</span> opérations jouées
+                    <span style={{fontSize: '30pt', fontWeight: 900}}>{getPlayedOperationsCount(user.operations || [])}</span> opérations jouées
                 </p>
             </div>
             <div style={{ boxShadow: 'rgba(0, 0, 0, .4) 0 15px 20px', padding: '0 2rem', borderRadius: '.75rem', height: '150px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', color: '#fff', background: 'linear-gradient(140deg, rgba(8,0,255,1) 0%, rgba(96,57,128,1) 100%)' }}>
                 <Sword size={60}/>
                 <p style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-                    <span style={{fontSize: '30pt', fontWeight: 900}}>{getNextOperationsCount(user.operations)}</span> prochaines opérations
+                    <span style={{fontSize: '30pt', fontWeight: 900}}>{getNextOperationsCount(user.operations || [])}</span> prochaines opérations
                 </p>
             </div>
             <div style={{ boxShadow: 'rgba(0, 0, 0, .4) 0 15px 20px', padding: '0 2rem', borderRadius: '.75rem', height: '150px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', color: '#fff', background: 'linear-gradient(140deg, rgba(96,57,128,1) 0%, rgba(175,0,255,1) 100%)' }}>
                 <Stars size={60}/>
                 <p style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-                    <span style={{fontSize: '30pt', fontWeight: 900}}>{getRatedOperationsCount(user.operations)}</span> opérations notées
+                    <span style={{fontSize: '30pt', fontWeight: 900}}>{getRatedOperationsCount(user.operations || [])}</span> opérations notées
                 </p>
             </div>
         </SimpleGrid>
