@@ -66,6 +66,7 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           password: ${{ secrets.SSH_PASS }}
           script: |
+            cp ~/7eCompagnie/orbat/.env ~/7eCompagnie/orbat-deployments/${{ github.sha }}
             cd ~/7eCompagnie/orbat-deployments/${{ github.sha }}
             npm install --production
             npm run build
