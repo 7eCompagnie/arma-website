@@ -41,8 +41,8 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           password: ${{ secrets.SSH_PASS }}
           script: |
-            mkdir ~/7eCompagnie/${{ GITHUB_SHA }}
-            cd ~/7eCompagnie/${{ GITHUB_SHA }}
+            mkdir ~/7eCompagnie/${{ github.sha }}
+            cd ~/7eCompagnie/${{ github.sha }}
         
       - name: Copy dist to VPS
         uses: appleboy/scp-action@master
@@ -54,7 +54,7 @@ jobs:
           # Selecting all folders except "node_modules"
           source: ".,!node_modules"
           # The path is based on the directory where the user logged into the server starts
-          target: "~/7eCompagnie/${{ GITHUB_SHA }}"
+          target: "~/7eCompagnie/${{ github.sha }}"
           
       - name: Install dependencies on VPS, run migrations on VPS and restart Node server
         uses: appleboy/ssh-action@master
@@ -66,8 +66,8 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           password: ${{ secrets.SSH_PASS }}
           script: |
-            cd ~/7eCompagnie/${{ GITHUB_SHA }}
+            cd ~/7eCompagnie/${{ github.sha }}
             npm install --production
             npm run build
-            ln -s ~/7eCompagnie/${{ GITHUB_SHA }} ~/7eCompagnie/orbat
+            ln -s ~/7eCompagnie/${{ github.sha }} ~/7eCompagnie/orbat
             pm2 restart orbat
