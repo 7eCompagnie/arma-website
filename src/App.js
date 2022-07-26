@@ -7,7 +7,7 @@ import TrainingsList from "./pages/Trainings/List";
 import OperationSingle from "./pages/Operations/Single";
 import OperationCreate from "./pages/Operations/Create";
 import Users from "./pages/Users/Manage";
-import {AppShell, Container, Header, MantineProvider, Navbar} from "@mantine/core";
+import {AppShell, Container, MantineProvider} from "@mantine/core";
 import AppNavbar from "./layouts/AppNavbar";
 import AppHeader from "./layouts/AppHeader";
 import Settings from "./pages/Users/Settings";
@@ -79,12 +79,8 @@ function App() {
                     <Protected condition={user} path="/">
                         <AppShell
                             padding="md"
-                            navbar={<Navbar width={{ base: 300 }} p="xs">
-                                <AppNavbar active={pathname} isLoading={isLoading} user={user}/>
-                            </Navbar>}
-                            header={<Header height={60} p="xs">
-                                <AppHeader isLoading={isLoading} user={user} setUser={setUser}/>
-                            </Header>}
+                            navbar={<AppNavbar active={pathname} isLoading={isLoading} user={user}/>}
+                            header={<AppHeader isLoading={isLoading} user={user} setUser={setUser}/>}
                             footer={<AppFooter />}
                             styles={(theme) => ({
                                 main: { backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.colors.gray[0] },

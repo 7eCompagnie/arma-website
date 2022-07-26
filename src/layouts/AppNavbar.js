@@ -139,8 +139,8 @@ function AppNavbar({active, isLoading, user}) {
         </>);
     }
 
-    return (<>
-        <Navbar.Section grow mt="md">
+    return (
+        <Navbar width={{ base: 300 }} height={650} p="xs">
             {user.roles.includes('USER_ROLE') ? userLinksToDisplay : userLinksToDisplay}
 
             {user.roles.includes('TRAINER_ROLE') || user.roles.includes('HEAD_QUARTER_ROLE') ? <h3 style={{fontSize: "1rem", margin: "1rem 0 0 .75rem", textTransform: "uppercase", color: "#b2bec3"}}>Formateurs</h3> : null}
@@ -151,8 +151,8 @@ function AppNavbar({active, isLoading, user}) {
 
             {user.roles.includes('HEAD_QUARTER_ROLE') ? <h3 style={{fontSize: "1rem", margin: "1rem 0 0 .75rem", textTransform: "uppercase", color: "#b2bec3"}}>États-Major</h3> : null}
             {user.roles.includes('HEAD_QUARTER_ROLE') ? headQuartersLinksToDisplay : null}
-        </Navbar.Section>
-    </>);
+        </Navbar>
+    );
 }
 
 export default AppNavbar;
