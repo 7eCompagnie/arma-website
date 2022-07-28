@@ -75,7 +75,7 @@ function OperationsPast() {
     }, [activePage]);
 
     const rows = (operations.map((operation, i) => {
-        if (new Date(operation.duration[1]) < new Date()) {
+        if (new Date(operation.duration[1]).getTime() < new Date().getTime()) {
             return (<tr key={i}>
                 <td>{operation.title}</td>
                 <td>

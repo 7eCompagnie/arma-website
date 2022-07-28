@@ -27,7 +27,7 @@ function OperationsList() {
     }, []);
 
     const operationsCards = operations.map((operation, i) => {
-        if (new Date(operation.duration[1]) > new Date()) {
+        if (new Date(operation.duration[1]).getTime() > new Date().getTime()) {
             return (<Card shadow="sm" p="lg" key={i}>
                 <Card.Section>
                     {operation.picture.startsWith("http") ?

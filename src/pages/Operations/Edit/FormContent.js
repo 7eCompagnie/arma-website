@@ -98,6 +98,10 @@ function FormContent({operation}) {
         updatedOperation.duration[1].setDate(updatedOperation.date.getDate());
         updatedOperation.connectionStartTime.setDate(updatedOperation.date.getDate());
 
+        updatedOperation.duration[0].setMonth(updatedOperation.date.getMonth());
+        updatedOperation.duration[1].setMonth(updatedOperation.date.getMonth());
+        updatedOperation.connectionStartTime.setMonth(updatedOperation.date.getMonth());
+
         body.duration = [
             updatedOperation.duration[0].toUTCString(),
             updatedOperation.duration[1].toUTCString()
