@@ -14,6 +14,9 @@ function Row({user, trainings, onDelete}) {
     const displayTrainings = user.trained.map((training, i) => {
         const returnTraining = trainings.find((t) => t.value === training);
 
+        if (returnTraining === undefined)
+            return null;
+
         return returnTraining.label;
     }).join(', ');
 
