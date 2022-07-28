@@ -18,7 +18,7 @@ function AppHeader({isLoading, user, setUser}) {
     const navigate = useNavigate();
     const [opened, setOpened] = useState(false);
 
-    const appVersion = 'beta-1.1.6';
+    const appVersion = 'beta-1.1.8';
 
     const revokeToken = async () => {
         const body = new URLSearchParams();
