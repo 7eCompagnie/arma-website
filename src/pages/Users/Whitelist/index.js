@@ -59,7 +59,7 @@ function Whitelist() {
 
     return (
         <>
-            <h1>Passer une whitelist</h1>
+            <h1>Passer une whitelist ({users.length})</h1>
 
             <Table striped highlightOnHover>
                 <thead>

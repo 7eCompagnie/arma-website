@@ -21,7 +21,7 @@ function Users() {
         document.title = "Utilisateurs - La 7ème Compagnie";
 
         getUsers(activePage).then(data => {
-            setUsers(data.data);
+            setUsers(data.data.filter(user => !user.roles.includes('VISITOR_ROLE')));
             setCurrUserModal(data.data[0]);
 
             getMaxPages().then(data => {
@@ -39,7 +39,7 @@ function Users() {
         const currPage = page || 1;
 
         getUsers(currPage).then(data => {
-            setUsers(data.data);
+            setUsers(data.data.filter(user => !user.roles.includes('VISITOR_ROLE')));
             setCurrUserModal(data.data[0]);
 
             getMaxPages().then(data => {
