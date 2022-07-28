@@ -2,7 +2,14 @@ import {Input, InputWrapper, MultiSelect, SimpleGrid} from "@mantine/core";
 import {Id, LetterCase, Numbers} from "tabler-icons-react";
 import roles from "../../../data/roles.json";
 
-function FormContent({user, onRolesChange}) {
+function FormContent({user, trainings, onRolesChange, onTrainingsChange}) {
+    const trainingsData = trainings.map((training) => {
+        return ({
+            value: training._id,
+            label: training.title
+        });
+    });
+
     return (
         <SimpleGrid cols={2}>
             <InputWrapper
@@ -47,6 +54,17 @@ function FormContent({user, onRolesChange}) {
                 searchable
                 nothingFound="Aucun rôle trouvé"
                 onChange={onRolesChange}
+            />
+
+            <MultiSelect
+                mt={10}
+                data={trainingsData}
+                label={`Modifier les formations de ${user.username}`}
+                placeholder="Rechercher une formation..."
+                searchable
+                nothingFound="Aucune formation trouvée."
+                defaultValue={user.trained}
+                onChange={onTrainingsChange}
             />
         </SimpleGrid>
     )
