@@ -102,7 +102,7 @@ function TrainingsManage() {
     }
 
     return (<>
-        <h1>Gérer les formations</h1>
+        <h1>Gérer les formations ({trainings.length})</h1>
         <Button leftIcon={<Plus size={22}/>} onClick={() => navigate('/trainers/trainings/new')}>Créer une formation</Button>
         <Center my={"1rem"}>
             <Pagination page={activePage} onChange={setPage} total={maxPages} withEdges />

@@ -2,10 +2,17 @@ import {Alert, Table, Text} from "@mantine/core";
 import {AlertCircle} from "tabler-icons-react";
 import Row from "./Row";
 
-function UsersListing({users, onDelete}) {
+function UsersListing({users, trainings, onDelete}) {
+    const dataTrainings = trainings.map((t) => {
+        return {
+            value: t._id,
+            label: t.title
+        }
+    });
+
     const rows = users.map((user, index) => {
         if (!user.roles.includes('VISITOR_ROLE'))
-            return <Row user={user} key={index} onDelete={onDelete}/>
+            return <Row user={user} trainings={dataTrainings} key={index} onDelete={onDelete}/>
         else
             return null;
     });
@@ -15,8 +22,10 @@ function UsersListing({users, onDelete}) {
             <Table striped highlightOnHover>
                 <thead>
                     <tr>
+                        <th>Avatar</th>
                         <th>Pseudo</th>
                         <th>Roles</th>
+                        <th>Formations</th>
                         <th>Actions</th>
                     </tr>
                 </thead>

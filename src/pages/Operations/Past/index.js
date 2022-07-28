@@ -106,7 +106,7 @@ function OperationsPast() {
     }
 
     return (<>
-        <h1>Gérer les opérations</h1>
+        <h1>Gérer les opérations ({rows.filter(r => r !== null).length})</h1>
         <Button leftIcon={<Plus size={22}/>} onClick={() => navigate('/zeus/operations/new')}>Créer une opération</Button>
         <Center my={"1rem"}>
             <Pagination page={activePage} onChange={setActivePage} total={maxPages} withEdges />
